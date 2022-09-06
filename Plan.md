@@ -10,7 +10,7 @@
 * Тестирование удобства пользования
 
 ## Документация
-* [Чек-лист](https://github.com/KseniyaChepelevich/diplom/blob/main/%D0%A7%D0%B5%D0%BA-%D0%BB%D0%B8%D1%81%D1%82-%D0%A5%D0%BE%D1%81%D0%BF%D0%B8%D1%81.xlsx)
+* [Чек-лист]([https://github.com/KseniyaChepelevich/diplom/blob/main/%D0%A7%D0%B5%D0%BA-%D0%BB%D0%B8%D1%81%D1%82-%D0%A5%D0%BE%D1%81%D0%BF%D0%B8%D1%81.xlsx](https://github.com/KseniyaChepelevich/diplom/blob/main/%D0%A7%D0%B5%D0%BA-%D0%BB%D0%B8%D1%81%D1%82%20%D0%A5%D0%BE%D1%81%D0%BF%D0%B8%D1%81.xlsx))
 * [Тест-кейсы](https://github.com/KseniyaChepelevich/diplom/blob/main/%D0%A2%D0%B5%D1%81%D1%82-%D0%BA%D0%B5%D0%B9%D1%81%D1%8B-%D0%A5%D0%BE%D1%81%D0%BF%D0%B8%D1%81.xlsx)
 
 ## Перечень используемых инструментов
