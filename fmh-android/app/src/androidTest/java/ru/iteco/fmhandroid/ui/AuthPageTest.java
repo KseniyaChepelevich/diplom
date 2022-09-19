@@ -63,6 +63,13 @@ public class AuthPageTest {
 
     }
 
+    @Test public void authorizationEmptyFields() throws UiObjectNotFoundException {
+        authPageSteps.authentication("", "");
+        boolean isNotAuthorization = DataHelper.waitForToast("Login and password cannot be empty",3000);
+        Assert.assertTrue("this toast", isNotAuthorization);
+
+    }
+
     /*@After
     public void tearDown() throws UiObjectNotFoundException {
         authPageSteps.close();

@@ -6,6 +6,7 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.UiSelector;
+import androidx.test.uiautomator.Until;
 
 public class MainPage {
     public final String packageName;
@@ -41,6 +42,13 @@ public class MainPage {
         return By.res(packageName, "ru.iteco.fmhandroid:id/container_list_claim_include_on_fragment_main");
     }
 
+    private BySelector allNewsButSelector() {
+        return By.res(packageName, "ru.iteco.fmhandroid:id/all_news_text_view");
+    }
+    /*private UiSelector allNewsButSelector() {
+        return (new UiSelector().text("ALL NEWS").fromParent(new UiSelector().resourceId("container_list_news_include_on_fragment_main")));
+    }*/
+
     public UiObject2 mainPageName() {
         return device.findObject(mainPageNameSelector());
     }
@@ -61,5 +69,12 @@ public class MainPage {
         return device.findObject(claimsBlockSelector());
     }
 
+    //public UiObject2 allNewsBut () { return getUiObject(allNewsButSelector()); }
+
+    public UiObject2 allNewsBut () { return device.wait(Until.findObject(allNewsButSelector()), 10000); }
+
+
+    private UiObject2 getUiObject(BySelector selector) {
+        return device.wait(Until.findObject(selector), 10000);}
 
 }
