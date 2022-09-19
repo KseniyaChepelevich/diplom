@@ -81,6 +81,8 @@ public class TestApplication {
         authPage.enterBut().clickAndWait(Until.newWindow(), 5000);
     }
 
+
+
     public void closeApp() throws UiObjectNotFoundException {
         UiObject authImButton = device.findObject(new UiSelector().resourceId("ru.iteco.fmhandroid:id/authorization_image_button"));
         authImButton.click();

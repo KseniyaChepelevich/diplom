@@ -56,7 +56,7 @@ public class DataHelper {
         return new AuthInfo(login, pass);
     }
 
-    private static final String TAG = "IsToast";
+   private static final String TAG = "IsToast";
 
     public static boolean waitForToast(String toast, long timeout) {
         return waitForToast(toast, Function::identity, timeout);
