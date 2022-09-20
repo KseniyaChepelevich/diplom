@@ -1,23 +1,25 @@
 package ru.iteco.fmhandroid.ui.page;
 
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.BySelector;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObject2;
+import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
 public class MainPage {
     public final String packageName;
-    private UiDevice device;
+    private UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
     /*public MainPage(UiDevice device, String packageName) {
         this.device = device;
         this.packageName = packageName;
     }*/
 
-    public MainPage(String packageName) {
+    public MainPage(String packageName) throws UiObjectNotFoundException {
         this.packageName = packageName;
     }
 
@@ -34,8 +36,8 @@ public class MainPage {
 
     }
 
-    private BySelector newsBlockSelector() {
-        return By.res(packageName, "ru.iteco.fmhandroid:id/container_list_news_include_on_fragment_main");
+    private UiSelector newsBlockSelector() {
+        return (new UiSelector().className("android.widget.TextView").resourceId("ru.iteco.fmhandroid:id/container_list_news_include_on_fragment_main"));
     }
 
     private BySelector claimsBlockSelector() {
@@ -45,9 +47,38 @@ public class MainPage {
     private BySelector allNewsButSelector() {
         return By.res(packageName, "ru.iteco.fmhandroid:id/all_news_text_view");
     }
+
+    /*UiScrollable scrollView = new UiScrollable(new UiSelector().scrollable(true));
+    UiObject newsBlock = scrollView.getChild(new UiSelector().className("android.widget.LinearLayout")).getChild(new UiSelector().resourceId("ru.iteco.fmhandroid:id/container_list_news_include_on_fragment_main"));
+
+    public UiObject allNewsBut() throws UiObjectNotFoundException { return newsBlock.getChild(new UiSelector().resourceId("ALL NEWS")); }*/
+
+
     /*private UiSelector allNewsButSelector() {
-        return (new UiSelector().text("ALL NEWS").fromParent(new UiSelector().resourceId("container_list_news_include_on_fragment_main")));
+        return (new UiSelector().className("android.widget.ScrollView").childSelector(new UiSelector().className("android.widget.LinearLayout")).childSelector(new UiSelector().className("android.widget.LinearLayout").index(0)).childSelector(new UiSelector().resourceId("ru.iteco.fmhandroid:id/all_news_text_view").textContains("ALL NEWS")));
     }*/
+    /*private UiSelector allNewsButSelector() {
+
+        return (new UiSelector().className("android.widget.RelativeLayout").fromParent(new UiSelector().fromParent(new UiSelector().fromParent(new UiSelector().fromParent(new UiSelector().resourceId("ru.iteco.fmhandroid:id/all_news_text_view"))))));
+    }*/
+    /*private UiSelector allNewsButSelector() {
+
+        return (new UiSelector().className("android.widget.LinearLayout").index(0).fromParent(new UiSelector().resourceId("ru.iteco.fmhandroid:id/all_news_text_view")));
+    }*/
+
+    /*private UiSelector allNewsButSelector() {
+
+        return (new UiSelector().resourceId("android.widget.ru.iteco.fmhandroid:id/all_news_text_view").index(1));
+    }*/
+
+
+
+
+
+    private BySelector allClaimsButSelector() {
+
+        return (By.res(packageName,"ru.iteco.fmhandroid:id/all_claims_text_view")); }
+
 
     public UiObject2 mainPageName() {
         return device.findObject(mainPageNameSelector());
@@ -61,7 +92,7 @@ public class MainPage {
         return device.findObject(claimsHearSelector());
     }
 
-    public UiObject2 newsBlock() {
+    public UiObject newsBlock() {
         return device.findObject(newsBlockSelector());
     }
 
@@ -69,10 +100,12 @@ public class MainPage {
         return device.findObject(claimsBlockSelector());
     }
 
-    //public UiObject2 allNewsBut () { return getUiObject(allNewsButSelector()); }
+    /*public UiObject2 allNewsBut () { return device.findObject(allNewsButSelector()); }*/
 
-    public UiObject2 allNewsBut () { return device.wait(Until.findObject(allNewsButSelector()), 10000); }
+        public UiObject2 allClaimsBut () { return device.findObject(allClaimsButSelector()); }
 
+    //public UiObject allNewsBut () { return device.wait(Until.findObject(allNewsButSelector()), 10000); }
+    public UiObject2 allNewsBut () {return device.wait(Until.findObject(allNewsButSelector()), 10000);}
 
     private UiObject2 getUiObject(BySelector selector) {
         return device.wait(Until.findObject(selector), 10000);}

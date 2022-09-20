@@ -19,6 +19,7 @@ import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
 import ru.iteco.fmhandroid.ui.page.AuthPage;
+import ru.iteco.fmhandroid.ui.page.NewsPage;
 
 public class TestApplication {
 
