@@ -22,34 +22,40 @@ import ru.iteco.fmhandroid.ui.steps.TestApplication;
 public class MainPageTest {
 
 
-        private UiDevice device;
-        public static final String packageName = "ru.iteco.fmhandroid";
-        private TestApplication authPageSteps;
-        private MainPageSteps mainPageSteps;
-        private MainPage mainPage;
-        private NewsPage newsPage;
+    private UiDevice device;
+    public static final String packageName = "ru.iteco.fmhandroid";
+    private TestApplication authPageSteps;
+    private MainPageSteps mainPageSteps;
+    private MainPage mainPage;
+    private NewsPage newsPage;
 
-        @Before
-        public void setUp() {
-            authPageSteps = new TestApplication();
-        }
+    @Before
+    public void setUp() {
+        authPageSteps = new TestApplication();
+    }
 
-        @After
-        public void tearDown() throws UiObjectNotFoundException {
-            authPageSteps.closeApp();
-        }
+    @After
+    public void tearDown() throws UiObjectNotFoundException {
+        authPageSteps.closeApp();
+    }
 
-        @Test public void transitionOnTheBackBut() throws UiObjectNotFoundException {
-            authPageSteps.authentication(authInfo().getLogin(), authInfo().getPass());
-            MatcherAssert.assertThat(mainPage.allNewsBut().isEnabled(), Is.is(true));
-            mainPage.allNewsBut().click();
-            //newsPage.newsPageHeader().isEnabled();
-            //device.pressBack();
-            //mainPage.mainPageName().isEnabled();
+    @Test
+    public void transitionOnTheAllNewsBut() throws UiObjectNotFoundException {
+        authPageSteps.authentication(authInfo().getLogin(), authInfo().getPass());
+        //MatcherAssert.assertThat(mainPage.allNewsBut().isEnabled(), Is.is(true));
+        mainPage.allNewsBut().click();
+        //newsPage.newsPageHeader().isEnabled();
+        //device.pressBack();
+        //mainPage.mainPageName().isEnabled();20
+    }
 
-
-
-
-
-        }
+    @Test
+    public void transitionOnTheAllClaimsBut() throws UiObjectNotFoundException {
+        authPageSteps.authentication(authInfo().getLogin(), authInfo().getPass());
+        //MatcherAssert.assertThat(mainPage.allNewsBut().isEnabled(), Is.is(true));
+        mainPage.allClaimsBut().click();
+        //newsPage.newsPageHeader().isEnabled();
+        //device.pressBack();
+        //mainPage.mainPageName().isEnabled();20
+    }
 }

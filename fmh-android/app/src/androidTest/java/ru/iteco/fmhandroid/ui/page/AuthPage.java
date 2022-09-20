@@ -1,17 +1,13 @@
 package ru.iteco.fmhandroid.ui.page;
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.BySelector;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.UiSelector;
-
-import ru.iteco.fmhandroid.ui.data.DataHelper;
 
 public class AuthPage {
 
@@ -40,6 +36,16 @@ public class AuthPage {
         return By.res(packageName, "enter_button");
     }
 
+    /*private UiSelector enterButSelector() {
+        return (new UiSelector().className("android.view.ViewGroup").childSelector(new UiSelector().resourceId("ru.iteco.fmhandroid:id/enter_button")));
+    }*/
+    /*private UiSelector enterButSelector() {
+        return (new UiSelector().className("android.view.ViewGroup").fromParent(new UiSelector().resourceId("ru.iteco.fmhandroid:id/enter_button")));
+    }*/
+
+
+
+
     /*public ViewInteraction emptyToast(String id){
         return onView(withText(id)).inRoot(new DataHelper.ToastMatcher());
     }*/
@@ -60,6 +66,9 @@ public class AuthPage {
     public UiObject2 enterBut() {
         return device.findObject(enterButSelector());
     }
+
+
+
 
 
 
