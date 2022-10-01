@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
-import static ru.iteco.fmhandroid.ui.data.DataHelper.invalidAuthInfo;
+//import static ru.iteco.fmhandroid.ui.data.DataHelper.invalidAuthInfo;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -56,7 +56,7 @@ public class AuthPageTest {
         authPageSteps.closeApp();
     }
 
-    @Test public void authorizationInvalidData() throws UiObjectNotFoundException {
+    /*@Test public void authorizationInvalidData() throws UiObjectNotFoundException {
         authPageSteps.authentication(invalidAuthInfo().getLogin(), invalidAuthInfo().getPass());
         boolean isNotAuthorization = DataHelper.waitForToast("Wrong login or password",3000);
         Assert.assertTrue("this toast", isNotAuthorization);

@@ -1,22 +1,29 @@
 package ru.iteco.fmhandroid.ui.steps;
 
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 
 import ru.iteco.fmhandroid.ui.page.MainPage;
+import ru.iteco.fmhandroid.ui.page.MainPageElements;
 
 public class MainPageSteps {
+    private MainPageElements mainPageElements;
 
-    private UiDevice device;
-    public static final String packageName = "ru.iteco.fmhandroid";
-    private static final int TIMEOUT = 5000;
-    private MainPage mainPage;
+    public void isMainPage() {
+        mainPageElements.newsBlockHeader.check(matches(isDisplayed()));
+        mainPageElements.newsBlock.check(matches(isDisplayed()));
+        mainPageElements.claimsBlockHeader.check(matches(isDisplayed()));
+        mainPageElements.claimsBlock.check(matches(isDisplayed()));
+    }
 
-    public void isMainPage() throws UiObjectNotFoundException {
-        mainPage.newsHeader().getText();
-        mainPage.claimsHear().isEnabled();
-        mainPage.newsBlock().isEnabled();
-        mainPage.claimsBlock().isEnabled();
+    public void clickLogOutBut() {
+        mainPageElements.authImBut.perform(click());
+        mainPageElements.logOutBut.perform(click());
+
     }
 }

@@ -24,7 +24,7 @@ public class DataHelper {
 
     }
 
-    public static class AuthInfo {
+    /*public static class AuthInfo {
         private final String login;
         private final String pass;
 
@@ -53,6 +53,29 @@ public class DataHelper {
     public static AuthInfo invalidAuthInfo() {
         String login = "invalid2";
         String pass = "invalid2";
+        return new AuthInfo(login, pass);
+    }*/
+    public static class AuthInfo {
+        private final String login;
+        private final String pass;
+
+        public AuthInfo(String login, String pass) {
+            this.login = login;
+            this.pass = pass;
+        }
+
+        public String getLogin() {
+            return login;
+        }
+
+        public String getPass() {
+            return pass;
+        }
+    }
+
+    public static AuthInfo authInfo() {
+        String login = "login2";
+        String pass = "password2";
         return new AuthInfo(login, pass);
     }
 
