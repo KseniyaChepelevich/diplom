@@ -28,4 +28,9 @@ public class ClaimsPageSteps {
         claimsPageElements.canselClaimBut.check(matches(isDisplayed()));
 
     }
+
+    public void isClaimsCard() {
+        claimsPageElements.claimsItemDescription.check(matches(isDisplayed()));
+
+    }
 }

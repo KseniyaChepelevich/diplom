@@ -1,7 +1,5 @@
 package ru.iteco.fmhandroid.ui;
 
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 import android.os.SystemClock;
@@ -21,22 +19,19 @@ import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.page.FilterNewsPageElements;
 import ru.iteco.fmhandroid.ui.page.NewsPageElements;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
-import ru.iteco.fmhandroid.ui.steps.ControlPanelSteps;
 import ru.iteco.fmhandroid.ui.steps.FilterNewsPageSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
 
 //@RunWith(AllureAndroidJUnit4.class)
 @RunWith(AndroidJUnit4.class)
-
-public class NewsPageTest {
+public class FilterNewsPageTest {
     AuthSteps authSteps = new AuthSteps();
     MainPageSteps mainPageSteps = new MainPageSteps();
     NewsPageSteps newsPageSteps = new NewsPageSteps();
     NewsPageElements newsPageElements =  new NewsPageElements();
     FilterNewsPageSteps filterNewsPageSteps = new FilterNewsPageSteps();
     FilterNewsPageElements filterNewsPageElements = new FilterNewsPageElements();
-    ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
     @Rule
     public ActivityTestRule<AppActivity> activityTestRule =
@@ -52,6 +47,8 @@ public class NewsPageTest {
         }
         authSteps.authWithValidData(authInfo());
         mainPageSteps.openNewsPageThroughTheMainMenu();
+        SystemClock.sleep(3000);
+        DataHelper.EspressoBaseTest.clickButton(newsPageElements.filterNewsMaterialBut);
 
     }
 
@@ -61,32 +58,13 @@ public class NewsPageTest {
     }
 
     @Test
-    @DisplayName("Открытие фильтра новостей по кнопке Filter")
-    public void shouldOpenTheNewsFilterSettingsForm() {
-        DataHelper.EspressoBaseTest.clickButton(newsPageElements.filterNewsMaterialBut);
+    @DisplayName("Фильтракция новостей по Категории Обьявление")
+    public void shouldFilterTheNewsWithCategoryAnnouncement() {
+        filterNewsPageSteps.fillingOutTheFilterNewsForm();
+        DataHelper.EspressoBaseTest.clickButton(filterNewsPageElements.filterBut);
         SystemClock.sleep(3000);
-        filterNewsPageSteps.isFilterNewsForm();
+        //Добавить проверку, что отображаются новости с категорией Объявление
+
+
     }
-//Дублируется с тестом на Главной странице "Разворот описания заявки на Главной странице". Оставить элементы только в NewsPageElements
-    @Test
-    @DisplayName("Разворачиване описания новости")
-    public void shouldOpenTheNewsDescription() {
-        DataHelper.EspressoBaseTest.clickButton(newsPageElements.newsItemMaterialCardView1);
-        SystemClock.sleep(3000);
-        newsPageElements.newsItemDescriptionTextView1.check(matches(isDisplayed()));
-    }
-
-
-
-    @Test
-    @DisplayName("Переход по кнопке Edit News")
-    public void shouldOpenTheControlPanel() {
-        DataHelper.EspressoBaseTest.clickButton(newsPageElements.editNewsMaterialBut);
-        SystemClock.sleep(3000);
-        controlPanelSteps.isControlPanel();
-    }
-
-
-
 }
-

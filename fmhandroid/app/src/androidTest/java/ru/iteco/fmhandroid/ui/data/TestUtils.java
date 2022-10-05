@@ -99,8 +99,8 @@ public class TestUtils {
     }
 
 
-    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
+    public static CustomRecyclerViewActions.RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
 
-        return new RecyclerViewMatcher(recyclerViewId);
+        return new CustomRecyclerViewActions.RecyclerViewMatcher(recyclerViewId);
     }
 }
