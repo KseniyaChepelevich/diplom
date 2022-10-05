@@ -14,6 +14,10 @@ import androidx.test.espresso.ViewInteraction;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+
 public class DataHelper {
     private DataHelper() {
 
@@ -80,4 +84,19 @@ public class DataHelper {
         }
 
     }
+
+    public static String generateDate(int plusMonth, int plusDays, String formatPattern) {
+        return LocalDate.now().plusMonths(plusMonth).plusDays(plusDays).format(DateTimeFormatter.ofPattern(formatPattern));
+    }
+
+    public static String getValidDate(int plusMonth, int plusDays) {
+        //int randomNumber = ThreadLocalRandom.current().nextInt(1,60);
+        String date = generateDate(plusMonth, plusDays,"dd.MM.yyyy");
+        return date;
+    }
+
+    /*public static Calendar getTodayDate() {
+       return Calendar.getInstance();
+    }*/
+    //today.set(Calendar.HOUR_OF_DAY, 0);
 }

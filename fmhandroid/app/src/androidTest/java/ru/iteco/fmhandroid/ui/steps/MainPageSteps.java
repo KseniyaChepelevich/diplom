@@ -1,6 +1,8 @@
 package ru.iteco.fmhandroid.ui.steps;
 
 import android.os.SystemClock;
+
+import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.page.MainPageElements;
 
 import static androidx.test.espresso.action.ViewActions.click;
@@ -29,6 +31,33 @@ public class MainPageSteps {
         SystemClock.sleep(3000);
         mainPageElements.logOutBut.check(matches(isDisplayed()));
         mainPageElements.logOutBut.perform(click());
+
+    }
+
+    public void openNewsPageThroughTheMainMenu() {
+        SystemClock.sleep(3000);
+        DataHelper.EspressoBaseTest.clickButton(mainPageElements.mainMenuImBut);
+        SystemClock.sleep(3000);
+        DataHelper.EspressoBaseTest.clickButton(mainPageElements.newsInTheMainMenu);
+        SystemClock.sleep(3000);
+
+    }
+
+    public void openClaimsPageThroughTheMainMenu() {
+        SystemClock.sleep(3000);
+        DataHelper.EspressoBaseTest.clickButton(mainPageElements.mainMenuImBut);
+        SystemClock.sleep(3000);
+        DataHelper.EspressoBaseTest.clickButton(mainPageElements.claimsInTheMainMenu);
+        SystemClock.sleep(3000);
+
+    }
+
+    public void openAboutPageThroughTheMainMenu() {
+        SystemClock.sleep(3000);
+        DataHelper.EspressoBaseTest.clickButton(mainPageElements.mainMenuImBut);
+        SystemClock.sleep(3000);
+        DataHelper.EspressoBaseTest.clickButton(mainPageElements.aboutInTheMainMenu);
+        SystemClock.sleep(3000);
 
     }
 

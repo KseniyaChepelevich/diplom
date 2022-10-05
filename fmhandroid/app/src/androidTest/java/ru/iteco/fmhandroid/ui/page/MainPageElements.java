@@ -4,6 +4,8 @@ import android.view.View;
 import androidx.test.espresso.DataInteraction;
 
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.matcher.ViewMatchers;
+
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsInstanceOf;
 import ru.iteco.fmhandroid.R;
@@ -15,6 +17,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
+import static org.hamcrest.JMock1Matchers.equalTo;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.hasEntry;
 
@@ -22,6 +25,8 @@ import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNot.not;
+
+import java.util.Map;
 
 public class MainPageElements {
     public ViewInteraction newsBlockHeader = onView(withText("News"));
@@ -59,12 +64,13 @@ public class MainPageElements {
 
     public ViewInteraction allClaimsCardsBlockConstraintLayout = onView(withId(R.id.all_claims_cards_block_constraint_layout));
 
-    public ViewInteraction claimListCard1 = onView(TestUtils.withRecyclerView(R.id.claim_list_recycler_view)
-            .atPositionOnView(1, R.id.claim_list_card));
+    public ViewInteraction claimListRecyclerView =  onView(ViewMatchers.withId(R.id.claim_list_recycler_view));
 
     public ViewInteraction scrollView = onView(withClassName(endsWith("ScrollView")));
 
     public ViewInteraction addNewClaimBut = onView(withId(R.id.add_new_claim_material_button));
+    public ViewInteraction claimsListCard4 = onView(TestUtils.withRecyclerView(R.id.claim_list_recycler_view)
+            .atPositionOnView(4, R.id.claim_list_card));
 
 
 

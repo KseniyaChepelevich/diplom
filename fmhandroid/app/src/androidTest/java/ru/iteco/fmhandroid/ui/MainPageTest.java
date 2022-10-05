@@ -2,6 +2,7 @@ package ru.iteco.fmhandroid.ui;
 
 import android.os.SystemClock;
 import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import io.qameta.allure.kotlin.junit4.DisplayName;
@@ -17,7 +18,9 @@ import ru.iteco.fmhandroid.ui.page.ClaimsPageElements;
 import ru.iteco.fmhandroid.ui.page.MainPageElements;
 import ru.iteco.fmhandroid.ui.steps.*;
 
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -74,22 +77,14 @@ public class MainPageTest {
     @Test
     @DisplayName("Переход в раздел News через главное меню")
     public void shouldOpenNewsPageByButNewsInTheMainMenu() {
-        SystemClock.sleep(3000);
-        DataHelper.EspressoBaseTest.clickButton(mainPageElements.mainMenuImBut);
-        SystemClock.sleep(3000);
-        DataHelper.EspressoBaseTest.clickButton(mainPageElements.newsInTheMainMenu);
-        SystemClock.sleep(3000);
+        mainPageSteps.openNewsPageThroughTheMainMenu();
         newsPageSteps.isNewsPage();
     }
 
     @Test
     @DisplayName("Переход в раздел Claims через главное меню")
     public void shouldOpenClaimsPageByButClaimsInTheMainMenu() {
-        SystemClock.sleep(3000);
-        DataHelper.EspressoBaseTest.clickButton(mainPageElements.mainMenuImBut);
-        SystemClock.sleep(3000);
-        DataHelper.EspressoBaseTest.clickButton(mainPageElements.claimsInTheMainMenu);
-        SystemClock.sleep(3000);
+        mainPageSteps.openClaimsPageThroughTheMainMenu();
         claimsPageSteps.isClaimsPage();
 
     }
@@ -106,11 +101,7 @@ public class MainPageTest {
     @Test
     @DisplayName("Переход в раздел About через главное меню")
     public void shouldOpenAboutPage() {
-        SystemClock.sleep(3000);
-        DataHelper.EspressoBaseTest.clickButton(mainPageElements.mainMenuImBut);
-        SystemClock.sleep(3000);
-        DataHelper.EspressoBaseTest.clickButton(mainPageElements.aboutInTheMainMenu);
-        SystemClock.sleep(3000);
+        mainPageSteps.openAboutPageThroughTheMainMenu();
         aboutPageSteps.isAboutPage();
 
 
@@ -156,18 +147,19 @@ public class MainPageTest {
 
     }
 
-    /*@Test
+    @Test
     @DisplayName("Разворот описания заявки на Главной странице")
     public void shouldOpenClaimsItemDescription() {
         SystemClock.sleep(3000);
         mainPageElements.scrollView.check(matches(isEnabled()));
-        mainPageElements.scrollView.perform(scrollTo());
         SystemClock.sleep(3000);
-        DataHelper.EspressoBaseTest.clickButton(mainPageElements.claimListCard1);
+        mainPageElements.scrollView.perform(swipeUp());
         SystemClock.sleep(3000);
-        //claimsPageElements.claimsItemDescription.check(matches(isDisplayed()));
+        DataHelper.EspressoBaseTest.clickButton(mainPageElements.claimsListCard4);
+        SystemClock.sleep(3000);
+        claimsPageElements.claimsItemDescription.check(matches(isDisplayed()));
 
-    }*/
+    }
 
     @Test
     @DisplayName("Добавление заявки с главной страницы")

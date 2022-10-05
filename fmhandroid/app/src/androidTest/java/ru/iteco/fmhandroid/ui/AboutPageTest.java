@@ -2,12 +2,15 @@ package ru.iteco.fmhandroid.ui;
 
 import android.content.Intent;
 import android.os.SystemClock;
+
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
+
 import io.qameta.allure.kotlin.junit4.DisplayName;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -55,6 +58,7 @@ public class AboutPageTest {
             mainPageSteps.clickLogOutBut();
         }
         authSteps.authWithValidData(authInfo());
+        mainPageSteps.openAboutPageThroughTheMainMenu();
     }
 
     @After
@@ -65,13 +69,10 @@ public class AboutPageTest {
     @Test
     @DisplayName("Переход по ссылке на Политику конфиденциальности")
     public void shouldOpenPrivacyPolicyDetailsPage() {
-        DataHelper.EspressoBaseTest.clickButton(mainPageElements.mainMenuImBut);
-        SystemClock.sleep(3000);
-        DataHelper.EspressoBaseTest.clickButton(mainPageElements.aboutInTheMainMenu);
         Intents.init();
         aboutPageSteps.openPrivacyPolicy();
         SystemClock.sleep(3000);
-        intended (allOf(hasData("https://vhospice.org/#/privacy-policy/"), hasAction(Intent.ACTION_VIEW)));
+        intended(allOf(hasData("https://vhospice.org/#/privacy-policy/"), hasAction(Intent.ACTION_VIEW)));
         Intents.release();
 
         //Проверка что загрузилась страница с Политикой конфиденциальности. Не работает. Страница не загружается.
@@ -84,13 +85,10 @@ public class AboutPageTest {
     @Test
     @DisplayName("Переход по ссылке на Пользовательское соглашение")
     public void shouldOpenTermsOfUseDetailsPage() {
-        DataHelper.EspressoBaseTest.clickButton(mainPageElements.mainMenuImBut);
-        SystemClock.sleep(3000);
-        DataHelper.EspressoBaseTest.clickButton(mainPageElements.aboutInTheMainMenu);
         Intents.init();
         aboutPageSteps.openTermsOfUse();
         SystemClock.sleep(3000);
-        intended (allOf(hasData("https://vhospice.org/#/terms-of-use"), hasAction(Intent.ACTION_VIEW)));
+        intended(allOf(hasData("https://vhospice.org/#/terms-of-use"), hasAction(Intent.ACTION_VIEW)));
         Intents.release();
         //Проверка что загрузилась страница с Пользовательским соглашением. Не работает. Страница не загружается.
         ViewInteraction mainText = onView(allOf(
@@ -101,10 +99,6 @@ public class AboutPageTest {
     @Test
     @DisplayName("Выход из раздела About по кнопке Назад в AppBar")
     public void shouldGoBackBut() {
-        DataHelper.EspressoBaseTest.clickButton(mainPageElements.mainMenuImBut);
-        SystemClock.sleep(3000);
-        DataHelper.EspressoBaseTest.clickButton(mainPageElements.aboutInTheMainMenu);
-        SystemClock.sleep(3000);
         DataHelper.EspressoBaseTest.clickButton(aboutPageElements.aboutBackImageBut);
         mainPageSteps.isMainPage();
 
