@@ -15,6 +15,7 @@ import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
@@ -92,6 +93,20 @@ public class DataHelper {
     public static String getValidDate(int plusMonth, int plusDays) {
         //int randomNumber = ThreadLocalRandom.current().nextInt(1,60);
         String date = generateDate(plusMonth, plusDays,"dd.MM.yyyy");
+        return date;
+    }
+
+    public static String generateTime(int plusHours, int plusMinutes, String formatPattern) {
+        return LocalTime.now().plusHours(plusHours).plusMinutes(plusMinutes).format(DateTimeFormatter.ofPattern(formatPattern));
+    }
+
+    public static String getValidTime(int plusHour, int plusMinuts) {
+        //int randomNumber = ThreadLocalRandom.current().nextInt(1,60);
+        String time = generateTime(plusHour, plusMinuts,"HH:mm");
+        return time;
+    }
+    public static Cloneable getDateForPicker() {
+        Calendar date = Calendar.getInstance();
         return date;
     }
 

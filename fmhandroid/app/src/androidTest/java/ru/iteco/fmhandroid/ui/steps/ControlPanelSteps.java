@@ -6,9 +6,7 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.PickerActions.setDate;
 import static androidx.test.espresso.contrib.PickerActions.setTime;
-import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withChild;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -18,17 +16,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.AllOf.allOf;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 import android.os.SystemClock;
-import android.view.View;
-import android.widget.ImageView;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
-
-import org.hamcrest.core.IsInstanceOf;
 
 import java.util.Calendar;
 
@@ -66,6 +59,16 @@ public class ControlPanelSteps {
         controlPanelElements.switcherActive.check(matches(isDisplayed()));
     }
 
+    public void isCardTestNews(String title) {
+        controlPanelElements.newsItemCategoryField.check(matches(withText("Объявление")));
+        controlPanelElements.newsItemTitleField.check(matches(withText(title)));
+        controlPanelElements.newsItemDescriptionField.check(matches(withText(title)));
+        controlPanelElements.saveBut.check(matches(isDisplayed()));
+        controlPanelElements.cancelBut.check(matches(isDisplayed()));
+        controlPanelElements.switcherActive.check(matches(isDisplayed()));
+
+    }
+
     public void selectANewsCategoryFromTheList(ViewInteraction nameCategory) {
         DataHelper.EspressoBaseTest.clickButton(controlPanelElements.newsItemCategoryField);
         Espresso.closeSoftKeyboard();
@@ -75,18 +78,40 @@ public class ControlPanelSteps {
         controlPanelElements.newsItemCategoryField.perform(replaceText(nameCategory));
     }
 
-
-    public void fillingOutTheFormCreatingNewsWithDateTomorrow(String title, String description) {
-        SystemClock.sleep(3000);
-        controlPanelElements.newsItemTitleField.perform(replaceText(title));
+    public void setDateToDatePicker(int plusYear, int plusMonth, int plusDay) {
         DataHelper.EspressoBaseTest.clickButton(controlPanelElements.newsItemPublishDateField);
         controlPanelElements.datePicker.check(matches(isDisplayed()));
-        controlPanelElements.datePicker.perform(setDate(date.get(Calendar.YEAR), date.get(Calendar.MONTH)+1, date.get(Calendar.DAY_OF_MONTH)+1));
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.newsItemPublishTimeField);
+        controlPanelElements.datePicker.perform(setDate(date.get(Calendar.YEAR)+plusYear, date.get(Calendar.MONTH)+1+plusMonth, date.get(Calendar.DAY_OF_MONTH)+plusDay));
+        //DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
+    }
+
+    public void setTimeToTimePicker(int plusHour, int plusMinute) {
         controlPanelElements.timePicker.check(matches(isDisplayed()));
-        controlPanelElements.timePicker.perform(setTime(date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE)));
+        controlPanelElements.timePicker.perform(setTime(date.get(Calendar.HOUR_OF_DAY)+plusHour, date.get(Calendar.MINUTE)+plusMinute));
+
+
+    }
+
+    public void setTimeToTimeField(int plusHour, int plusMinute) {
+        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.newsItemPublishTimeField);
+        //controlPanelElements.timePicker.check(matches(isDisplayed()));
+        //controlPanelElements.timePicker.perform(setTime(date.get(Calendar.HOUR_OF_DAY)+plusHour, date.get(Calendar.MINUTE)+plusMinute));
+        //DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
+        setTimeToTimePicker(plusHour, plusMinute);
         DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
+    }
+
+
+    public void fillingOutTheFormCreatingNewsWithDateToday(int plusYear, int plusMonth, int plusDay, int plusHour, int plusMinute, String title, String description) {
+        SystemClock.sleep(3000);
+        controlPanelElements.newsItemTitleField.perform(replaceText(title));
+        setDateToDatePicker(plusYear, plusMonth, plusDay);
+        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
+        //DataHelper.EspressoBaseTest.clickButton(controlPanelElements.newsItemPublishTimeField);
+        //controlPanelElements.timePicker.check(matches(isDisplayed()));
+        //controlPanelElements.timePicker.perform(setTime(date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE)));
+        //DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
+        setTimeToTimeField(plusHour, plusMinute);
         controlPanelElements.newsItemDescriptionField.perform(replaceText(description));
 
     }
@@ -95,10 +120,15 @@ public class ControlPanelSteps {
         return onView(allOf(withId(R.id.delete_news_item_image_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view),withChild(withChild(withText(title))))))));
     }
 
+    public ViewInteraction getItemNewsEditElement(String title) {
+        return onView(allOf(withId(R.id.edit_news_item_image_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title))))))));
+    }
+
     public void deleteItemNews (String description) {
         getItemNewsDeleteElement(description).perform(click());
         controlPanelElements.okBut.perform(click());
     }
+
 
     public void checkToast(String text, boolean visible) {
         if (visible) {
@@ -115,6 +145,25 @@ public class ControlPanelSteps {
         controlPanelElements.createTimeInputEndIcon.check(matches(isDisplayed()));
         controlPanelElements.descriptionTextInputEndIcon.check(matches(isDisplayed()));
     }
+
+    public void creatingTestNews(String title, String description) {
+        openCreatingNewsForm();
+        selectANewsCategoryFromTheList(controlPanelElements.categoryAnnouncement);
+        fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, 0, 0, title, description);
+        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
+        SystemClock.sleep(3000);
+    }
+
+    /*public boolean NoNewsCheck(String title) {
+        if (controlPanelElements.newsRecyclerList
+                // scrollTo will fail the test if no item matches.
+                .perform(RecyclerViewActions.scrollTo(
+                        hasDescendant(withText(title))
+                )) == null) {
+            return true;
+        }
+        return false;
+    }*/
 
 
 }
