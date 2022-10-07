@@ -1,23 +1,16 @@
 package ru.iteco.fmhandroid.ui;
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
-import static androidx.test.espresso.matcher.ViewMatchers.withChild;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
-import static org.hamcrest.core.IsNot.not;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 import android.os.SystemClock;
 
 import androidx.test.espresso.NoMatchingViewException;
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
@@ -29,8 +22,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import io.qameta.allure.kotlin.junit4.DisplayName;
-import ru.iteco.fmhandroid.R;
-import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.page.ControlPanelElements;
 import ru.iteco.fmhandroid.ui.page.FilterNewsPageElements;
@@ -41,7 +32,6 @@ import ru.iteco.fmhandroid.ui.steps.FilterNewsPageSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
 
-//@RunWith(AllureAndroidJUnit4.class)
 @RunWith(AndroidJUnit4.class)
 public class ControlPanelTest {
     AuthSteps authSteps = new AuthSteps();
@@ -52,6 +42,13 @@ public class ControlPanelTest {
     FilterNewsPageElements filterNewsPageElements = new FilterNewsPageElements();
     ControlPanelElements controlPanelElements = new ControlPanelElements();
     ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+
+    String titleNewsForEditing = "Новость для редактирования";
+    String titleNewsToDelete = "Новость для удаления";
+    String titleNewsWillNotBeDeleted = "Новость не будет удалена";
+    String titleNewsWillNotBeEditing = "Новость не будет изменена";
+    String titleNewsSavedWithoutChanges = "Новость сохранена без изменений";
+    String titleNewsTurnOffActiveStatus = "Новость для выключения активного статуса";
 
     @Rule
     public ActivityTestRule<AppActivity> activityTestRule =
@@ -83,235 +80,94 @@ public class ControlPanelTest {
         controlPanelSteps.isCreatingNewsForm();
     }
 
-
     @Test
-    @DisplayName("Создание Новости с категорией Объявление")
-    public void shouldCreateANewsItemWithCategoryAnnouncement() {
-        controlPanelSteps.openCreatingNewsForm();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryAnnouncement);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateTomorrow("Тест новость Объявление", "Тест новость Объявление");
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-        String today = DataHelper.getValidDate(0, 0);
-        String tomorrow = DataHelper.getValidDate(0, 1);
-
-        //Проверка что отображаются новости с заголовком "Тест новость Объявление"
+    @DisplayName("Отмена удаления новости во вкладке Control panel")
+    public void shouldNotRemoveTheNewsItem(){
+        controlPanelSteps.creatingTestNews(titleNewsWillNotBeDeleted, titleNewsWillNotBeDeleted);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText("Тест новость Объявление")), hasDescendant(withText(today)), hasDescendant(withText(tomorrow)), hasDescendant(withText("Иванов Д.Д.")))
+                        hasDescendant(withText(titleNewsWillNotBeDeleted)))
                 )).check(matches(isDisplayed()));
-
-        //Удаляем нашу новость
-       controlPanelSteps.deleteItemNews("Тест новость Объявление");
-    }
-
-    @Test
-    @DisplayName("Создание Новости с категорией День рождения")
-    public void shouldCreateANewsItemWithCategoryBirthday() {
-        controlPanelSteps.openCreatingNewsForm();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryBirthday);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateTomorrow("Тест новость День рождения", "Тест новость День рождения");
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-        String today = DataHelper.getValidDate(0, 0);
-        String tomorrow = DataHelper.getValidDate(0, 1);
-
-        //Проверка что отображаются новости с заголовком "Тест новость День рождения"
+        controlPanelSteps.getItemNewsDeleteElement(titleNewsWillNotBeDeleted).perform(click());
+        controlPanelElements.messageAboutDelete.check(matches(isDisplayed()));
+        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.cancelDeleteBut);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText("Тест новость День рождения")), hasDescendant(withText(today)), hasDescendant(withText(tomorrow)), hasDescendant(withText("Иванов Д.Д.")))
+                        hasDescendant(withText(titleNewsWillNotBeDeleted)))
                 )).check(matches(isDisplayed()));
-
-        //Удаляем нашу новость
-        controlPanelSteps.deleteItemNews("Тест новость День рождения");
+        controlPanelSteps.deleteItemNews(titleNewsWillNotBeDeleted);
     }
 
-    @Test
-    @DisplayName("Создание Новости с категорией День рождения")
-    public void shouldCreateANewsItemWithCategorySalagy() {
-        controlPanelSteps.openCreatingNewsForm();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateTomorrow("Тест новость Зарплата", "Тест новость Зарплата");
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-        String today = DataHelper.getValidDate(0, 0);
-        String tomorrow = DataHelper.getValidDate(0, 1);
 
-        //Проверка что отображаются новости с заголовком "Тест новость Зарплата"
+
+    @Test
+    @DisplayName("Открытие и закрытие Новости для редактирования без внесения изменений")
+    public void shouldNotEditTheNews(){
+        controlPanelSteps.creatingTestNews(titleNewsWillNotBeEditing, titleNewsWillNotBeEditing);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText("Тест новость Зарплата")), hasDescendant(withText(today)), hasDescendant(withText(tomorrow)), hasDescendant(withText("Иванов Д.Д.")))
+                        hasDescendant(withText(titleNewsWillNotBeEditing)))
                 )).check(matches(isDisplayed()));
-
-        //Удаляем нашу новость
-        controlPanelSteps.deleteItemNews("Тест новость Зарплата");
-    }
-
-    @Test
-    @DisplayName("Создание Новости с категорией Профсоюз")
-    public void shouldCreateANewsItemWithCategoryTradeUnion() {
-        controlPanelSteps.openCreatingNewsForm();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryTradeUnion);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateTomorrow("Тест новость Профсоюз", "Тест новость Профсоюз");
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-        String today = DataHelper.getValidDate(0, 0);
-        String tomorrow = DataHelper.getValidDate(0, 1);
-
-        //Проверка что отображаются новости с заголовком "Тест новость Профсоюз"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText("Тест новость Профсоюз")), hasDescendant(withText(today)), hasDescendant(withText(tomorrow)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
-        //Удаляем нашу новость
-        controlPanelSteps.deleteItemNews("Тест новость Профсоюз");
-    }
-
-    @Test
-    @DisplayName("Создание Новости с категорией Праздник")
-    public void shouldCreateANewsItemWithCategoryHoliday() {
-        controlPanelSteps.openCreatingNewsForm();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryHoliday);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateTomorrow("Тест новость Праздник", "Тест новость Праздник");
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-        String today = DataHelper.getValidDate(0, 0);
-        String tomorrow = DataHelper.getValidDate(0, 1);
-
-        //Проверка что отображаются новости с заголовком "Тест новость Праздник"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText("Тест новость Праздник")), hasDescendant(withText(today)), hasDescendant(withText(tomorrow)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
-        //Удаляем нашу новость
-        controlPanelSteps.deleteItemNews("Тест новость Праздник");
-    }
-
-    @Test
-    @DisplayName("Создание Новости с категорией Благодарность")
-    public void shouldCreateANewsItemWithCategoryGratitude() {
-        controlPanelSteps.openCreatingNewsForm();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryGratitude);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateTomorrow("Тест новость Благодарность", "Тест новость Благодарность");
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-        String today = DataHelper.getValidDate(0, 0);
-        String tomorrow = DataHelper.getValidDate(0, 1);
-
-        //Проверка что отображаются новости с заголовком "Тест новость Благодарность"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText("Тест новость Благодарность")), hasDescendant(withText(today)), hasDescendant(withText(tomorrow)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
-        //Удаляем нашу новость
-        controlPanelSteps.deleteItemNews("Тест новость Благодарность");
-    }
-
-    @Test
-    @DisplayName("Создание Новости с категорией Массаж")
-    public void shouldCreateANewsItemWithCategoryMassage() {
-        controlPanelSteps.openCreatingNewsForm();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryMassage);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateTomorrow("Тест новость Массаж", "Тест новость Массаж");
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-        String today = DataHelper.getValidDate(0, 0);
-        String tomorrow = DataHelper.getValidDate(0, 1);
-
-        //Проверка что отображаются новости с заголовком "Тест новость Массаж"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText("Тест новость Массаж")), hasDescendant(withText(today)), hasDescendant(withText(tomorrow)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
-        //Удаляем нашу новость
-        controlPanelSteps.deleteItemNews("Тест новость Массаж");
-    }
-
-    @Test
-    @DisplayName("Создание Новости с категорией Нужна помощь")
-    public void shouldCreateANewsItemWithCategoryNeedHelp() {
-        controlPanelSteps.openCreatingNewsForm();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryNeedHelp);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateTomorrow("Тест новость Нужна помощь", "Тест новость Нужна помощь");
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-        String today = DataHelper.getValidDate(0, 0);
-        String tomorrow = DataHelper.getValidDate(0, 1);
-
-        //Проверка что отображаются новости с заголовком "Тест новость Массаж"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText("Тест новость Нужна помощь")), hasDescendant(withText(today)), hasDescendant(withText(tomorrow)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
-        //Удаляем нашу новость
-        controlPanelSteps.deleteItemNews("Тест новость Нужна помощь");
-    }
-
-    @Test
-    @DisplayName("Отмена создания новости")
-    public void shouldNotCreateNews() {
-        //Проверить количество новостей до
-        //int item = CustomRecyclerViewActions.getItemCount(controlPanelElements.newsRecyclerList);
-        controlPanelSteps.openCreatingNewsForm();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryNeedHelp);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateTomorrow("Новость не должна сохраниться", "Новость не должна сохраниться");
+        controlPanelSteps.getItemNewsEditElement(titleNewsWillNotBeEditing).perform(click());
+        controlPanelSteps.isCardTestNews(titleNewsWillNotBeEditing);
         DataHelper.EspressoBaseTest.clickButton(controlPanelElements.cancelBut);
+        controlPanelElements.messageChangesWonTBeSaved.check(matches(isDisplayed()));
         DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
         SystemClock.sleep(3000);
-        String today = DataHelper.getValidDate(0, 0);
-        String tomorrow = DataHelper.getValidDate(0, 1);
-
-        //Проверить количетво новостей после
-        //controlPanelElements.newsRecyclerList.check(matches(CustomRecyclerViewActions.CustomViewMatcher.recyclerViewSizeMatcher(item)));
+        controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
-
-
-
+                .perform(RecyclerViewActions.scrollTo(allOf(
+                        hasDescendant(withText(titleNewsWillNotBeEditing)))
+                )).check(matches(isDisplayed()));
+        controlPanelSteps.deleteItemNews(titleNewsWillNotBeEditing);
     }
 
     @Test
-    @DisplayName("Создание новости с категорией не из списка")
-    public void shouldShowAMessageWithTextSelectACategoryFromTheList() {
-        controlPanelSteps.openCreatingNewsForm();
-        controlPanelSteps.replaceTextNewsCategory("Тест");
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateTomorrow("Новость не должна сохраниться", "Новость не должна сохраниться");
+    @DisplayName("Открытие и сохранение Новости для редактирования без внесения изменений")
+    public void shouldKeepTheNewsUnchanged(){
+        controlPanelSteps.creatingTestNews(titleNewsSavedWithoutChanges, titleNewsSavedWithoutChanges);
+        controlPanelElements.newsRecyclerList
+                // scrollTo will fail the test if no item matches.
+                .perform(RecyclerViewActions.scrollTo(allOf(
+                        hasDescendant(withText(titleNewsSavedWithoutChanges)))
+                )).check(matches(isDisplayed()));
+        controlPanelSteps.getItemNewsEditElement(titleNewsSavedWithoutChanges).perform(click());
+        controlPanelSteps.isCardTestNews(titleNewsSavedWithoutChanges);
         DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
         SystemClock.sleep(3000);
-        controlPanelSteps.checkToast("Wrong category selected. Select a category from the list.", true);
+        controlPanelElements.newsRecyclerList
+                // scrollTo will fail the test if no item matches.
+                .perform(RecyclerViewActions.scrollTo(allOf(
+                        hasDescendant(withText(titleNewsSavedWithoutChanges)))
+                )).check(matches(isDisplayed()));
+        controlPanelSteps.deleteItemNews(titleNewsSavedWithoutChanges);
     }
 
     @Test
-    @DisplayName("Сохранение пустой формы новости")
-    public void shouldNotSaveEmptyNews() {
-        controlPanelSteps.openCreatingNewsForm();
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-        controlPanelSteps.isWrongEmptyFormNews();
-
-    }
-
-    @Test
-    @DisplayName("Создание Новости со статусом Не активна")
-    public void shouldToggleTurnOffSwitchActive() {
-        controlPanelSteps.openCreatingNewsForm();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryMassage);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateTomorrow("Тест новость Массаж", "Тест новость Массаж");
+    @DisplayName("Выключение Активного статуса у Новости")
+    public void shouldTurnOffActiveStatus(){
+        controlPanelSteps.creatingTestNews(titleNewsTurnOffActiveStatus, titleNewsTurnOffActiveStatus);
+        controlPanelElements.newsRecyclerList
+                // scrollTo will fail the test if no item matches.
+                .perform(RecyclerViewActions.scrollTo(allOf(
+                        hasDescendant(withText(titleNewsTurnOffActiveStatus)))
+                )).check(matches(isDisplayed()));
+        controlPanelSteps.getItemNewsEditElement(titleNewsTurnOffActiveStatus).perform(click());
+        controlPanelSteps.isCardTestNews(titleNewsTurnOffActiveStatus);
         DataHelper.EspressoBaseTest.clickButton(controlPanelElements.switcherActive);
         controlPanelElements.switcherNotActive.check(matches(isDisplayed()));
+
+        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
+        SystemClock.sleep(3000);
+        controlPanelElements.newsRecyclerList
+                // scrollTo will fail the test if no item matches.
+                .perform(RecyclerViewActions.scrollTo(allOf(
+                        hasDescendant(withText(titleNewsTurnOffActiveStatus)), hasDescendant(withText("NOT ACTIVE")))))
+                .check(matches(isDisplayed()));
+
+        controlPanelSteps.deleteItemNews(titleNewsSavedWithoutChanges);
     }
-
 }
-
