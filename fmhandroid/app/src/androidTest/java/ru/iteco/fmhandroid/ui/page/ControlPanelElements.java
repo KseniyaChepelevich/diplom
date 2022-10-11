@@ -33,7 +33,7 @@ public class ControlPanelElements {
     public ViewInteraction saveBut = onView(withId(R.id.save_button));
     public ViewInteraction cancelBut = onView(withId(R.id.cancel_button));
     public ViewInteraction categoryAnnouncement = onView(withText("Объявление")).inRoot((RootMatchers.isPlatformPopup()));
-    public ViewInteraction categoryBirthday = onView(withText("День рождения")).inRoot((RootMatchers.isPlatformPopup()));
+    public static ViewInteraction categoryBirthday = onView(withText("День рождения")).inRoot((RootMatchers.isPlatformPopup()));
     public ViewInteraction categorySalary = onView(withText("Зарплата")).inRoot((RootMatchers.isPlatformPopup()));
     public ViewInteraction categoryTradeUnion = onView(withText("Профсоюз")).inRoot((RootMatchers.isPlatformPopup()));
     public ViewInteraction categoryMassage = onView(withText("Массаж")).inRoot((RootMatchers.isPlatformPopup()));
@@ -56,6 +56,7 @@ public class ControlPanelElements {
     public ViewInteraction createTimeInputEndIcon = onView(allOf(withId(R.id.text_input_end_icon), withParent(withParent(withParent(withParent(withId(R.id.news_item_publish_time_text_input_layout)))))));
     public ViewInteraction descriptionTextInputEndIcon = onView(allOf(withId(R.id.text_input_end_icon), withParent(withParent(withParent(withParent(withId(R.id.news_item_description_text_input_layout)))))));
     public ViewInteraction messageChangesWonTBeSaved = onView(withText("The changes won't be saved, do you really want to log out?"));
+
 
 
 

@@ -5,17 +5,16 @@ import static org.hamcrest.core.Is.is;
 
 import android.content.res.Resources;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.BoundedMatcher;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import java.util.List;
+import ru.iteco.fmhandroid.R;
 
 public class CustomRecyclerViewActions {
 
@@ -75,14 +74,36 @@ public class CustomRecyclerViewActions {
                 }
             };
         }
+
+        public static Matcher<View> matchChildViewOfCardTile(String cardName, int targetViewId, Matcher<View> itemMatcher ){
+            return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
+                @Override
+                public void describeTo(Description description) {
+                    description.appendText("Has view id $targetViewId and matches $itemMatcher for item with name $accountName");
+                }
+
+                @Override
+                protected boolean matchesSafely(RecyclerView recyclerView) {
+                    int itemCount = recyclerView.getAdapter().getItemCount();
+                    for (int i = 0; i < itemCount; i++){
+                        RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(i);
+                        if (holder != null) {
+                            TextView cardNameView = (TextView)holder.itemView.findViewById(R.id.news_item_title_text_view);
+                            if (cardNameView.getText().toString() == cardName) {
+                                View targetView = (View) holder.itemView.findViewById(targetViewId);
+                                return itemMatcher.matches(targetView);
+                            }
+                        }
+                    }
+                    return false;
+                }
+            };
+        }
     }
 
     public static class CustomViewMatcher {
         public static Matcher<View> recyclerViewSizeMatcher(final int matcherSize) {
             return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
-
-
-
 
                 String result;
 
@@ -111,4 +132,6 @@ public class CustomRecyclerViewActions {
         return 0;
 
     }
+
+
 }

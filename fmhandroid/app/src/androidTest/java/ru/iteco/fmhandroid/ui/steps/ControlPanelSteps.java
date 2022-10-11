@@ -6,7 +6,6 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.PickerActions.setDate;
 import static androidx.test.espresso.contrib.PickerActions.setTime;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withChild;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -21,7 +20,6 @@ import android.os.SystemClock;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.contrib.RecyclerViewActions;
 
 import java.util.Calendar;
 
@@ -124,8 +122,34 @@ public class ControlPanelSteps {
         return onView(allOf(withId(R.id.edit_news_item_image_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title))))))));
     }
 
+    public ViewInteraction getItemNewsPublicationDateElement(String title) {
+        return (onView(allOf(withId(R.id.news_item_publication_date_text_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title)))))))));
+    }
+
+    public ViewInteraction getItemNewsButViewElement(String title) {
+        return onView(allOf(withId(R.id.view_news_item_image_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title))))))));
+    }
+
+    public ViewInteraction getItemNewsStatusElement(String title) {
+        return onView(allOf(withId(R.id.news_item_published_text_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title))))))));
+    }
+
+    public ViewInteraction getItemNewsDescriptionElement(String title) {
+        return onView(allOf(withId(R.id.news_item_description_text_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title))))))));
+    }
+
+    public ViewInteraction getItemNewsTitleElement(String title) {
+        return onView(allOf(withId(R.id.news_item_title_text_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title))))))));
+    }
+
+    public ViewInteraction getItemNewsCard(String title) {
+        return onView(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title)))));
+
+    }
+
     public void deleteItemNews (String description) {
         getItemNewsDeleteElement(description).perform(click());
+        controlPanelElements.messageAboutDelete.check(matches(isDisplayed()));
         controlPanelElements.okBut.perform(click());
     }
 
