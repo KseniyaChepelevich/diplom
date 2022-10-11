@@ -32,6 +32,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
@@ -43,8 +44,8 @@ import ru.iteco.fmhandroid.ui.steps.ControlPanelSteps;
 import ru.iteco.fmhandroid.ui.steps.FilterNewsPageSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
-
-@RunWith(AndroidJUnit4.class)
+@RunWith(AllureAndroidJUnit4.class)
+//@RunWith(AndroidJUnit4.class)
 public class ControlPanelTest {
     AuthSteps authSteps = new AuthSteps();
     static MainPageSteps mainPageSteps = new MainPageSteps();
@@ -67,6 +68,7 @@ public class ControlPanelTest {
     static String titleNewsWithModifiedTitle = "Новость с измененным заголовком";
     static String titleNewsWithModifiedCategory = "Новость с измененной категорией";
     static String titleNewsForOpenDescription = "Новость для просмотра описания";
+
 
 
     @Rule
