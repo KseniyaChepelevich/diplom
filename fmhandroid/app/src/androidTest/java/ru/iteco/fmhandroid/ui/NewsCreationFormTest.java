@@ -325,6 +325,7 @@ public class NewsCreationFormTest {
         controlPanelSteps.deleteItemNews(titleForNewsNeedHelp);
     }
 
+   //Как проверить отсутствие новости в списке?
     @Test
     @DisplayName("Отмена создания новости")
     public void shouldNotCreateNews() {
@@ -341,7 +342,15 @@ public class NewsCreationFormTest {
 
         // scrollTo will fail the test if no item matches.
         //Assert.assertEquals(controlPanelSteps.NoNewsCheck("Новость не должна сохраниться"), true);
-        onView(withText(titleForNewsShouldNotBeKept)).check(doesNotExist());
+
+        //controlPanelElements.newsRecyclerList.check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewOfCardTile(titleForNewsShouldNotBeKept, R.id.news_item_material_card_view, )))
+        //onView(withText(titleForNewsShouldNotBeKept)).check(doesNotExist());
+
+        controlPanelElements.newsRecyclerList
+                // scrollTo will fail the test if no item matches.
+                .perform(RecyclerViewActions.scrollTo(allOf(
+                        hasDescendant(withText(titleForNewsShouldNotBeKept)))
+                )).check(doesNotExist());
 
 
     }
