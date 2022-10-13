@@ -22,7 +22,8 @@ import ru.iteco.fmhandroid.ui.data.DataHelper;
 public class ControlPanelElements {
     public ViewInteraction contrloPanelHeader = onView(withText("Control panel"));
     public ViewInteraction addNewsImBut = onView(withId(R.id.add_news_image_view));
-    public ViewInteraction sortNewsMaterialBut = onView(withId(R.id.sort_news_material_button));
+    public ViewInteraction sortNewsBut = onView(withId(R.id.sort_news_material_button));
+    public ViewInteraction filterNewsBut = onView(withId(R.id.filter_news_material_button));
     public ViewInteraction newsItemCategoryField = onView(withId(R.id.news_item_category_text_auto_complete_text_view));
     public ViewInteraction newsItemTitleField = onView(withId(R.id.news_item_title_text_input_edit_text));
     public ViewInteraction newsItemPublishDateField = onView(withId(R.id.news_item_publish_date_text_input_edit_text));

@@ -178,6 +178,8 @@ public class ControlPanelSteps {
         SystemClock.sleep(3000);
     }
 
+
+
     /*public boolean NoNewsCheck(String title) {
         if (controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.

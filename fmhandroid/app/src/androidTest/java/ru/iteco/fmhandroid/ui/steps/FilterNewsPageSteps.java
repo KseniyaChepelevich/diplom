@@ -27,6 +27,17 @@ public class FilterNewsPageSteps {
         filterNewsPageElements.canselBut.check(matches(isDisplayed()));
     }
 
+    public void isFilterNewsFormControlPanel() {
+        filterNewsPageElements.filterNewsTitleTextView.check(matches(isDisplayed()));
+        filterNewsPageElements.newsItemCategoryField.check(matches(isDisplayed()));
+        filterNewsPageElements.newsItemPublishDateStartField.check(matches(isDisplayed()));
+        filterNewsPageElements.newsItemPublishDateEndField.check(matches(isDisplayed()));
+        filterNewsPageElements.filterNewsActiveCheckBox.check(matches(isDisplayed()));
+        filterNewsPageElements.filterNewsInactiveCheckBox.check(matches(isDisplayed()));
+        filterNewsPageElements.filterBut.check(matches(isDisplayed()));
+        filterNewsPageElements.canselBut.check(matches(isDisplayed()));
+    }
+
     public void fillingOutTheFilterNewsForm() {
         DataHelper.EspressoBaseTest.clickButton(filterNewsPageElements.newsItemCategoryField);
         SystemClock.sleep(3000);

@@ -16,7 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Is.is;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
-
+import io.qameta.allure.kotlin.junit4.DisplayName;
 import android.os.SystemClock;
 
 import androidx.test.espresso.Espresso;
@@ -32,8 +32,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 
+import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.page.ControlPanelElements;
@@ -44,8 +44,9 @@ import ru.iteco.fmhandroid.ui.steps.ControlPanelSteps;
 import ru.iteco.fmhandroid.ui.steps.FilterNewsPageSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
-@RunWith(AllureAndroidJUnit4.class)
-//@RunWith(AndroidJUnit4.class)
+
+//@RunWith(AllureAndroidJUnit4.class)
+@RunWith(AndroidJUnit4.class)
 public class ControlPanelTest {
     AuthSteps authSteps = new AuthSteps();
     static MainPageSteps mainPageSteps = new MainPageSteps();
@@ -115,6 +116,7 @@ public class ControlPanelTest {
     }
 
     @Test
+    @DisplayName("Открытие формы создания новости")
     public void shouldOpenCreatNewsForm() {
         controlPanelSteps.openCreatingNewsForm();
         controlPanelSteps.isCreatingNewsForm();
@@ -122,7 +124,7 @@ public class ControlPanelTest {
     }
 
     @Test
-
+    @DisplayName("Отмена удаления новости во вкладке Панель управления")
     public void shouldNotRemoveTheNewsItem(){
         controlPanelSteps.creatingTestNews(titleNewsWillNotBeDeleted, titleNewsWillNotBeDeleted);
         controlPanelElements.newsRecyclerList
@@ -144,7 +146,7 @@ public class ControlPanelTest {
 
 
     @Test
-
+    @DisplayName("Открытие и закрытие Новости для редактирования без внесения изменений")
     public void shouldNotEditTheNews(){
         controlPanelSteps.creatingTestNews(titleNewsWillNotBeEditing, titleNewsWillNotBeEditing);
         controlPanelElements.newsRecyclerList
@@ -167,7 +169,7 @@ public class ControlPanelTest {
     }
 
     @Test
-
+    @DisplayName("Открытие и сохранение Новости для редактирования без внесения изменений")
     public void shouldKeepTheNewsUnchanged(){
         controlPanelSteps.creatingTestNews(titleNewsSavedWithoutChanges, titleNewsSavedWithoutChanges);
         controlPanelElements.newsRecyclerList
@@ -188,7 +190,7 @@ public class ControlPanelTest {
     }
 
     @Test
-
+    @DisplayName("Выключение Активного статуса у Новости")
     public void shouldTurnOffActiveStatus(){
         controlPanelSteps.creatingTestNews(titleNewsTurnOffActiveStatus, titleNewsTurnOffActiveStatus);
         controlPanelElements.newsRecyclerList
@@ -213,7 +215,7 @@ public class ControlPanelTest {
     }
 
     @Test
-
+    @DisplayName("Редактирование даты публикации")
     public void shouldChangeThePublicationDate() {
         String publishDateTomorrow = DataHelper.getValidDate(0, 1);
 
@@ -241,7 +243,7 @@ public class ControlPanelTest {
     }
 
     @Test
-
+    @DisplayName("Редактирование описания Новости")
     public void shouldChangeTheDescription() {
         String newDescription = titleNewsWithModifiedDescription + " проверка";
         controlPanelSteps.creatingTestNews(titleNewsWithModifiedDescription, titleNewsWithModifiedDescription);
@@ -267,7 +269,7 @@ public class ControlPanelTest {
     }
 
     @Test
-
+    @DisplayName("Редактирование времени публикации Новости")
     public void shouldChangeThePublicationTime() {
         String newPublicationTime = DataHelper.getValidTime(1, 0);
 
@@ -297,7 +299,7 @@ public class ControlPanelTest {
     }
 
     @Test
-
+    @DisplayName("Редактирование заголовка Новости")
     public void shouldChangeNewsTitle() {
         String newTitel = titleNewsWithModifiedTitle + " проверка";
         controlPanelSteps.creatingTestNews(titleNewsWithModifiedTitle, titleNewsWithModifiedTitle);
@@ -321,7 +323,7 @@ public class ControlPanelTest {
     }
 
     @Test
-
+    @DisplayName("Редактирование Категории Новости")
     public void shouldChangeNewsCategory() {
         String newCategory = "День рождения";
 
@@ -350,7 +352,7 @@ public class ControlPanelTest {
     }
 
     @Test
-
+    @DisplayName("Просмотр описания новости из вкладки Панель управления раздела Новости")
     public void shouldOpenNewsDescription() {
 
         controlPanelSteps.creatingTestNews(titleNewsForOpenDescription, titleNewsForOpenDescription);
@@ -367,7 +369,7 @@ public class ControlPanelTest {
     }
 
     @Test
-
+    @DisplayName("Удаление новости во вкладке Панель управления")
     public void shouldDeleteNewsItem() {
 
         controlPanelSteps.creatingTestNews(titleNewsToDelete, titleNewsToDelete);
@@ -384,6 +386,14 @@ public class ControlPanelTest {
                 .perform(RecyclerViewActions.scrollTo(allOf(
                         hasDescendant(withText(titleNewsToDelete)))
                 )).check(doesNotExist());
+    }
+
+    @Test
+    @DisplayName("Открытие фильтра новостей по кнопке Filter во вкладке Control panel")
+    public void shouldOpenTheNewsFilterSettingsForm() {
+        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.filterNewsBut);
+        SystemClock.sleep(3000);
+        filterNewsPageSteps.isFilterNewsFormControlPanel();
     }
 
 }
