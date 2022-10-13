@@ -4,7 +4,7 @@ import android.os.SystemClock;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
-import io.qameta.allure.android.runners.AllureAndroidJUnit4;
+//import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;

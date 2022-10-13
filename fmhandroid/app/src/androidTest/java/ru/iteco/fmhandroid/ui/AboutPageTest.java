@@ -67,7 +67,7 @@ public class AboutPageTest {
     }
 
     @Test
-    @DisplayName("Переход по ссылке на Политику конфиденциальности")
+    @DisplayName("Переход по ссылке Политика конфиденциальности")
     public void shouldOpenPrivacyPolicyDetailsPage() {
         Intents.init();
         aboutPageSteps.openPrivacyPolicy();
@@ -83,7 +83,7 @@ public class AboutPageTest {
     }
 
     @Test
-    @DisplayName("Переход по ссылке на Пользовательское соглашение")
+    @DisplayName("Переход по ссылке Пользовательское соглашение")
     public void shouldOpenTermsOfUseDetailsPage() {
         Intents.init();
         aboutPageSteps.openTermsOfUse();
@@ -97,7 +97,7 @@ public class AboutPageTest {
     }
 
     @Test
-    @DisplayName("Выход из раздела About по кнопке Назад в AppBar")
+
     public void shouldGoBackBut() {
         DataHelper.EspressoBaseTest.clickButton(aboutPageElements.aboutBackImageBut);
         mainPageSteps.isMainPage();
