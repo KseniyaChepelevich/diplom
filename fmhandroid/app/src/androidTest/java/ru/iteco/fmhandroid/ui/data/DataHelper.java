@@ -8,6 +8,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.view.WindowManager;
+
 import androidx.test.espresso.Root;
 import androidx.test.espresso.ViewInteraction;
 
@@ -18,6 +19,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.UUID;
+
+
+
+//import io.bloco.faker.Faker;
 
 public class DataHelper {
     private DataHelper() {
@@ -92,7 +98,7 @@ public class DataHelper {
 
     public static String getValidDate(int plusMonth, int plusDays) {
         //int randomNumber = ThreadLocalRandom.current().nextInt(1,60);
-        String date = generateDate(plusMonth, plusDays,"dd.MM.yyyy");
+        String date = generateDate(plusMonth, plusDays, "dd.MM.yyyy");
         return date;
     }
 
@@ -102,16 +108,31 @@ public class DataHelper {
 
     public static String getValidTime(int plusHour, int plusMinuts) {
         //int randomNumber = ThreadLocalRandom.current().nextInt(1,60);
-        String time = generateTime(plusHour, plusMinuts,"HH:mm");
+        String time = generateTime(plusHour, plusMinuts, "HH:mm");
         return time;
     }
+
     public static Cloneable getDateForPicker() {
         Calendar date = Calendar.getInstance();
         return date;
     }
 
-    /*public static Calendar getTodayDate() {
-       return Calendar.getInstance();
-    }*/
-    //today.set(Calendar.HOUR_OF_DAY, 0);
+
+
+
+
+    public static String generateTitleId() {
+        //Faker faker = new Faker();
+        String titleId = UUID.randomUUID().toString();
+        return titleId;
+
+    }
+
+    public String generateTitle(String item) {
+        return (item + generateTitleId());
+
+    }
+
+
+
 }

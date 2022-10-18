@@ -170,13 +170,20 @@ public class ControlPanelSteps {
         controlPanelElements.descriptionTextInputEndIcon.check(matches(isDisplayed()));
     }
 
-    public void creatingTestNews(String title, String description) {
+    public void creatingTestNews(ViewInteraction newsItemCategory, String title, String description) {
         openCreatingNewsForm();
-        selectANewsCategoryFromTheList(controlPanelElements.categoryAnnouncement);
+        selectANewsCategoryFromTheList(newsItemCategory);
         fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, 0, 0, title, description);
         DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
         SystemClock.sleep(3000);
     }
+
+   /* public void checkExistNewsInList() {
+        for (int childCount = recyclerView.getChildCount(), i = 0; i < childCount; ++i) {
+            final ViewHolder holder = recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
+   ...
+        }
+    }*/
 
 
 

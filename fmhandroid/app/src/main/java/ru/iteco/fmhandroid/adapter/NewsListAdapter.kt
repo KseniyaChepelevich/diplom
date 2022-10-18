@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import ru.iteco.fmhandroid.EspressoIdlingResources
 import ru.iteco.fmhandroid.R
 import ru.iteco.fmhandroid.databinding.ItemNewsBinding
 import ru.iteco.fmhandroid.dto.News
@@ -30,8 +31,10 @@ class NewsListAdapter(private val onNewsItemClickListener: OnNewsItemClickListen
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
+        EspressoIdlingResources.increment();
         val newsViewData = getItem(position)
         holder.bind(newsViewData)
+        EspressoIdlingResources.decrement();
     }
 
     class NewsViewHolder(

@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import ru.iteco.fmhandroid.EspressoIdlingResources
 import ru.iteco.fmhandroid.databinding.ItemClaimBinding
 import ru.iteco.fmhandroid.dto.FullClaim
 import ru.iteco.fmhandroid.utils.Utils
@@ -29,8 +30,10 @@ class ClaimListAdapter(
     }
 
     override fun onBindViewHolder(holder: ClaimViewHolder, position: Int) {
+        EspressoIdlingResources.increment();
         val fullClaim = getItem(position)
         holder.bind(fullClaim)
+        EspressoIdlingResources.decrement();
     }
 
     class ClaimViewHolder(
