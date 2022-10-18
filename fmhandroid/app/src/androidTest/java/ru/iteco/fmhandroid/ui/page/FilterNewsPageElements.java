@@ -29,6 +29,13 @@ public class FilterNewsPageElements {
     public ViewInteraction filterNewsActiveCheckBox = onView(withId(R.id.filter_news_active_material_check_box));
     public ViewInteraction filterNewsInactiveCheckBox = onView(withId(R.id.filter_news_inactive_material_check_box));
     public ViewInteraction categoryAnnouncement = onView(withText("Объявление")).inRoot((RootMatchers.isPlatformPopup()));
+    public ViewInteraction categoryBirthday = onView(withText("День рождения")).inRoot((RootMatchers.isPlatformPopup()));
+    public ViewInteraction categorySalary = onView(withText("Зарплата")).inRoot((RootMatchers.isPlatformPopup()));
+    public ViewInteraction categoryTradeUnion = onView(withText("Профсоюз")).inRoot((RootMatchers.isPlatformPopup()));
+    public ViewInteraction categoryMassage = onView(withText("Массаж")).inRoot((RootMatchers.isPlatformPopup()));
+    public ViewInteraction categoryGratitude = onView(withText("Благодарность")).inRoot((RootMatchers.isPlatformPopup()));
+    public ViewInteraction categoryNeedHelp = onView(withText("Нужна помощь")).inRoot((RootMatchers.isPlatformPopup()));
+    public ViewInteraction categoryHoliday = onView(withText("Праздник")).inRoot((RootMatchers.isPlatformPopup()));
 
     public ViewInteraction datePicker = onView(isAssignableFrom(DatePicker.class));
     public ViewInteraction okBut = onView(withId(android.R.id.button1));

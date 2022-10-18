@@ -28,5 +28,6 @@ public class NewsPageElements {
     public ViewInteraction swithcherActive = onView(withId(R.id.switcher));
     public ViewInteraction saveBut = onView(withId(R.id.save_button));
     public ViewInteraction cancelBut = onView(withId(R.id.cancel_button));
+    public ViewInteraction newsItemTitle = onView(withId(R.id.news_item_title_text_view));
 
 }

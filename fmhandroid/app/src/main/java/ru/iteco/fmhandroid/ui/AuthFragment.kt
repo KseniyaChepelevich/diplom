@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import ru.iteco.fmhandroid.EspressoIdlingResources
 import ru.iteco.fmhandroid.R
 import ru.iteco.fmhandroid.databinding.FragmentAuthBinding
 import ru.iteco.fmhandroid.viewmodel.AuthViewModel
@@ -25,7 +26,9 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
         lifecycleScope.launch {
             viewModel.loginEvent.collectLatest {
+                EspressoIdlingResources.increment();
                 findNavController().navigate(R.id.action_authFragment_to_mainFragment)
+                EspressoIdlingResources.decrement();
             }
         }
         lifecycleScope.launch {

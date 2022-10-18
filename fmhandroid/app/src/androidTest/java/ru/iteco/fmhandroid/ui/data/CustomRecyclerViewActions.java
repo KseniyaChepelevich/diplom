@@ -2,6 +2,7 @@ package ru.iteco.fmhandroid.ui.data;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.fail;
 
 import android.content.res.Resources;
 import android.view.View;
@@ -75,33 +76,38 @@ public class CustomRecyclerViewActions {
             };
         }
 
-        public static Matcher<View> matchChildViewOfCardTile(String cardName, int targetViewId, Matcher<View> itemMatcher ){
+        public static BoundedMatcher<View, RecyclerView> matchChildViewisNotExist(int targetViewId, Matcher<View> itemMatcher ){
             return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
                 @Override
                 public void describeTo(Description description) {
-                    description.appendText("Has view id $targetViewId and matches $itemMatcher for item with name $accountName");
+                    description.appendText("Does not have view id $targetViewId with matches $itemMatcher");
                 }
 
                 @Override
                 protected boolean matchesSafely(RecyclerView recyclerView) {
-                    int itemCount = recyclerView.getAdapter().getItemCount();
-                    for (int i = 0; i < itemCount; i++){
-                        RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(i);
-                        if (holder != null) {
-                            TextView cardNameView = (TextView)holder.itemView.findViewById(R.id.news_item_title_text_view);
-                            if (cardNameView.getText().toString() == cardName) {
-                                View targetView = (View) holder.itemView.findViewById(targetViewId);
-                                return itemMatcher.matches(targetView);
+                    RecyclerView.Adapter adapter = recyclerView.getAdapter();
+
+                    for (int i = 0; i < adapter.getItemCount(); i++){
+                        int itemType = adapter.getItemViewType(i);
+                        RecyclerView.ViewHolder viewHolder = adapter.createViewHolder(recyclerView, itemType);
+                        adapter.bindViewHolder(viewHolder, i);
+
+                        View targetView = viewHolder.itemView.findViewById(targetViewId);
+
+                        if (itemMatcher.matches(targetView)) {
+                            return false; // Found match
                             }
                         }
+                    return true;
                     }
-                    return false;
-                }
+
+                };
             };
         }
-    }
 
-    public static class CustomViewMatcher {
+
+
+    /*public static class CustomViewMatcher {
         public static Matcher<View> recyclerViewSizeMatcher(final int matcherSize) {
             return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
 
@@ -124,7 +130,7 @@ public class CustomRecyclerViewActions {
             };
 
         }
-    }
+    }*/
 
     public static int getItemCount(RecyclerView recyclerView) {
         if (recyclerView != null)

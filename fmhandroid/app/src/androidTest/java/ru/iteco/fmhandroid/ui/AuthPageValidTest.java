@@ -1,6 +1,8 @@
 package ru.iteco.fmhandroid.ui;
 
 import android.os.SystemClock;
+
+import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
@@ -11,6 +13,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import ru.iteco.fmhandroid.EspressoIdlingResources;
 import ru.iteco.fmhandroid.ui.page.AuthPageElements;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
@@ -33,18 +37,22 @@ public class AuthPageValidTest {
 
     @Before
     public void logoutCheck() {
-        SystemClock.sleep(8000);
+        IdlingRegistry.getInstance().register(EspressoIdlingResources.idlingResource);
+        //SystemClock.sleep(8000);
         try {
             authSteps.isAuthScreen();
         } catch (NoMatchingViewException e) {
-            SystemClock.sleep(8000);
+            //SystemClock.sleep(8000);
             mainPageSteps.clickLogOutBut();
         }
     }
 
     @After
     public void setUp() {
-        SystemClock.sleep(3000);
+
+        //mainPageSteps.clickLogOutBut();
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResources.idlingResource);
+        //SystemClock.sleep(3000);
     }
 
 
@@ -58,7 +66,7 @@ public class AuthPageValidTest {
     @DisplayName("Вход с валидными данными")
     public void shouldLogInWithValidData() {
         authSteps.authWithValidData(authInfo());
-        SystemClock.sleep(3000);
+        //SystemClock.sleep(3000);
         mainPageSteps.isMainPage();
     }
 }

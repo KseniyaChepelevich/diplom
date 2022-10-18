@@ -7,6 +7,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
 import android.os.SystemClock;
 
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.ViewInteraction;
+
 import java.util.Calendar;
 
 import ru.iteco.fmhandroid.ui.data.DataHelper;
@@ -38,20 +41,28 @@ public class FilterNewsPageSteps {
         filterNewsPageElements.canselBut.check(matches(isDisplayed()));
     }
 
-    public void fillingOutTheFilterNewsForm() {
+    public void fillingOutTheFilterNewsForm(ViewInteraction nameCategory, int plusYearStart, int plusMonthStart, int plusDayStart, int plusYearEnd, int plusMonthEnd, int plusDayEnd) {
+        selectANewsCategoryFromTheList(nameCategory);
+
+        setDateToDatePicker(filterNewsPageElements.newsItemPublishDateStartField, plusYearStart, plusMonthStart, plusDayStart);
+        DataHelper.EspressoBaseTest.clickButton(filterNewsPageElements.okBut);
+
+        setDateToDatePicker(filterNewsPageElements.newsItemPublishDateEndField, plusYearEnd, plusMonthEnd, plusDayEnd);
+        DataHelper.EspressoBaseTest.clickButton(filterNewsPageElements.okBut);
+
+        DataHelper.EspressoBaseTest.clickButton(filterNewsPageElements.filterBut);
+    }
+
+    public void selectANewsCategoryFromTheList(ViewInteraction nameCategory) {
         DataHelper.EspressoBaseTest.clickButton(filterNewsPageElements.newsItemCategoryField);
-        SystemClock.sleep(3000);
-        DataHelper.EspressoBaseTest.clickButton(filterNewsPageElements.categoryAnnouncement);
-        SystemClock.sleep(3000);
-        DataHelper.EspressoBaseTest.clickButton(filterNewsPageElements.newsItemPublishDateStartField);
-        filterNewsPageElements.datePicker.check(matches(isDisplayed()));
-        filterNewsPageElements.datePicker.perform(setDate(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH)));
-        DataHelper.EspressoBaseTest.clickButton(filterNewsPageElements.okBut);
-        DataHelper.EspressoBaseTest.clickButton(filterNewsPageElements.newsItemPublishDateEndField);
-        filterNewsPageElements.datePicker.check(matches(isDisplayed()));
-        filterNewsPageElements.datePicker.perform(setDate(date.get(Calendar.YEAR), date.get(Calendar.MONTH)+1, date.get(Calendar.DAY_OF_MONTH)));
-        DataHelper.EspressoBaseTest.clickButton(filterNewsPageElements.okBut);
+        Espresso.closeSoftKeyboard();
+        DataHelper.EspressoBaseTest.clickButton(nameCategory);
+    }
 
-
+    public void setDateToDatePicker(ViewInteraction nameDtePicker, int plusYear, int plusMonth, int plusDay) {
+        DataHelper.EspressoBaseTest.clickButton(nameDtePicker);
+        filterNewsPageElements.datePicker.check(matches(isDisplayed()));
+        filterNewsPageElements.datePicker.perform(setDate(date.get(Calendar.YEAR)+plusYear, date.get(Calendar.MONTH)+1+plusMonth, date.get(Calendar.DAY_OF_MONTH)+plusDay));
+        //DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
     }
 }

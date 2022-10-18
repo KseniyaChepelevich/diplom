@@ -60,19 +60,19 @@ public class NewsCreationFormTest {
     ControlPanelElements controlPanelElements = new ControlPanelElements();
     ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
-    String titleForNewsAnnouncement = "Тест новость Объявление";
-    String titleForNewsBirthday = "Тест новость День рождения";
-    String titleForNewsSalary = "Тест новость Зарплата";
-    String titleForNewsTradeUnion = "Тест новость Профсоюз";
-    String titleForNewsHoliday = "Тест новость Праздник";
-    String titleForNewsGratitude = "Тест новость Благодарность";
-    String titleForNewsMassage = "Тест новость Массаж";
-    String titleForNewsNeedHelp = "Тест новость Нужна помощь";
-    String titleForNewsShouldNotBeKept = "Новость не должна сохраниться";
-    String titleForNewsPublicationDateTomorrow = "Дата публикации сегодня";
-    String titleForNewsPublicationDateInAMonth = "Дата публикации через месяц";
-    String titleForNewsPublicationTimeHourAgo = "Время публикации час назад";
-    String titleForNewsPublicationTimeInOneHour = "Время публикации через час";
+    String titleForNewsAnnouncement = "Тест новость Объявление" + " " + DataHelper.generateTitleId();
+    String titleForNewsBirthday = "Тест новость День рождения" + " " + DataHelper.generateTitleId();
+    String titleForNewsSalary = "Тест новость Зарплата" + " " + DataHelper.generateTitleId();
+    String titleForNewsTradeUnion = "Тест новость Профсоюз" + " " + DataHelper.generateTitleId();
+    String titleForNewsHoliday = "Тест новость Праздник" + " " + DataHelper.generateTitleId();
+    String titleForNewsGratitude = "Тест новость Благодарность" + " " + DataHelper.generateTitleId();
+    String titleForNewsMassage = "Тест новость Массаж" + " " + DataHelper.generateTitleId();
+    String titleForNewsNeedHelp = "Тест новость Нужна помощь" + " " + DataHelper.generateTitleId();
+    String titleForNewsShouldNotBeKept = "Новость не должна сохраниться" + " " + DataHelper.generateTitleId();
+    String titleForNewsPublicationDateTomorrow = "Дата публикации сегодня" + " " + DataHelper.generateTitleId();
+    String titleForNewsPublicationDateInAMonth = "Дата публикации через месяц" + " " + DataHelper.generateTitleId();
+    String titleForNewsPublicationTimeHourAgo = "Время публикации час назад" + " " + DataHelper.generateTitleId();
+    String titleForNewsPublicationTimeInOneHour = "Время публикации через час" + " " + DataHelper.generateTitleId();
 
     @Rule
     public ActivityTestRule<AppActivity> activityTestRule =
@@ -337,21 +337,8 @@ public class NewsCreationFormTest {
         controlPanelElements.messageChangesWonTBeSaved.check(matches(isDisplayed()));
         DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
         SystemClock.sleep(3000);
-
         //Проверить отсутствие в списке новостей новости с заголовком "Новость не должна сохраниться"
-
-        // scrollTo will fail the test if no item matches.
-        //Assert.assertEquals(controlPanelSteps.NoNewsCheck("Новость не должна сохраниться"), true);
-
-        //controlPanelElements.newsRecyclerList.check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewOfCardTile(titleForNewsShouldNotBeKept, R.id.news_item_material_card_view, )))
-        //onView(withText(titleForNewsShouldNotBeKept)).check(doesNotExist());
-
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForNewsShouldNotBeKept)))
-                )).check(doesNotExist());
-
+        controlPanelElements.newsRecyclerList.check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewisNotExist(R.id.news_item_title_text_view, withText(titleForNewsShouldNotBeKept))));
 
     }
 
