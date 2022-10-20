@@ -132,7 +132,7 @@ public class ControlPanelTest {
     @Test
     @DisplayName("Отмена удаления новости во вкладке Панель управления")
     public void shouldNotRemoveTheNewsItem(){
-        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWillNotBeDeleted, titleNewsWillNotBeDeleted);
+        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWillNotBeDeleted, titleNewsWillNotBeDeleted, 0, 0, 0);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
@@ -154,7 +154,7 @@ public class ControlPanelTest {
     @Test
     @DisplayName("Открытие и закрытие Новости для редактирования без внесения изменений")
     public void shouldNotEditTheNews(){
-        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWillNotBeEditing, titleNewsWillNotBeEditing);
+        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWillNotBeEditing, titleNewsWillNotBeEditing, 0, 0, 0);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
@@ -177,7 +177,7 @@ public class ControlPanelTest {
     @Test
     @DisplayName("Открытие и сохранение Новости для редактирования без внесения изменений")
     public void shouldKeepTheNewsUnchanged(){
-        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsSavedWithoutChanges, titleNewsSavedWithoutChanges);
+        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsSavedWithoutChanges, titleNewsSavedWithoutChanges, 0, 0, 0);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
@@ -198,7 +198,7 @@ public class ControlPanelTest {
     @Test
     @DisplayName("Выключение Активного статуса у Новости")
     public void shouldTurnOffActiveStatus(){
-        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsTurnOffActiveStatus, titleNewsTurnOffActiveStatus);
+        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsTurnOffActiveStatus, titleNewsTurnOffActiveStatus, 0, 0, 0);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
@@ -225,7 +225,7 @@ public class ControlPanelTest {
     public void shouldChangeThePublicationDate() {
         String publishDateTomorrow = DataHelper.getValidDate(0, 1);
 
-        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWithModifiedPublicationDate, titleNewsWithModifiedPublicationDate);
+        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWithModifiedPublicationDate, titleNewsWithModifiedPublicationDate, 0, 0, 0);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
@@ -252,7 +252,7 @@ public class ControlPanelTest {
     @DisplayName("Редактирование описания Новости")
     public void shouldChangeTheDescription() {
         String newDescription = titleNewsWithModifiedDescription + " проверка";
-        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWithModifiedDescription, titleNewsWithModifiedDescription);
+        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWithModifiedDescription, titleNewsWithModifiedDescription, 0, 0, 0);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
@@ -279,7 +279,7 @@ public class ControlPanelTest {
     public void shouldChangeThePublicationTime() {
         String newPublicationTime = DataHelper.getValidTime(1, 0);
 
-        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWithModifiedPublicationTime, titleNewsWithModifiedPublicationTime);
+        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWithModifiedPublicationTime, titleNewsWithModifiedPublicationTime, 0, 0, 0);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
@@ -308,7 +308,7 @@ public class ControlPanelTest {
     @DisplayName("Редактирование заголовка Новости")
     public void shouldChangeNewsTitle() {
         String newTitel = titleNewsWithModifiedTitle + " проверка";
-        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWithModifiedTitle, titleNewsWithModifiedTitle);
+        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWithModifiedTitle, titleNewsWithModifiedTitle, 0, 0, 0);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
@@ -333,7 +333,7 @@ public class ControlPanelTest {
     public void shouldChangeNewsCategory() {
         String newCategory = "День рождения";
 
-        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWithModifiedCategory, titleNewsWithModifiedCategory);
+        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWithModifiedCategory, titleNewsWithModifiedCategory, 0, 0, 0);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
@@ -361,7 +361,7 @@ public class ControlPanelTest {
     @DisplayName("Просмотр описания новости из вкладки Панель управления раздела Новости")
     public void shouldOpenNewsDescription() {
 
-        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsForOpenDescription, titleNewsForOpenDescription);
+        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsForOpenDescription, titleNewsForOpenDescription, 0, 0, 0);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
@@ -378,7 +378,7 @@ public class ControlPanelTest {
     @DisplayName("Удаление новости во вкладке Панель управления")
     public void shouldDeleteNewsItem() {
 
-        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsToDelete, titleNewsToDelete);
+        controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsToDelete, titleNewsToDelete, 0, 0, 0);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
@@ -387,7 +387,7 @@ public class ControlPanelTest {
 
         controlPanelSteps.deleteItemNews(titleNewsToDelete);
 
-        controlPanelElements.newsRecyclerList.check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewisNotExist(R.id.news_item_title_text_view, withText(titleNewsToDelete))));
+        controlPanelElements.newsRecyclerList.check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(titleNewsToDelete))));
 
 
     }

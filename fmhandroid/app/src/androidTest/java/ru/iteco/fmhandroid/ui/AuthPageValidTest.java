@@ -37,12 +37,12 @@ public class AuthPageValidTest {
 
     @Before
     public void logoutCheck() {
-        IdlingRegistry.getInstance().register(EspressoIdlingResources.idlingResource);
+        //IdlingRegistry.getInstance().register(EspressoIdlingResources.idlingResource);
         //SystemClock.sleep(8000);
         try {
             authSteps.isAuthScreen();
         } catch (NoMatchingViewException e) {
-            //SystemClock.sleep(8000);
+            SystemClock.sleep(8000);
             mainPageSteps.clickLogOutBut();
         }
     }
@@ -50,9 +50,8 @@ public class AuthPageValidTest {
     @After
     public void setUp() {
 
-        //mainPageSteps.clickLogOutBut();
-        IdlingRegistry.getInstance().unregister(EspressoIdlingResources.idlingResource);
-        //SystemClock.sleep(3000);
+
+        SystemClock.sleep(3000);
     }
 
 
@@ -66,7 +65,7 @@ public class AuthPageValidTest {
     @DisplayName("Вход с валидными данными")
     public void shouldLogInWithValidData() {
         authSteps.authWithValidData(authInfo());
-        //SystemClock.sleep(3000);
+        SystemClock.sleep(3000);
         mainPageSteps.isMainPage();
     }
 }
