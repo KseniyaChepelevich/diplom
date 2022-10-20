@@ -7,6 +7,7 @@ import ru.iteco.fmhandroid.ui.data.TestUtils;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.AllOf.allOf;
 
 public class NewsPageElements {
     public ViewInteraction newsPageHeader = onView(withText("News"));
@@ -29,5 +30,11 @@ public class NewsPageElements {
     public ViewInteraction saveBut = onView(withId(R.id.save_button));
     public ViewInteraction cancelBut = onView(withId(R.id.cancel_button));
     public ViewInteraction newsItemTitle = onView(withId(R.id.news_item_title_text_view));
+
+    //Элементы на экране при пустом списке новостей
+    public ViewInteraction emptyNewsListImage = onView(withId(R.id.empty_news_list_image_view));
+    public ViewInteraction emptyNewsListText = onView(withText("There is nothing here yet…"));
+    public ViewInteraction newsRetryButton = onView(allOf(withId(R.id.news_retry_material_button), withText("REFRESH")));
+
 
 }

@@ -18,6 +18,7 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.RootMatchers;
 
 import ru.iteco.fmhandroid.R;
+import ru.iteco.fmhandroid.ui.data.DataHelper;
 
 public class FilterNewsPageElements {
     public ViewInteraction filterNewsTitleTextView = onView(withId(R.id.filter_news_title_text_view));
@@ -25,7 +26,7 @@ public class FilterNewsPageElements {
     public ViewInteraction newsItemPublishDateStartField = onView(withId(R.id.news_item_publish_date_start_text_input_edit_text));
     public ViewInteraction newsItemPublishDateEndField = onView(withId(R.id.news_item_publish_date_end_text_input_edit_text));
     public ViewInteraction filterBut = onView(withId(R.id.filter_button));
-    public ViewInteraction canselBut = onView(withId(R.id.cancel_button));
+    public ViewInteraction cancelBut = onView(withId(R.id.cancel_button));
     public ViewInteraction filterNewsActiveCheckBox = onView(withId(R.id.filter_news_active_material_check_box));
     public ViewInteraction filterNewsInactiveCheckBox = onView(withId(R.id.filter_news_inactive_material_check_box));
     public ViewInteraction categoryAnnouncement = onView(withText("Объявление")).inRoot((RootMatchers.isPlatformPopup()));
@@ -36,8 +37,13 @@ public class FilterNewsPageElements {
     public ViewInteraction categoryGratitude = onView(withText("Благодарность")).inRoot((RootMatchers.isPlatformPopup()));
     public ViewInteraction categoryNeedHelp = onView(withText("Нужна помощь")).inRoot((RootMatchers.isPlatformPopup()));
     public ViewInteraction categoryHoliday = onView(withText("Праздник")).inRoot((RootMatchers.isPlatformPopup()));
+    public ViewInteraction messageTextWrongPeriod = onView(withText("Wrong period"));
 
     public ViewInteraction datePicker = onView(isAssignableFrom(DatePicker.class));
     public ViewInteraction okBut = onView(withId(android.R.id.button1));
+
+    public ViewInteraction wrongСategoryToast(String text) {
+        return onView(withText(text)).inRoot(new DataHelper.ToastMatcher());
+    }
 
 }

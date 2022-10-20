@@ -76,7 +76,7 @@ public class CustomRecyclerViewActions {
             };
         }
 
-        public static BoundedMatcher<View, RecyclerView> matchChildViewisNotExist(int targetViewId, Matcher<View> itemMatcher ){
+        public static BoundedMatcher<View, RecyclerView> matchChildViewIsNotExist(int targetViewId, Matcher<View> itemMatcher ){
             return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
                 @Override
                 public void describeTo(Description description) {
@@ -104,6 +104,8 @@ public class CustomRecyclerViewActions {
                 };
             };
         }
+
+
 
 
 

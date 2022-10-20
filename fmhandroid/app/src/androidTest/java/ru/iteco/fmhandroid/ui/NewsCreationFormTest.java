@@ -338,7 +338,7 @@ public class NewsCreationFormTest {
         DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
         SystemClock.sleep(3000);
         //Проверить отсутствие в списке новостей новости с заголовком "Новость не должна сохраниться"
-        controlPanelElements.newsRecyclerList.check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewisNotExist(R.id.news_item_title_text_view, withText(titleForNewsShouldNotBeKept))));
+        controlPanelElements.newsRecyclerList.check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(titleForNewsShouldNotBeKept))));
 
     }
 

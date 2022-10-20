@@ -6,6 +6,7 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.PickerActions.setDate;
 import static androidx.test.espresso.contrib.PickerActions.setTime;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withChild;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -20,6 +21,7 @@ import android.os.SystemClock;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 
 import java.util.Calendar;
 
@@ -148,6 +150,10 @@ public class ControlPanelSteps {
     }
 
     public void deleteItemNews (String description) {
+        controlPanelElements.newsRecyclerList
+                // scrollTo will fail the test if no item matches.
+                .perform(RecyclerViewActions.scrollTo(allOf(
+                        hasDescendant(withText(description)))));
         getItemNewsDeleteElement(description).perform(click());
         controlPanelElements.messageAboutDelete.check(matches(isDisplayed()));
         controlPanelElements.okBut.perform(click());
@@ -170,10 +176,10 @@ public class ControlPanelSteps {
         controlPanelElements.descriptionTextInputEndIcon.check(matches(isDisplayed()));
     }
 
-    public void creatingTestNews(ViewInteraction newsItemCategory, String title, String description) {
+    public void creatingTestNews(ViewInteraction newsItemCategory, String title, String description, int plusYear, int plusMonth, int plusDay) {
         openCreatingNewsForm();
         selectANewsCategoryFromTheList(newsItemCategory);
-        fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, 0, 0, title, description);
+        fillingOutTheFormCreatingNewsWithDateToday(plusYear, plusMonth, plusDay, 0, 0, title, description);
         DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
         SystemClock.sleep(3000);
     }
