@@ -25,12 +25,22 @@ public class ClaimsPageSteps {
         claimsPageElements.timeClaimField.check(matches(isDisplayed()));
         claimsPageElements.descriptionClaimField.check(matches(isDisplayed()));
         claimsPageElements.saveClaimBut.check(matches(isDisplayed()));
-        claimsPageElements.canselClaimBut.check(matches(isDisplayed()));
+        claimsPageElements.cancelClaimBut.check(matches(isDisplayed()));
 
     }
 
     public void isClaimsCard() {
         claimsPageElements.claimsItemDescription.check(matches(isDisplayed()));
 
+    }
+
+    public void isClaimsFilteringDialog() {
+        claimsPageElements.claimFilterDialogTitle.check(matches(isDisplayed()));
+        claimsPageElements.itemFilterOpen.check(matches(isDisplayed()));
+        claimsPageElements.itemFilterInProgress.check(matches(isDisplayed()));
+        claimsPageElements.itemFilterExecuted.check(matches(isDisplayed()));
+        claimsPageElements.itemFilterCancelled.check(matches(isDisplayed()));
+        claimsPageElements.claimListFilterOkBut.check(matches(isDisplayed()));
+        claimsPageElements.claimFilterCancelBut.check(matches(isDisplayed()));
     }
 }
