@@ -23,6 +23,16 @@ public class ClaimsPageElements {
     public ViewInteraction timeClaimField = onView(allOf(withHint("Time"), withParent(withParent(withId(R.id.time_in_plan_text_input_layout)))));
     public ViewInteraction descriptionClaimField = onView(allOf(withHint("Description"), withParent(withParent(withId(R.id.description_text_input_layout)))));
     public ViewInteraction saveClaimBut = onView(withId(R.id.save_button));
-    public ViewInteraction canselClaimBut = onView(withId(R.id.cancel_button));
+    public ViewInteraction cancelClaimBut = onView(withId(R.id.cancel_button));
+    public ViewInteraction claimsFiltersButton = onView(withId(R.id.filters_material_button));
+    //Элементы диалогового окна Фильтрация
+    public ViewInteraction claimFilterDialogTitle = onView(withId(R.id.claim_filter_dialog_title));
+    public ViewInteraction itemFilterOpen = onView(withId(R.id.item_filter_open));
+    public ViewInteraction itemFilterInProgress = onView(withId(R.id.item_filter_in_progress));
+    public ViewInteraction itemFilterExecuted = onView(withId(R.id.item_filter_executed));
+    public ViewInteraction itemFilterCancelled = onView(withId(R.id.item_filter_cancelled));
+    public ViewInteraction claimListFilterOkBut = onView(withId(R.id.claim_list_filter_ok_material_button));
+    public ViewInteraction claimFilterCancelBut = onView(withId(R.id.claim_filter_cancel_material_button));
+
 
 }

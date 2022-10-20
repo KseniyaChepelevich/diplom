@@ -2,8 +2,10 @@ package ru.iteco.fmhandroid.ui;
 
 import android.os.SystemClock;
 
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 //import io.qameta.allure.android.runners.AllureAndroidJUnit4;
@@ -34,6 +36,7 @@ public class AuthPageValidTest {
     @Rule
     public ActivityTestRule<AppActivity> activityTestRule =
             new ActivityTestRule<>(AppActivity.class);
+    //public ActivityScenarioRule rule = new ActivityScenarioRule<>(AppActivity.class);
 
     @Before
     public void logoutCheck() {
@@ -58,12 +61,14 @@ public class AuthPageValidTest {
     @Test
     @DisplayName("Проверка элементов экрана авторизации")
     public void shouldCheckAuthPageElements() {
+        //ActivityScenario scenario = rule.getScenario();
         authSteps.isAuthScreen();
     }
 
     @Test
     @DisplayName("Вход с валидными данными")
     public void shouldLogInWithValidData() {
+        //ActivityScenario scenario = rule.getScenario();
         authSteps.authWithValidData(authInfo());
         SystemClock.sleep(3000);
         mainPageSteps.isMainPage();
