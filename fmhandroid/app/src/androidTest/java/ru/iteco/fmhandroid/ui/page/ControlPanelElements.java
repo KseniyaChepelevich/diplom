@@ -2,12 +2,14 @@ package ru.iteco.fmhandroid.ui.page;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.core.Is.is;
 
 import android.view.View;
 import android.widget.DatePicker;
@@ -47,6 +49,7 @@ public class ControlPanelElements {
     public ViewInteraction timePicker = onView(isAssignableFrom(TimePicker.class));
     public ViewInteraction timePickerToggleMode = onView(withContentDescription("Switch to text input mode for the time input."));
     public ViewInteraction timePickerTopLabel = onView(withText("Type in time"));
+
     //public ViewInteraction inputHourTimePicker = onView(withId(android.R.id.input_hour));
     public ViewInteraction deleteNewsItemBut = onView(withId(R.id.delete_news_item_image_view));
     public ViewInteraction messageAboutDelete = onView(withText("Are you sure you want to permanently delete the document? These changes cannot be reversed in the future."));

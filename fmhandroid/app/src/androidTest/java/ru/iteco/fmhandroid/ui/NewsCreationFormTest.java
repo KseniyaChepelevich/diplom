@@ -2,6 +2,7 @@ package ru.iteco.fmhandroid.ui;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.PickerActions.setTime;
@@ -60,6 +61,8 @@ public class NewsCreationFormTest {
     ControlPanelElements controlPanelElements = new ControlPanelElements();
     ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
+    Calendar date = Calendar.getInstance();
+
     String titleForNewsAnnouncement = "Тест новость Объявление" + " " + DataHelper.generateTitleId();
     String titleForNewsBirthday = "Тест новость День рождения" + " " + DataHelper.generateTitleId();
     String titleForNewsSalary = "Тест новость Зарплата" + " " + DataHelper.generateTitleId();
@@ -100,7 +103,7 @@ public class NewsCreationFormTest {
 
 
     @Test
-    @DisplayName("Автоподставление в поле Titel из поля Category")
+    @DisplayName("Автоподставление в поле Title из поля Category")
     public void shouldSubstituteInTheTitleFieldTheValueOfTheCategoryField() {
 
         controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryAnnouncement);
@@ -112,7 +115,7 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с категорией Объявление")
     public void shouldCreateANewsItemWithCategoryAnnouncement() {
-        String publicationDate = DataHelper.getValidDate(0, 0);
+        String publicationDate = DataHelper.getValidDate(0, 0, 0);
         //String publicationTime = DataHelper.getValidTime(0, 0);
 
 
@@ -139,7 +142,7 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с категорией День рождения")
     public void shouldCreateANewsItemWithCategoryBirthday() {
-        String publicationDate = DataHelper.getValidDate(0, 0);
+        String publicationDate = DataHelper.getValidDate(0, 0, 0);
         //String publicationTime = DataHelper.getValidTime(0, 0);
 
 
@@ -166,7 +169,7 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с категорией Зарплата")
     public void shouldCreateANewsItemWithCategorySalagy() {
-        String publicationDate = DataHelper.getValidDate(0, 0);
+        String publicationDate = DataHelper.getValidDate(0, 0, 0);
         //String publicationTime = DataHelper.getValidTime(0, 0);
 
 
@@ -193,7 +196,7 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с категорией Профсоюз")
     public void shouldCreateANewsItemWithCategoryTradeUnion() {
-        String publicationDate = DataHelper.getValidDate(0, 0);
+        String publicationDate = DataHelper.getValidDate(0, 0, 0);
         //String publicationTime = DataHelper.getValidTime(0, 0);
 
 
@@ -220,7 +223,7 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с категорией Праздник")
     public void shouldCreateANewsItemWithCategoryHoliday() {
-        String publicationDate = DataHelper.getValidDate(0, 0);
+        String publicationDate = DataHelper.getValidDate(0, 0, 0);
         //String publicationTime = DataHelper.getValidTime(0, 0);
 
 
@@ -247,7 +250,7 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с категорией Благодарность")
     public void shouldCreateANewsItemWithCategoryGratitude() {
-        String publicationDate = DataHelper.getValidDate(0, 0);
+        String publicationDate = DataHelper.getValidDate(0, 0, 0);
         //String publicationTime = DataHelper.getValidTime(0, 0);
 
 
@@ -274,7 +277,7 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с категорией Массаж")
     public void shouldCreateANewsItemWithCategoryMassage() {
-        String publicationDate = DataHelper.getValidDate(0, 0);
+        String publicationDate = DataHelper.getValidDate(0, 0, 0);
         //String publicationTime = DataHelper.getValidTime(0, 0);
 
 
@@ -301,7 +304,7 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с категорией Нужна помощь")
     public void shouldCreateANewsItemWithCategoryNeedHelp() {
-        String publicationDate = DataHelper.getValidDate(0, 0);
+        String publicationDate = DataHelper.getValidDate(0, 0, 0);
         //String publicationTime = DataHelper.getValidTime(0, 0);
 
 
@@ -376,7 +379,7 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с датой публикации завтра")
     public void shouldCreateANewsItemWithPublishDateTomorrow() {
-        String publicationDate = DataHelper.getValidDate(0, 1);
+        String publicationDate = DataHelper.getValidDate(0, 0, 1);
         //String publicationTime = DataHelper.getValidTime(0, 0);
 
 
@@ -404,7 +407,7 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с датой публикации через месяц")
     public void shouldCreateANewsItemWithPublicationDateInAMonth() {
-        String publicationDate = DataHelper.getValidDate(1, 0);
+        String publicationDate = DataHelper.getValidDate(0, 1, 0);
         //String publicationTime = DataHelper.getValidTime(0, 0);
 
 
@@ -432,7 +435,7 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с датой публикации вчера")
     public void shouldCreateANewsItemWithPublicationDateYesterday() {
-        String publicationDate = DataHelper.getValidDate(0, 0);
+        String publicationDate = DataHelper.getValidDate(0, 0, 0);
 
 
         controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categorySalary);
@@ -445,7 +448,7 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с датой публикации год назад")
     public void shouldCreateANewsItemWithPublicationDateOneYearAgo() {
-        String publicationDate = DataHelper.getValidDate(0, 0);
+        String publicationDate = DataHelper.getValidDate(0, 0, 0);
 
 
         controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categorySalary);
@@ -457,15 +460,22 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с датой публикации час назад")
     public void shouldCreateANewsItemWithPublicationTimeHourAgo() {
-        String timeHourAgo = DataHelper.getValidTime(-1, 0);
-        String publicationDate = DataHelper.getValidDate(0, 0);
-
+        int hour = date.get(Calendar.HOUR_OF_DAY)-1;
+        int minutes = date.get(Calendar.MINUTE);
+        String publicationDate = DataHelper.getValidDate(0, 0, 0);
 
         controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, -1, 0, titleForNewsPublicationTimeHourAgo, titleForNewsPublicationTimeHourAgo);
+        controlPanelElements.newsItemTitleField.perform(replaceText(titleForNewsPublicationTimeHourAgo));
+        controlPanelSteps.setDateToDatePicker(0, 0, 0);
+        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
+        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.newsItemPublishTimeField);
+        controlPanelElements.timePicker.check(matches(isDisplayed()));
+        controlPanelElements.timePicker.perform(setTime(hour, minutes));
+        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
 
         controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
-        controlPanelElements.newsItemPublishTimeField.check(matches(withText(timeHourAgo)));
+        controlPanelElements.newsItemPublishTimeField.check(matches(withText(hour + ":" + minutes)));
+        controlPanelElements.newsItemDescriptionField.perform(replaceText(titleForNewsPublicationTimeHourAgo));
 
         DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
         SystemClock.sleep(3000);
@@ -484,15 +494,23 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с датой публикации через час")
     public void shouldCreateANewsItemWithPublicationTimeInOneHour() {
-        String timeInOneHour = DataHelper.getValidTime(+1, 0);
-        String publicationDate = DataHelper.getValidDate(0, 0);
+        int hour = date.get(Calendar.HOUR_OF_DAY)+1;
+        int minutes = date.get(Calendar.MINUTE);
+        String publicationDate = DataHelper.getValidDate(0, 0, 0);
 
 
         controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, +1, 0, titleForNewsPublicationTimeInOneHour, titleForNewsPublicationTimeInOneHour);
+        controlPanelElements.newsItemTitleField.perform(replaceText(titleForNewsPublicationTimeInOneHour));
+        controlPanelSteps.setDateToDatePicker(0, 0, 0);
+        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
+        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.newsItemPublishTimeField);
+        controlPanelElements.timePicker.check(matches(isDisplayed()));
+        controlPanelElements.timePicker.perform(setTime(hour, minutes));
+        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
 
         controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
-        controlPanelElements.newsItemPublishTimeField.check(matches(withText(timeInOneHour)));
+        controlPanelElements.newsItemPublishTimeField.check(matches(withText(hour + ":" + minutes)));
+        controlPanelElements.newsItemDescriptionField.perform(replaceText(titleForNewsPublicationTimeInOneHour));
 
         DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
         SystemClock.sleep(3000);
@@ -508,6 +526,7 @@ public class NewsCreationFormTest {
         controlPanelSteps.deleteItemNews(titleForNewsPublicationTimeInOneHour);
     }
 
+    //Не выходит вводом цифр
     @Test
     @DisplayName("Выставление времени публикации Новости вводом цифр")
     public void shouldSetTheTimeByEnteringNumbers() {

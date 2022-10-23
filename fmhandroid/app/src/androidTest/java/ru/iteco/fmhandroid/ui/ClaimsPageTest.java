@@ -55,8 +55,30 @@ public class ClaimsPageTest {
         DataHelper.EspressoBaseTest.clickButton(claimsPageElements.claimsFiltersButton);
         SystemClock.sleep(3000);
         claimsPageSteps.isClaimsFilteringDialog();
+    }
+
+    @Test
+    @DisplayName("Открытие формы Создания заявки в разделе Заявки")
+    public void shouldOpenTheCreateClaimForm() {
+        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.addNewClaimBut);
+        claimsPageSteps.isClaimsForm();
 
     }
+
+    @Test
+    @DisplayName("Окрытие Заявки с помощью кнопки со стрелкой")
+    public void shouldOpenTheClaimCard() {
+        //Создать заявку для теста
+
+        //Открыть карточку заявки
+
+        //Проверить, что отображается карточка созданной заявки
+
+
+
+    }
+
+
 
 
 
