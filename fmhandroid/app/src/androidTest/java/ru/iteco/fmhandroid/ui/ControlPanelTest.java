@@ -223,7 +223,7 @@ public class ControlPanelTest {
     @Test
     @DisplayName("Редактирование даты публикации")
     public void shouldChangeThePublicationDate() {
-        String publishDateTomorrow = DataHelper.getValidDate(0, 1);
+        String publishDateTomorrow = DataHelper.getValidDate(0, 0, 1);
 
         controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWithModifiedPublicationDate, titleNewsWithModifiedPublicationDate, 0, 0, 0);
         controlPanelElements.newsRecyclerList
@@ -307,7 +307,7 @@ public class ControlPanelTest {
     @Test
     @DisplayName("Редактирование заголовка Новости")
     public void shouldChangeNewsTitle() {
-        String newTitel = titleNewsWithModifiedTitle + " проверка";
+        String newTitle = titleNewsWithModifiedTitle + " проверка";
         controlPanelSteps.creatingTestNews(controlPanelElements.categoryAnnouncement, titleNewsWithModifiedTitle, titleNewsWithModifiedTitle, 0, 0, 0);
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
@@ -323,7 +323,7 @@ public class ControlPanelTest {
         controlPanelElements.newsRecyclerList
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(newTitel))))).check(matches(isDisplayed()));
+                        hasDescendant(withText(newTitle))))).check(matches(isDisplayed()));
 
         controlPanelSteps.deleteItemNews(titleNewsWithModifiedTitle);
     }

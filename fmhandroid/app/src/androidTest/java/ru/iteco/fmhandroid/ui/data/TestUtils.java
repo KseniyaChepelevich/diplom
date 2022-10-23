@@ -1,12 +1,21 @@
 package ru.iteco.fmhandroid.ui.data;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
+
 import android.view.View;
 
 import androidx.annotation.IdRes;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.ViewAssertion;
+import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.util.HumanReadables;
 
@@ -39,7 +48,7 @@ public class TestUtils {
         }
 
         public Matcher<View> getConstraints() {
-            return Matchers.allOf(new Matcher[] {
+            return Matchers.allOf(new Matcher[]{
                     ViewMatchers.isAssignableFrom(RecyclerView.class), ViewMatchers.isDisplayed()
             });
         }
@@ -83,7 +92,7 @@ public class TestUtils {
         }
 
         public Matcher<View> getConstraints() {
-            return Matchers.allOf(new Matcher[] {
+            return Matchers.allOf(new Matcher[]{
                     ViewMatchers.isAssignableFrom(RecyclerView.class), ViewMatchers.isDisplayed()
             });
         }
@@ -103,4 +112,39 @@ public class TestUtils {
 
         return new CustomRecyclerViewActions.RecyclerViewMatcher(recyclerViewId);
     }
+
+    public static ViewInteraction waitView(Matcher<View> matcher) {
+        onView(isRoot()).perform(ViewActions.waitElement(matcher, 10000));
+        return onView((matcher));
+
+    }
+
+
+
+    public static ViewInteraction onViewWithTimeout(Matcher<View> matcher) {
+        int retries = 10;
+        int retryDelayMs = 500;
+        ViewAssertion retryAssertion= matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE));
+        for (int i = 0; i < retries; i++)
+         {
+
+            try {
+                ViewInteraction viewInteraction = Espresso.onView(matcher);
+                viewInteraction.check(retryAssertion);
+                return viewInteraction;
+            } catch (NoMatchingViewException e) {
+                if (i >= retries) {
+                    throw (e);
+                } else {
+                    try {
+                        Thread.sleep(retryDelayMs);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
+        throw new AssertionError("View matcher is broken for $matcher");
+    }
+
 }

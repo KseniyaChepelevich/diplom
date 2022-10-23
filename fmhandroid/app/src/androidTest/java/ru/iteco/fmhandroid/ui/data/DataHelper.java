@@ -92,13 +92,13 @@ public class DataHelper {
 
     }
 
-    public static String generateDate(int plusMonth, int plusDays, String formatPattern) {
-        return LocalDate.now().plusMonths(plusMonth).plusDays(plusDays).format(DateTimeFormatter.ofPattern(formatPattern));
+    public static String generateDate(int plusYear, int plusMonth, int plusDays, String formatPattern) {
+        return LocalDate.now().plusYears(plusYear).plusMonths(plusMonth).plusDays(plusDays).format(DateTimeFormatter.ofPattern(formatPattern));
     }
 
-    public static String getValidDate(int plusMonth, int plusDays) {
+    public static String getValidDate(int plusYear, int plusMonth, int plusDays) {
         //int randomNumber = ThreadLocalRandom.current().nextInt(1,60);
-        String date = generateDate(plusMonth, plusDays, "dd.MM.yyyy");
+        String date = generateDate(plusYear, plusMonth, plusDays, "dd.MM.yyyy");
         return date;
     }
 
@@ -106,13 +106,13 @@ public class DataHelper {
         return LocalTime.now().plusHours(plusHours).plusMinutes(plusMinutes).format(DateTimeFormatter.ofPattern(formatPattern));
     }
 
-    public static String getValidTime(int plusHour, int plusMinuts) {
+    public static String getValidTime(int plusHour, int plusMinutes) {
         //int randomNumber = ThreadLocalRandom.current().nextInt(1,60);
-        String time = generateTime(plusHour, plusMinuts, "HH:mm");
+        String time = generateTime(plusHour, plusMinutes, "HH:mm");
         return time;
     }
 
-    public static Cloneable getDateForPicker() {
+    public static Calendar getDateForPicker() {
         Calendar date = Calendar.getInstance();
         return date;
     }

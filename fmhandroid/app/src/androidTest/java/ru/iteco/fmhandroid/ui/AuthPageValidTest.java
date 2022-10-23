@@ -29,14 +29,16 @@ import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 public class AuthPageValidTest {
 
 
-    AuthSteps authSteps = new AuthSteps();
-    AuthPageElements authsPageElements = new AuthPageElements();
-    MainPageSteps mainPageSteps = new MainPageSteps();
+
 
     @Rule
     public ActivityTestRule<AppActivity> activityTestRule =
             new ActivityTestRule<>(AppActivity.class);
     //public ActivityScenarioRule rule = new ActivityScenarioRule<>(AppActivity.class);
+
+    AuthSteps authSteps = new AuthSteps();
+    //AuthPageElements authsPageElements = new AuthPageElements();
+    MainPageSteps mainPageSteps = new MainPageSteps();
 
     @Before
     public void logoutCheck() {
