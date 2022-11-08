@@ -18,7 +18,7 @@ public class NewsPageElements {
             .atPositionOnView(1, R.id.news_item_material_card_view));
     public ViewInteraction newsItemDescriptionTextView1 = onView(TestUtils.withRecyclerView(R.id.news_list_recycler_view).atPositionOnView(1, R.id.news_item_description_text_view));
 
-    public ViewInteraction contrloPanelHeader = onView(withText("Control panel"));
+    public ViewInteraction controlPanelHeader = onView(withText("Control panel"));
     public ViewInteraction addNewsImBut = onView(withId(R.id.add_news_image_view));
     public ViewInteraction sortNewsMaterialBut = onView(withId(R.id.sort_news_material_button));
     public ViewInteraction newsItemCategoryField = onView(withId(R.id.news_item_category_text_auto_complete_text_view));

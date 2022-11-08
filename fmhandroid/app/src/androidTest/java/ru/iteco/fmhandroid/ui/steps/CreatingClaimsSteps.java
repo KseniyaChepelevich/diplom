@@ -1,47 +1,64 @@
 package ru.iteco.fmhandroid.ui.steps;
 
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.PickerActions.setDate;
 import static androidx.test.espresso.contrib.PickerActions.setTime;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.core.AllOf.allOf;
 
 import android.os.SystemClock;
+import android.view.View;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.espresso.matcher.RootMatchers;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
+
+import java.security.Key;
 import java.util.Calendar;
 
+import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
+import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.page.ClaimsPageElements;
 
 public class CreatingClaimsSteps {
     Calendar date = Calendar.getInstance();
     ClaimsPageElements claimsPageElements = new ClaimsPageElements();
+    ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
+    ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
     public void replaceTextClaimExecutor(String nameExecutor) {
-        claimsPageElements.executorClaimField.perform(click(), replaceText(nameExecutor));
+        TestUtils.waitView(claimsPageSteps.executorClaimField).check(matches(isDisplayed())).perform(click(), replaceText(nameExecutor));
+        Espresso.closeSoftKeyboard();
 
     }
 
     public void selectAClaimExecutorFromTheList(ViewInteraction nameExecutor) {
-        DataHelper.EspressoBaseTest.clickButton( claimsPageElements.executorClaimField);
+        TestUtils.waitView(claimsPageSteps.executorClaimField).perform(click());
         Espresso.closeSoftKeyboard();
+        //TestUtils.waitView(nameExecutor).inRoot((RootMatchers.isPlatformPopup())).perform(click());
         DataHelper.EspressoBaseTest.clickButton(nameExecutor);
     }
 
-    public void setDateToDatePicker(int plusYear, int plusMonth, int plusDay) {
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.dateClaimField);
-        claimsPageElements.datePicker.check(matches(isDisplayed()));
-        claimsPageElements.datePicker.perform(setDate(date.get(Calendar.YEAR)+plusYear, date.get(Calendar.MONTH)+1+plusMonth, date.get(Calendar.DAY_OF_MONTH)+plusDay));
-        //DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
+    public void setDateToDatePicker(int year, int month, int day) {
+        TestUtils.waitView(claimsPageSteps.dateClaimField).perform(click());
+        TestUtils.waitView(controlPanelSteps.datePicker).check(matches(isDisplayed()));
+        TestUtils.waitView(controlPanelSteps.datePicker).perform(setDate(year, month, day));
     }
 
     public void setTimeToTimePicker(int plusHour, int plusMinute) {
@@ -49,42 +66,54 @@ public class CreatingClaimsSteps {
         claimsPageElements.timePicker.perform(setTime(date.get(Calendar.HOUR_OF_DAY)+plusHour, date.get(Calendar.MINUTE)+plusMinute));
     }
 
-    public void setTimeToTimeField(int plusHour, int plusMinute) {
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.timeClaimField);
-        //controlPanelElements.timePicker.check(matches(isDisplayed()));
-        //controlPanelElements.timePicker.perform(setTime(date.get(Calendar.HOUR_OF_DAY)+plusHour, date.get(Calendar.MINUTE)+plusMinute));
-        //DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
-        setTimeToTimePicker(plusHour, plusMinute);
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.okBut);
+    public void setTimeToTimeField(int hour, int minute) {
+        TestUtils.waitView(claimsPageSteps.timeClaimField).perform(click());
+        controlPanelSteps.setTimeToTimePicker(hour, minute);
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
     }
 
-    public void fillingOutTheFormCreatingClaimWithDateToday(int plusYear, int plusMonth, int plusDay, int plusHour, int plusMinute, String title, String description) {
+    public void fillingOutTheFormCreatingClaimWithDateToday(int year, int month, int day, int hour, int minute, String title, String description) {
+        TestUtils.waitView(claimsPageSteps.titleClaimField).perform(replaceText(title));
+
+        setDateToDatePicker(year, month, day);
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
+        setTimeToTimeField(hour, minute);
+        TestUtils.waitView(claimsPageSteps.descriptionClaimField).perform(replaceText(description));
+    }
+
+    public void creatingAClaim(int year, int month, int day, int hour, int minutes, String title, String description) {
+        TestUtils.waitView(claimsPageSteps.addNewClaimBut).perform(click());
+
+        selectAClaimExecutorFromTheList(claimsPageSteps.executorIvanov);
+        fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, title, description);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+    }
+
+    public void creatingAClaimWithStatusOpen(int year, int month, int day, int hour, int minutes, String title, String description) {
+        TestUtils.waitView(claimsPageSteps.addNewClaimBut).perform(click());
+        fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, title, description);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         SystemClock.sleep(3000);
-        claimsPageElements.titleClaimField.perform(replaceText(title));
-        setDateToDatePicker(plusYear, plusMonth, plusDay);
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.okBut);
-        setTimeToTimeField(plusHour, plusMinute);
-        claimsPageElements.descriptionClaimField.perform(replaceText(description));
     }
 
     public void cancellationOfTheClaim (String description) {
-        claimsPageElements.newsRecyclerList
+        TestUtils.waitView(claimsPageSteps.claimRecyclerList)
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
                         hasDescendant(withText(description))))).perform(click());
-
     }
 
     public void isFillEmptyFieldsMessage() {
-        claimsPageElements.messageFillEmptyFields.check(matches(isDisplayed()));
-        claimsPageElements.okBut.check(matches(isDisplayed()));
+        TestUtils.waitView(claimsPageSteps.messageFillEmptyFields).check(matches(isDisplayed()));
+        TestUtils.waitView(controlPanelSteps.okBut).check(matches(isDisplayed()));
     }
 
     public void isWrongEmptyFormClaim() {
-        claimsPageElements.titleTextInputEndIcon.check(matches(isDisplayed()));
-        claimsPageElements.dateInPlaneTextInputEndIcon.check(matches(isDisplayed()));
-        claimsPageElements.timeInPlaneTextInputEndIcon.check(matches(isDisplayed()));
-        claimsPageElements.descriptionTextInputEndIcon.check(matches(isDisplayed()));
+        TestUtils.waitView(allOf(withId(R.id.text_input_end_icon), withParent(withParent(withParent(withParent(withId(R.id.title_text_input_layout))))))).check(matches(isDisplayed()));
+        TestUtils.waitView(Matchers.allOf(withId(R.id.text_input_end_icon), withParent(withParent(withParent(withParent(withId(R.id.date_in_plan_text_input_layout))))))).check(matches(isDisplayed()));
+        TestUtils.waitView(Matchers.allOf(withId(R.id.text_input_end_icon), withParent(withParent(withParent(withParent(withId(R.id.time_in_plan_text_input_layout))))))).check(matches(isDisplayed()));
+        TestUtils.waitView(Matchers.allOf(withId(R.id.text_input_end_icon), withParent(withParent(withParent(withParent(withId(R.id.description_text_input_layout))))))).check(matches(isDisplayed()));
     }
+
 
 }

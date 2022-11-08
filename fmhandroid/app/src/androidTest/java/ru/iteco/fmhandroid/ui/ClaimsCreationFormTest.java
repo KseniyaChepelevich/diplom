@@ -1,6 +1,7 @@
 package ru.iteco.fmhandroid.ui;
 
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.PickerActions.setTime;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -12,9 +13,12 @@ import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 import android.os.SystemClock;
 
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.espresso.PerformException;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.rule.ActivityTestRule;
 
 import org.junit.After;
 import org.junit.Before;
@@ -29,19 +33,22 @@ import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
+import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.page.ClaimsPageElements;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.ClaimsPageSteps;
+import ru.iteco.fmhandroid.ui.steps.ControlPanelSteps;
 import ru.iteco.fmhandroid.ui.steps.CreatingClaimsSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 
 @RunWith(AllureAndroidJUnit4.class)
+
 public class ClaimsCreationFormTest {
     AuthSteps authSteps = new AuthSteps();
     MainPageSteps mainPageSteps = new MainPageSteps();
-    ClaimsPageElements claimsPageElements = new ClaimsPageElements();
     ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
     CreatingClaimsSteps creatingClaimsSteps = new CreatingClaimsSteps();
+    ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
     Calendar date = Calendar.getInstance();
 
@@ -54,75 +61,63 @@ public class ClaimsCreationFormTest {
 
 
 
-
-
-
-
     @Rule
-    public ActivityScenarioRule rule = new ActivityScenarioRule<>(AppActivity.class);
+    public ActivityTestRule<AppActivity> activityTestRule =
+            new ActivityTestRule<>(AppActivity.class);
 
     @Before
     public void logoutCheck() {
-        SystemClock.sleep(8000);
         try {
             authSteps.isAuthScreen();
-        } catch (NoMatchingViewException e) {
-            SystemClock.sleep(8000);
+        } catch (PerformException e) {
             mainPageSteps.clickLogOutBut();
         }
         authSteps.authWithValidData(authInfo());
+        mainPageSteps.isMainPage();
         mainPageSteps.openClaimsPageThroughTheMainMenu();
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.addNewClaimBut);
-
-    }
-
-    @After
-    public void setUp() {
-        SystemClock.sleep(3000);
+        TestUtils.waitView(claimsPageSteps.addNewClaimBut).perform(click());
     }
 
     @Test
     @DisplayName("Создание заявки")
     public void shouldCreateAClaim() {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+        int minutes = date.get(Calendar.MINUTE);
+        int hour = date.get(Calendar.HOUR_OF_DAY);
         //Создать заявку
-        creatingClaimsSteps.selectAClaimExecutorFromTheList(claimsPageElements.executorSmirnov);
-        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(0,0,0,0,0, titleForTheTestClaim, titleForTheTestClaim);
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.saveClaimBut);
-        SystemClock.sleep(3000);
-        //Проверка что отображается заявка
-        claimsPageElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForTheTestClaim)))
-                )).check(matches(isDisplayed()));
 
+        creatingClaimsSteps.selectAClaimExecutorFromTheList(claimsPageSteps.executorSmirnov);
+        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+                //Проверка что отображается заявка
+        claimsPageSteps.scrollToElementInRecyclerList(titleForTheTestClaim).check(matches(isDisplayed()));
     }
 
 
     @Test
     @DisplayName("Сохранение пустой заявки")
     public void shouldNotCreateEmptyClaim() {
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.saveClaimBut);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         creatingClaimsSteps.isFillEmptyFieldsMessage();
-        claimsPageElements.okBut.perform(click());
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         creatingClaimsSteps.isWrongEmptyFormClaim();
-
     }
 
     @Test
     @DisplayName("Сохранение заявки без исполнителя")
     public void shouldCreateAClaimWithoutChoosingExecutor() {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+        int minutes = date.get(Calendar.MINUTE);
+        int hour = date.get(Calendar.HOUR_OF_DAY);
         //Создать заявку
-        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(0,0,0,0,0, titleForTheTestClaim, titleForTheTestClaim);
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.saveClaimBut);
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображается заявка
-        claimsPageElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForTheTestClaim)))
-                )).check(matches(isDisplayed()));
-
+        claimsPageSteps.scrollToElementInRecyclerList(titleForTheTestClaim).check(matches(isDisplayed()));
     }
 
     //Выбирает вчерашнюю дату. При ручном тестировании невозможно выбрать вчерашнюю дату
@@ -130,12 +125,16 @@ public class ClaimsCreationFormTest {
     @Test
     @DisplayName("Выбор вчерашней даты в заявке")
     public void shouldNotChoosePublicationDateYesterday() {
-        String publicationDate = DataHelper.getValidDate(0, 0, 0);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+        String monthExpected = TestUtils.getDateToString(month);
+        String dayExpected = TestUtils.getDateToString(day);
         //Выбираем в календаре вчерашнюю дату
-        creatingClaimsSteps.setDateToDatePicker(0, 0, -1);
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.okBut);
+        creatingClaimsSteps.setDateToDatePicker(year, month, day-1);
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         //Проверяем, что в поле Дата отображается сегодняшняя дата
-        claimsPageElements.dateClaimField.check(matches(withText(publicationDate)));
+        TestUtils.waitView(claimsPageSteps.dateClaimField).check(matches(withText(dayExpected + "." + monthExpected + "." + year)));
     }
 
     //Выбирает вчерашнюю дату. При ручном тестировании невозможно выбрать вчерашнюю дату
@@ -143,82 +142,101 @@ public class ClaimsCreationFormTest {
     @Test
     @DisplayName("Выбор даты год назад в заявке")
     public void shouldNotChoosePublicationDateYearAgo() {
-        String publicationDate = DataHelper.getValidDate(0, 0, 0);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+        String monthExpected = TestUtils.getDateToString(month);
+        String dayExpected = TestUtils.getDateToString(day+1);
         //Выбираем в календаре дату год назад
-        creatingClaimsSteps.setDateToDatePicker(-1, 0, 0);
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.okBut);
+        creatingClaimsSteps.setDateToDatePicker(year-1, month, day);
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         //Проверяем, что в поле Дата отображается сегодняшняя дата
-        claimsPageElements.dateClaimField.check(matches(withText(publicationDate)));
+        TestUtils.waitView(claimsPageSteps.dateClaimField).check(matches(withText(dayExpected + "." + monthExpected + "." + year)));
     }
 
     @Test
     @DisplayName("Выбор даты завтра в заявке")
     public void shouldChoosePublicationDateTomorrow() {
-        String publicationDate = DataHelper.getValidDate(0, 0, 1);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH)+1;
+        String monthExpected = TestUtils.getDateToString(month);
+        String dayExpected = TestUtils.getDateToString(day);
         //Выбираем в календаре дату завтра
-        creatingClaimsSteps.setDateToDatePicker(0, 0, 1);
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.okBut);
+        creatingClaimsSteps.setDateToDatePicker(year, month, day);
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         //Проверяем, что в поле Дата отображается выбранная дата
-        claimsPageElements.dateClaimField.check(matches(withText(publicationDate)));
+        TestUtils.waitView(claimsPageSteps.dateClaimField).check(matches(withText(dayExpected + "." + monthExpected + "." + year)));
     }
 
     @Test
     @DisplayName("Выбор даты через год в заявке")
     public void shouldChoosePublicationDateInAYear() {
-        String publicationDate = DataHelper.getValidDate(1, 0, 0);
+        int year = date.get(Calendar.YEAR)+1;
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+        String monthExpected = TestUtils.getDateToString(month);
+        String dayExpected = TestUtils.getDateToString(day);
         //Выбираем в календаре дату через год
-        creatingClaimsSteps.setDateToDatePicker(1, 0, 0);
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.okBut);
+        creatingClaimsSteps.setDateToDatePicker(year, month, day);
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         //Проверяем, что в поле Дата отображается выбранная дата
-        claimsPageElements.dateClaimField.check(matches(withText(publicationDate)));
+        TestUtils.waitView(claimsPageSteps.dateClaimField).check(matches(withText(dayExpected + "." + monthExpected + "." + year)));
     }
 
-    //Нестабильный тест. время  ожидаемое от фактического может отличаться в минуту и тест будет падать
+
 
     @Test
     @DisplayName("Создание заявки. В поле Время  на час больше текущего")
     public void shouldChoosePublicationTimeInOneHour() {
         int hour = date.get(Calendar.HOUR_OF_DAY)+1;
         int minutes = date.get(Calendar.MINUTE);
+        String hourExpected = TestUtils.getDateToString(hour);
+        String minutesExpected = TestUtils.getDateToString(minutes);
+
         //Выбираем в часах время на час больше текущего
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.timeClaimField);
-        claimsPageElements.timePicker.check(matches(isDisplayed()));
-        claimsPageElements.timePicker.perform(setTime(hour, minutes));
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.okBut);
+        TestUtils.waitView(claimsPageSteps.timeClaimField).perform(click());
+        TestUtils.waitView(controlPanelSteps.timePicker).check(matches(isDisplayed()));
+        TestUtils.waitView(controlPanelSteps.timePicker).perform(setTime(hour, minutes));
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         //Проверяем, что в поле Время отображается выбранное время
-        claimsPageElements.timeClaimField.check(matches(withText(hour + ":" + minutes)));
+        TestUtils.waitView(claimsPageSteps.timeClaimField).check(matches(withText(hourExpected + ":" + minutesExpected)));
     }
 
-    //Нестабильный тест. время  ожидаемое от фактического может отличаться в минуту и тест будет падать
+
 
     @Test
     @DisplayName("Создание заявки. В поле Время  на час меньше текущего")
     public void shouldChoosePublicationTimeHourAgo() {
         int hour = date.get(Calendar.HOUR_OF_DAY)-1;
         int minutes = date.get(Calendar.MINUTE);
+        String hourExpected = TestUtils.getDateToString(hour);
+        String minutesExpected = TestUtils.getDateToString(minutes);
         //Выбираем в часах время на час меньше текущего
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.timeClaimField);
-        claimsPageElements.timePicker.check(matches(isDisplayed()));
-        claimsPageElements.timePicker.perform(setTime(hour, minutes));
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.okBut);
+        TestUtils.waitView(claimsPageSteps.timeClaimField).perform(click());
+        TestUtils.waitView(controlPanelSteps.timePicker).check(matches(isDisplayed()));
+        TestUtils.waitView(controlPanelSteps.timePicker).perform(setTime(hour, minutes));
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         //Проверяем, что в поле Время отображается выбранное время
-        claimsPageElements.timeClaimField.check(matches(withText(hour + ":" + minutes)));
+        TestUtils.waitView(claimsPageSteps.timeClaimField).check(matches(withText(hourExpected + ":" + minutesExpected)));
     }
 
-    //Нестабильный тест. время  ожидаемое от фактического может отличаться в минуту и тест будет падать
+
 
     @Test
     @DisplayName("Создание заявки. В поле Время  на минуту больше текущего")
     public void shouldChoosePublicationTimeInOneMinute() {
         int hour = date.get(Calendar.HOUR_OF_DAY);
         int minutes = date.get(Calendar.MINUTE)+1;
+        String hourExpected = TestUtils.getDateToString(hour);
+        String minutesExpected = TestUtils.getDateToString(minutes);
         //Выбираем в часах время на минуту больше текущего
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.timeClaimField);
-        claimsPageElements.timePicker.check(matches(isDisplayed()));
-        claimsPageElements.timePicker.perform(setTime(hour, minutes));
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.okBut);
+        TestUtils.waitView(claimsPageSteps.timeClaimField).perform(click());
+        TestUtils.waitView(controlPanelSteps.timePicker).check(matches(isDisplayed()));
+        TestUtils.waitView(controlPanelSteps.timePicker).perform(setTime(hour, minutes));
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         //Проверяем, что в поле Время отображается выбранное время
-        claimsPageElements.timeClaimField.check(matches(withText(hour + ":" + minutes)));
+        TestUtils.waitView(claimsPageSteps.timeClaimField).check(matches(withText(hourExpected + ":" + minutesExpected)));
     }
 
     //Нестабильный тест. время  ожидаемое от фактического может отличаться в минуту и тест будет падать
@@ -228,126 +246,129 @@ public class ClaimsCreationFormTest {
     public void shouldChoosePublicationTimeMinuteAgo() {
         int hour = date.get(Calendar.HOUR_OF_DAY);
         int minutes = date.get(Calendar.MINUTE)-1;
+        String hourExpected = TestUtils.getDateToString(hour);
+        String minutesExpected = TestUtils.getDateToString(minutes);
 
         //Выбираем в часах время на минуту меньше текущего
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.timeClaimField);
-        claimsPageElements.timePicker.check(matches(isDisplayed()));
-        claimsPageElements.timePicker.perform(setTime(hour, minutes));
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.okBut);
+        TestUtils.waitView(claimsPageSteps.timeClaimField).perform(click());
+        TestUtils.waitView(controlPanelSteps.timePicker).check(matches(isDisplayed()));
+        TestUtils.waitView(controlPanelSteps.timePicker).perform(setTime(hour, minutes));
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         //Проверяем, что в поле Время отображается выбранное время
-        claimsPageElements.timeClaimField.check(matches(withText(hour + ":" + minutes)));
+        TestUtils.waitView(claimsPageSteps.timeClaimField).check(matches(withText(hourExpected + ":" + minutesExpected)));
     }
-    @Ignore
+
     @Test
     @DisplayName("Создание заявки. В поле Время  нереальное время")
     public void shouldShowTextEnteredInvalidValue() {
-        int hour = 99;
-        int minute = 99;
+        String hour = "99";
+        String  minutes = "99";
         //Вводим в часах нереальное время
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.timeClaimField);
-        claimsPageElements.timePicker.check(matches(isDisplayed()));
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.timePickerToggleMode);
-        claimsPageElements.timePicker.check(matches(isDisplayed()));
-        claimsPageElements.timePicker.perform(setTime(hour, minute));
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.okBut);
+        TestUtils.waitView(claimsPageSteps.timeClaimField).perform(click());
+        TestUtils.waitView(controlPanelSteps.timePicker).check(matches(isDisplayed()));
+        TestUtils.waitView(controlPanelSteps.timePickerToggleMode).perform(click());
+        TestUtils.waitView(controlPanelSteps.timePicker).check(matches(isDisplayed()));
+        //Espresso.p
+        TestUtils.waitView(controlPanelSteps.inputHour).check(matches(isDisplayed())).perform(replaceText(hour));
+        TestUtils.waitView(controlPanelSteps.inputMinute).check(matches(isDisplayed())).perform(replaceText(minutes));
+        //TestUtils.waitView(controlPanelSteps.timePicker).perform(setTime(hour, minutes));
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         //Проверяем, что отображается текст "Enter a valid time"
-        claimsPageElements.labelError.check(matches(isDisplayed()));
+        TestUtils.waitView(claimsPageSteps.labelError).check(matches(isDisplayed()));
 
     }
 
     @Test
     @DisplayName("Создание заявки с заголовком начинающимся с пробела")
-    public void shouldCreateAClaimWithATitleStartsWithoutASpace() {
+    public void shouldCreateAClaimWithATitleStartsWithoutASpaceAtTheBeginning() {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
         String titleWithoutSpace = titleStartsWithASpace.substring(1);
+        int minutes = date.get(Calendar.MINUTE);
+        int hour = date.get(Calendar.HOUR_OF_DAY);
         //Создать заявку
-        creatingClaimsSteps.selectAClaimExecutorFromTheList(claimsPageElements.executorSmirnov);
-        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(0,0,0,0,0, titleStartsWithASpace, titleStartsWithASpace);
+        creatingClaimsSteps.selectAClaimExecutorFromTheList(claimsPageSteps.executorSmirnov);
+        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, titleStartsWithASpace, titleStartsWithASpace);
         //claimsPageElements.titleClaimField.check(matches(withText(titleWithoutSpace)));
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.saveClaimBut);
-        SystemClock.sleep(3000);
+       TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображается заявка
-        claimsPageElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleWithoutSpace)))
-                )).check(matches(isDisplayed()));
-
+        claimsPageSteps.scrollToElementInRecyclerList(titleWithoutSpace).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Создание заявки с заголовком из 50 знаков")
     public void shouldCreateAClaimWithATitleWith50Characters() {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+        int minutes = date.get(Calendar.MINUTE);
+        int hour = date.get(Calendar.HOUR_OF_DAY);
         //Создать заявку
-        creatingClaimsSteps.selectAClaimExecutorFromTheList(claimsPageElements.executorSmirnov);
-        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(0,0,0,0,0, title50Characters, title50Characters);
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.saveClaimBut);
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.selectAClaimExecutorFromTheList(claimsPageSteps.executorSmirnov);
+        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, title50Characters, title50Characters);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображается заявка
-        claimsPageElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(title50Characters)))
-                )).check(matches(isDisplayed()));
-
+        claimsPageSteps.scrollToElementInRecyclerList(title50Characters).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Создание заявки с заголовком из 49 знаков")
     public void shouldCreateAClaimWithATitleWith49Characters() {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+        int minutes = date.get(Calendar.MINUTE);
+        int hour = date.get(Calendar.HOUR_OF_DAY);
         //Создать заявку
-        creatingClaimsSteps.selectAClaimExecutorFromTheList(claimsPageElements.executorSmirnov);
-        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(0,0,0,0,0, title49Characters, title49Characters);
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.saveClaimBut);
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.selectAClaimExecutorFromTheList(claimsPageSteps.executorSmirnov);
+        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, title49Characters, title49Characters);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображается заявка
-        claimsPageElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(title49Characters)))
-                )).check(matches(isDisplayed()));
-
+        claimsPageSteps.scrollToElementInRecyclerList(title49Characters).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Создание заявки с заголовком из 51 знаков")
     public void shouldCreateAClaimWithATitleWith51Characters() {
-
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
         String titleWhichToBeKept = title51Characters.substring(0,50);
+        int minutes = date.get(Calendar.MINUTE);
+        int hour = date.get(Calendar.HOUR_OF_DAY);
         //Создать заявку
-        creatingClaimsSteps.selectAClaimExecutorFromTheList(claimsPageElements.executorSmirnov);
-        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(0,0,0,0,0, title51Characters, title51Characters);
+        creatingClaimsSteps.selectAClaimExecutorFromTheList(claimsPageSteps.executorSmirnov);
+        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, title51Characters, title51Characters);
         //Проверка, что в поле Title отображается только 50 символов
-        claimsPageElements.titleClaimField.check(matches(withText(titleWhichToBeKept)));
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.saveClaimBut);
-        SystemClock.sleep(3000);
+        TestUtils.waitView(claimsPageSteps.titleClaimField).check(matches(withText(titleWhichToBeKept)));
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображается заявка
-        claimsPageElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleWhichToBeKept)))
-                )).check(matches(isDisplayed()));
-
+        claimsPageSteps.scrollToElementInRecyclerList(titleWhichToBeKept).check(matches(isDisplayed()));
     }
 
-    //Тест падает. Espresso не позволяет ввести текст в поле Executor
-    @Ignore
+
+
     @Test
     @DisplayName("Создание заявки. Исполнитель  не из списка")
     public void shouldCreateAClaimWithoutAnExecutor() {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
         String MayExecutor = "Козлов Константин Анатольевич";
+        int minutes = date.get(Calendar.MINUTE);
+        int hour = date.get(Calendar.HOUR_OF_DAY);
         //Создать заявку
         creatingClaimsSteps.replaceTextClaimExecutor(MayExecutor);
-        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(0,0,0,0,0, titleExecutorNotListed, titleExecutorNotListed);
-        DataHelper.EspressoBaseTest.clickButton(claimsPageElements.saveClaimBut);
+        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, titleExecutorNotListed, titleExecutorNotListed);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         SystemClock.sleep(3000);
         //Проверка что отображается заявка. Открытие ее
-        claimsPageElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleExecutorNotListed)), hasDescendant(allOf(withId(R.id.executor_name_material_text_view), withText(""))))
-                )).check(matches(isDisplayed()));
-
+        claimsPageSteps.scrollToElementInRecyclerList(titleExecutorNotListed).check(matches(isDisplayed()));
         //Проверка что исполнитель не назначен
+        claimsPageSteps.getItemClaimExecutorName(titleExecutorNotListed).check(matches(withText("")));
+
+
 
 
     }

@@ -2,10 +2,18 @@ package ru.iteco.fmhandroid.ui.data;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Checks.checkNotNull;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 
+import static org.hamcrest.EasyMock2Matchers.equalTo;
+import static org.hamcrest.Matchers.hasEntry;
+
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 
 import androidx.annotation.IdRes;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,11 +24,17 @@ import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.matcher.BoundedMatcher;
+import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.util.HumanReadables;
 
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.hamcrest.TypeSafeMatcher;
+
+import java.util.Map;
 
 public class TestUtils {
     public static <VH extends RecyclerView.ViewHolder> ViewAction actionOnItemViewAtPosition(int position,
@@ -114,10 +128,19 @@ public class TestUtils {
     }
 
     public static ViewInteraction waitView(Matcher<View> matcher) {
-        onView(isRoot()).perform(ViewActions.waitElement(matcher, 10000));
+        onView(isRoot()).perform(ViewActions
+                .waitElement(matcher, 20000));
         return onView((matcher));
 
     }
+
+    public static ViewInteraction waitPopupView(Matcher<View> matcher) {
+        onView(isRoot()).inRoot((RootMatchers.isPlatformPopup())).perform(ViewActions
+                .waitElement(matcher, 10000));
+        return onView((matcher));
+
+    }
+
 
 
 
@@ -146,5 +169,77 @@ public class TestUtils {
         }
         throw new AssertionError("View matcher is broken for $matcher");
     }
+
+    public static String getDateToString(int date) {
+        if (date < 10) {
+            return "0" + date;
+        }
+        return Integer.toString(date);
+    }
+
+    private static Matcher<View> childAtPosition(
+            final Matcher<View> parentMatcher, final int position) {
+
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Child at position " + position + " in parent ");
+                parentMatcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                ViewParent parent = view.getParent();
+                return parent instanceof ViewGroup && parentMatcher.matches(parent)
+                        && view.equals(((ViewGroup) parent).getChildAt(position));
+            }
+        };
+    }
+
+    public static Matcher<View> withAdaptedData(final Matcher<Object> dataMatcher) {
+        return new TypeSafeMatcher<View>() {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with class name: ");
+                dataMatcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                if (!(view instanceof AdapterView)) {
+                    return false;
+                }
+
+                @SuppressWarnings("rawtypes")
+                Adapter adapter = ((AdapterView) view).getAdapter();
+                for (int i = 0; i < adapter.getCount(); i++) {
+                    if (dataMatcher.matches(adapter.getItem(i))) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        };
+    }
+
+    public static Matcher<Object> withItemContent(String expectedText) {
+        checkNotNull(expectedText);
+        return withItemContent(equalTo(expectedText));
+    }
+
+    /*return new BoundedMatcher<Object, Map>(Map.class) {
+        @Override
+        public boolean matchesSafely(Map map) {
+            return hasEntry(equalTo("STR"), itemTextMatcher).matches(map);
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("with item content: ");
+            itemTextMatcher.describeTo(description);
+        }
+    };*/
 
 }

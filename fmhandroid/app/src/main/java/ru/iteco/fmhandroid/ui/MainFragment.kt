@@ -43,20 +43,16 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
 
         lifecycleScope.launchWhenStarted {
-            EspressoIdlingResources.increment();
             claimViewModel.openClaimEvent.collectLatest {
                 val action = MainFragmentDirections
                     .actionMainFragmentToOpenClaimFragment(it)
                 findNavController().navigate(action)
-                EspressoIdlingResources.decrement();
             }
         }
 
         lifecycleScope.launchWhenStarted {
-            EspressoIdlingResources.increment();
             claimViewModel.claimListUpdatedEvent.collectLatest {
                 newsViewModel.onRefresh()
-                EspressoIdlingResources.decrement();
             }
         }
 
@@ -74,9 +70,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         lifecycleScope.launchWhenResumed {
             authViewModel.userListLoadedEvent.collect {
-                EspressoIdlingResources.increment();
                 findNavController().navigate(R.id.action_mainFragment_to_createEditClaimFragment)
-                EspressoIdlingResources.decrement();
             }
         }
 
@@ -96,12 +90,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         val menuItemMain = mainMenu.menu.getItem(0)
         menuItemMain.isEnabled = false
         binding.containerCustomAppBarIncludeOnFragmentMain.mainMenuImageButton.setOnClickListener {
-            EspressoIdlingResources.increment();
             mainMenu.show()
-            EspressoIdlingResources.decrement();
         }
         mainMenu.setOnMenuItemClickListener {
-            //EspressoIdlingResources.increment();
             when (it.itemId) {
                 R.id.menu_item_claims -> {
                     findNavController().navigate(R.id.action_mainFragment_to_claimListFragment)
@@ -120,7 +111,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
 
 
-
         val authorizationMenu = PopupMenu(
             context,
             binding.containerCustomAppBarIncludeOnFragmentMain.authorizationImageButton
@@ -128,15 +118,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         authorizationMenu.inflate(R.menu.authorization)
 
         binding.containerCustomAppBarIncludeOnFragmentMain.authorizationImageButton.setOnClickListener {
-            EspressoIdlingResources.increment();
             authorizationMenu.show()
-            EspressoIdlingResources.decrement();
         }
 
         binding.containerCustomAppBarIncludeOnFragmentMain.ourMissionImageButton.setOnClickListener {
-            EspressoIdlingResources.increment();
             findNavController().navigate(R.id.action_mainFragment_to_our_mission_fragment)
-            EspressoIdlingResources.decrement();
         }
 
         authorizationMenu.setOnMenuItemClickListener {
@@ -151,7 +137,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
 
         binding.containerListClaimIncludeOnFragmentMain.apply {
-            EspressoIdlingResources.increment();
             expandMaterialButton.visibility = View.VISIBLE
             allClaimsTextView.visibility = View.VISIBLE
             filtersMaterialButton.visibility = View.GONE
@@ -159,18 +144,15 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             addNewClaimMaterialButton.setOnClickListener {
                 viewLifecycleOwner.lifecycleScope.launch {
                     authViewModel.loadUserList()
-                    EspressoIdlingResources.decrement();
                 }
             }
 
             expandMaterialButton.setOnClickListener {
-                EspressoIdlingResources.increment();
                 when (allClaimsTextView.visibility) {
                     View.GONE -> {
                         allClaimsTextView.visibility = View.VISIBLE
                         allClaimsCardsBlockConstraintLayout.visibility = View.VISIBLE
                         expandMaterialButton.setIconResource(R.drawable.expand_less_24)
-                        EspressoIdlingResources.decrement();
                     }
                     else -> {
                         allClaimsTextView.visibility = View.GONE
@@ -181,10 +163,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
 
             allClaimsTextView.setOnClickListener {
-                EspressoIdlingResources.increment();
                 if (Utils.isOnline(requireContext())) {
                     findNavController().navigate(R.id.action_mainFragment_to_claimListFragment)
-                    EspressoIdlingResources.decrement();
                 } else {
                     showErrorToast(R.string.error)
                 }
@@ -207,13 +187,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             editNewsMaterialButton.visibility = View.GONE
 
             expandMaterialButton.setOnClickListener {
-                EspressoIdlingResources.increment();
                 when (allNewsTextView.visibility) {
                     View.GONE -> {
                         allNewsTextView.visibility = View.VISIBLE
                         allNewsCardsBlockConstraintLayout.visibility = View.VISIBLE
                         expandMaterialButton.setIconResource(R.drawable.expand_less_24)
-                        EspressoIdlingResources.decrement();
                     }
                     else -> {
                         allNewsTextView.visibility = View.GONE
@@ -224,10 +202,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
 
             allNewsTextView.setOnClickListener {
-                EspressoIdlingResources.increment();
                 if (Utils.isOnline(requireContext())) {
                     findNavController().navigate(R.id.action_mainFragment_to_newsListFragment)
-                    EspressoIdlingResources.decrement();
                 } else {
                     showErrorToast(R.string.error)
                 }
@@ -238,22 +214,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         binding.containerListNewsIncludeOnFragmentMain.newsListRecyclerView.adapter =
             newsListAdapter
         lifecycleScope.launchWhenCreated {
-            EspressoIdlingResources.increment();
             newsViewModel.data.collectLatest {
                 newsListAdapter.submitList(it.take(3))
-                EspressoIdlingResources.decrement();
             }
         }
 
         lifecycleScope.launch {
             binding.mainSwipeRefresh.setOnRefreshListener {
-                EspressoIdlingResources.increment();
                 claimViewModel.onRefresh()
                 binding.mainSwipeRefresh.isRefreshing = false
-                EspressoIdlingResources.decrement();
             }
         }
-        //EspressoIdlingResources.decrement();
+
     }
 
     private fun showErrorToast(text: Int) {
@@ -264,11 +236,5 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         ).show()
     }
 
-    /*@VisibleForTesting
-    fun getIdlingResource(): IdlingResource {
-        if (mIdlingResource == null) {
-            mIdlingResource = SimpleIdlingResource()
-        }
-        return mIdlingResource
-    }*/
+
 }

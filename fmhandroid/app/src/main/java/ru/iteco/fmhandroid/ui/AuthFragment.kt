@@ -26,9 +26,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
         lifecycleScope.launch {
             viewModel.loginEvent.collectLatest {
-                EspressoIdlingResources.increment();
                 findNavController().navigate(R.id.action_authFragment_to_mainFragment)
-                EspressoIdlingResources.decrement();
             }
         }
         lifecycleScope.launch {
