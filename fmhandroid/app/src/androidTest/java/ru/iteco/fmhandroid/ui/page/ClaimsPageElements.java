@@ -31,8 +31,10 @@ public class ClaimsPageElements {
     public ViewInteraction dateClaimField = onView(allOf(withHint("Date"), withParent(withParent(withId(R.id.date_in_plan_text_input_layout)))));
     public ViewInteraction timeClaimField = onView(allOf(withHint("Time"), withParent(withParent(withId(R.id.time_in_plan_text_input_layout)))));
     public ViewInteraction descriptionClaimField = onView(allOf(withHint("Description"), withParent(withParent(withId(R.id.description_text_input_layout)))));
+
     public ViewInteraction saveClaimBut = onView(withId(R.id.save_button));
     public ViewInteraction cancelClaimBut = onView(withId(R.id.cancel_button));
+
     public ViewInteraction claimsFiltersButton = onView(withId(R.id.filters_material_button));
     //Элементы диалогового окна Фильтрация
     public ViewInteraction claimFilterDialogTitle = onView(withId(R.id.claim_filter_dialog_title));
@@ -50,6 +52,7 @@ public class ClaimsPageElements {
     public ViewInteraction cancelDeleteBut = onView(withId(android.R.id.button2));
     public ViewInteraction timePicker = onView(isAssignableFrom(TimePicker.class));
     public ViewInteraction timePickerToggleMode = onView(withContentDescription("Switch to text input mode for the time input."));
+
     public ViewInteraction labelError = onView(withText("Enter a valid time"));
     public ViewInteraction executorIvanov = onView(withText("Иванов Данил Данилович")).inRoot((RootMatchers.isPlatformPopup()));
     public ViewInteraction executorSidorov = onView(withText("Сидоров Дмитрий Дмитриевич")).inRoot((RootMatchers.isPlatformPopup()));

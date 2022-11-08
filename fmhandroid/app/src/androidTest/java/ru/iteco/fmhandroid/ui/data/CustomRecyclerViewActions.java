@@ -76,7 +76,7 @@ public class CustomRecyclerViewActions {
             };
         }
 
-        public static BoundedMatcher<View, RecyclerView> matchChildViewIsNotExist(int targetViewId, Matcher<View> itemMatcher ){
+        public static BoundedMatcher<View, RecyclerView> matchChildViewIsNotExist(int targetViewId, Matcher<View> itemMatcher) {
             return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
                 @Override
                 public void describeTo(Description description) {
@@ -87,23 +87,60 @@ public class CustomRecyclerViewActions {
                 protected boolean matchesSafely(RecyclerView recyclerView) {
                     RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
-                    for (int i = 0; i < adapter.getItemCount(); i++){
+                    for (int i = 0; i < adapter.getItemCount(); i++) {
                         int itemType = adapter.getItemViewType(i);
                         RecyclerView.ViewHolder viewHolder = adapter.createViewHolder(recyclerView, itemType);
                         adapter.bindViewHolder(viewHolder, i);
 
-                        View targetView = viewHolder.itemView.findViewById(targetViewId);
+                        View targetView = viewHolder.itemView.
+                                findViewById(targetViewId);
 
                         if (itemMatcher.matches(targetView)) {
                             return false; // Found match
-                            }
                         }
-                    return true;
                     }
+                    return true;
+                }
 
-                };
             };
         }
+
+        ;
+
+
+        public static BoundedMatcher<View, RecyclerView> matchChildViewIsExist(int targetViewId, Matcher<View> itemMatcher) {
+            return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
+                @Override
+                public void describeTo(Description description) {
+                    description.appendText("Have view id $targetViewId with matches $itemMatcher");
+                }
+
+                @Override
+                protected boolean matchesSafely(RecyclerView recyclerView) {
+                    RecyclerView.Adapter adapter = recyclerView.getAdapter();
+
+                    for (int i = 0; i < adapter.getItemCount(); i++) {
+                        int itemType = adapter.getItemViewType(i);
+                        RecyclerView.ViewHolder viewHolder = adapter.createViewHolder(recyclerView, itemType);
+                        adapter.bindViewHolder(viewHolder, i);
+
+                        View targetView = viewHolder.itemView.
+                                findViewById(targetViewId);
+
+                        if (itemMatcher.matches(targetView)) {
+                            return true; // Found match
+                        }
+                    }
+                    return false;
+                }
+
+            };
+        }
+
+        ;
+    }
+
+
 
 
 

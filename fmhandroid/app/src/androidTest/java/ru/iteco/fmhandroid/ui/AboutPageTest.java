@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.SystemClock;
 
 import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.espresso.PerformException;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -18,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ru.iteco.fmhandroid.ui.data.DataHelper;
+import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.page.AboutPageElements;
 import ru.iteco.fmhandroid.ui.page.MainPageElements;
 import ru.iteco.fmhandroid.ui.steps.AboutPageSteps;
@@ -25,6 +27,7 @@ import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
@@ -36,14 +39,12 @@ import static org.hamcrest.core.AllOf.allOf;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 @RunWith(AndroidJUnit4.class)
+
 public class AboutPageTest {
 
     AuthSteps authSteps = new AuthSteps();
     MainPageSteps mainPageSteps = new MainPageSteps();
-
     AboutPageSteps aboutPageSteps = new AboutPageSteps();
-    MainPageElements mainPageElements = new MainPageElements();
-    AboutPageElements aboutPageElements = new AboutPageElements();
 
     @Rule
     public ActivityTestRule<AppActivity> activityTestRule =
@@ -51,19 +52,15 @@ public class AboutPageTest {
 
     @Before
     public void logoutCheck() {
-        SystemClock.sleep(8000);
         try {
             authSteps.isAuthScreen();
-        } catch (NoMatchingViewException e) {
+        } catch (PerformException e) {
             mainPageSteps.clickLogOutBut();
         }
         authSteps.authWithValidData(authInfo());
+        //SystemClock.sleep(3000);
+        mainPageSteps.isMainPage();
         mainPageSteps.openAboutPageThroughTheMainMenu();
-    }
-
-    @After
-    public void setUp() {
-        SystemClock.sleep(3000);
     }
 
     @Test
@@ -71,7 +68,7 @@ public class AboutPageTest {
     public void shouldOpenPrivacyPolicyDetailsPage() {
         Intents.init();
         aboutPageSteps.openPrivacyPolicy();
-        SystemClock.sleep(3000);
+        //SystemClock.sleep(3000);
         intended(allOf(hasData("https://vhospice.org/#/privacy-policy/"), hasAction(Intent.ACTION_VIEW)));
         Intents.release();
 
@@ -97,12 +94,10 @@ public class AboutPageTest {
     }
 
     @Test
-
+    @DisplayName("Переход по кнопке Back в AppBar")
     public void shouldGoBackBut() {
-        DataHelper.EspressoBaseTest.clickButton(aboutPageElements.aboutBackImageBut);
+        TestUtils.waitView(aboutPageSteps.aboutBackImageBut).perform(click());
         mainPageSteps.isMainPage();
-
-
     }
 
 }

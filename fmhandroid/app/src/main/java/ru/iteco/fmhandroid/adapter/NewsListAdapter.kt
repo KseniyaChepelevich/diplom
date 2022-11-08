@@ -31,10 +31,8 @@ class NewsListAdapter(private val onNewsItemClickListener: OnNewsItemClickListen
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        EspressoIdlingResources.increment();
         val newsViewData = getItem(position)
         holder.bind(newsViewData)
-        EspressoIdlingResources.decrement();
     }
 
     class NewsViewHolder(

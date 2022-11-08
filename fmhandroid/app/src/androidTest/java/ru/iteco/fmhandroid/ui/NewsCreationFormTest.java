@@ -21,6 +21,7 @@ import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 import android.os.SystemClock;
 
 import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.espresso.PerformException;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -36,10 +37,12 @@ import org.junit.runner.RunWith;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
+import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
+import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.page.ControlPanelElements;
 import ru.iteco.fmhandroid.ui.page.FilterNewsPageElements;
 import ru.iteco.fmhandroid.ui.page.NewsPageElements;
@@ -49,16 +52,13 @@ import ru.iteco.fmhandroid.ui.steps.FilterNewsPageSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
 
-//@RunWith(AllureAndroidJUnit4.class)
-@RunWith(AndroidJUnit4.class)
+@RunWith(AllureAndroidJUnit4.class)
+
 public class NewsCreationFormTest {
     AuthSteps authSteps = new AuthSteps();
     MainPageSteps mainPageSteps = new MainPageSteps();
     NewsPageSteps newsPageSteps = new NewsPageSteps();
-    NewsPageElements newsPageElements = new NewsPageElements();
     FilterNewsPageSteps filterNewsPageSteps = new FilterNewsPageSteps();
-    FilterNewsPageElements filterNewsPageElements = new FilterNewsPageElements();
-    ControlPanelElements controlPanelElements = new ControlPanelElements();
     ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
     Calendar date = Calendar.getInstance();
@@ -83,58 +83,37 @@ public class NewsCreationFormTest {
 
     @Before
     public void logoutCheck() {
-        SystemClock.sleep(8000);
         try {
             authSteps.isAuthScreen();
-        } catch (NoMatchingViewException e) {
+        } catch (PerformException e) {
             mainPageSteps.clickLogOutBut();
         }
         authSteps.authWithValidData(authInfo());
+        mainPageSteps.isMainPage();
         mainPageSteps.openNewsPageThroughTheMainMenu();
-        DataHelper.EspressoBaseTest.clickButton(newsPageElements.editNewsMaterialBut);
-        controlPanelSteps.openCreatingNewsForm();
-
+        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        TestUtils.waitView(controlPanelSteps.addNewsImBut).perform(click());
     }
-
-    @After
-    public void setUp() {
-        SystemClock.sleep(3000);
-    }
-
 
     @Test
     @DisplayName("Автоподставление в поле Title из поля Category")
     public void shouldSubstituteInTheTitleFieldTheValueOfTheCategoryField() {
-
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryAnnouncement);
-        controlPanelElements.newsItemTitleField.check(matches(withText("Объявление")));
-
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
+        TestUtils.waitView(controlPanelSteps.newsItemTitleField).check(matches(withText("Объявление")));
     }
-
 
     @Test
     @DisplayName("Создание Новости с категорией Объявление")
     public void shouldCreateANewsItemWithCategoryAnnouncement() {
-        String publicationDate = DataHelper.getValidDate(0, 0, 0);
-        //String publicationTime = DataHelper.getValidTime(0, 0);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
 
-
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryAnnouncement);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, 0, 0, titleForNewsAnnouncement, titleForNewsAnnouncement);
-
-        controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
-        //controlPanelElements.newsItemPublishTimeField.check(matches(withText(publicationTime)));
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsAnnouncement, titleForNewsAnnouncement);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображаются новости с заголовком "Тест новость Объявление"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForNewsAnnouncement)), hasDescendant(withText(publicationDate)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
+        controlPanelSteps.scrollToElementInRecyclerList(titleForNewsAnnouncement).check(matches(isDisplayed()));
         //Удаляем нашу новость
         controlPanelSteps.deleteItemNews(titleForNewsAnnouncement);
     }
@@ -142,53 +121,31 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с категорией День рождения")
     public void shouldCreateANewsItemWithCategoryBirthday() {
-        String publicationDate = DataHelper.getValidDate(0, 0, 0);
-        //String publicationTime = DataHelper.getValidTime(0, 0);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
 
-
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryBirthday);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, 0, 0, titleForNewsBirthday, titleForNewsBirthday);
-
-        controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
-        //controlPanelElements.newsItemPublishTimeField.check(matches(withText(publicationTime)));
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryBirthday);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsBirthday, titleForNewsBirthday);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображаются новости с заголовком "Тест новость День рождения"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForNewsBirthday)), hasDescendant(withText(publicationDate)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
+        controlPanelSteps.scrollToElementInRecyclerList(titleForNewsBirthday).check(matches(isDisplayed()));
         //Удаляем нашу новость
         controlPanelSteps.deleteItemNews(titleForNewsBirthday);
     }
 
     @Test
     @DisplayName("Создание Новости с категорией Зарплата")
-    public void shouldCreateANewsItemWithCategorySalagy() {
-        String publicationDate = DataHelper.getValidDate(0, 0, 0);
-        //String publicationTime = DataHelper.getValidTime(0, 0);
+    public void shouldCreateANewsItemWithCategorySalary() {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
 
-
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, 0, 0, titleForNewsSalary, titleForNewsSalary);
-
-        controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
-        //controlPanelElements.newsItemPublishTimeField.check(matches(withText(publicationTime)));
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsSalary, titleForNewsSalary);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображаются новости с заголовком "Тест новость Зарплата"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForNewsSalary)), hasDescendant(withText(publicationDate)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
+        controlPanelSteps.scrollToElementInRecyclerList(titleForNewsSalary).check(matches(isDisplayed()));
         //Удаляем нашу новость
         controlPanelSteps.deleteItemNews(titleForNewsSalary);
     }
@@ -196,26 +153,15 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с категорией Профсоюз")
     public void shouldCreateANewsItemWithCategoryTradeUnion() {
-        String publicationDate = DataHelper.getValidDate(0, 0, 0);
-        //String publicationTime = DataHelper.getValidTime(0, 0);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
 
-
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryTradeUnion);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, 0, 0, titleForNewsTradeUnion, titleForNewsTradeUnion);
-
-        controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
-        //controlPanelElements.newsItemPublishTimeField.check(matches(withText(publicationTime)));
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryTradeUnion);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsTradeUnion, titleForNewsTradeUnion);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображаются новости с заголовком "Тест новость Профсоюз"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForNewsTradeUnion)), hasDescendant(withText(publicationDate)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
+        controlPanelSteps.scrollToElementInRecyclerList(titleForNewsTradeUnion).check(matches(isDisplayed()));
         //Удаляем нашу новость
         controlPanelSteps.deleteItemNews(titleForNewsTradeUnion);
     }
@@ -223,26 +169,15 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с категорией Праздник")
     public void shouldCreateANewsItemWithCategoryHoliday() {
-        String publicationDate = DataHelper.getValidDate(0, 0, 0);
-        //String publicationTime = DataHelper.getValidTime(0, 0);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
 
-
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryHoliday);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, 0, 0, titleForNewsHoliday, titleForNewsHoliday);
-
-        controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
-        //controlPanelElements.newsItemPublishTimeField.check(matches(withText(publicationTime)));
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryHoliday);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsHoliday, titleForNewsHoliday);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображаются новости с заголовком "Тест новость Праздник"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForNewsHoliday)), hasDescendant(withText(publicationDate)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
+        controlPanelSteps.scrollToElementInRecyclerList(titleForNewsHoliday).check(matches(isDisplayed()));
         //Удаляем нашу новость
         controlPanelSteps.deleteItemNews(titleForNewsHoliday);
     }
@@ -250,26 +185,15 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с категорией Благодарность")
     public void shouldCreateANewsItemWithCategoryGratitude() {
-        String publicationDate = DataHelper.getValidDate(0, 0, 0);
-        //String publicationTime = DataHelper.getValidTime(0, 0);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
 
-
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryGratitude);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, 0, 0, titleForNewsGratitude, titleForNewsGratitude);
-
-        controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
-        //controlPanelElements.newsItemPublishTimeField.check(matches(withText(publicationTime)));
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryGratitude);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsGratitude, titleForNewsGratitude);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображаются новости с заголовком "Тест новость Благодарность"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForNewsGratitude)), hasDescendant(withText(publicationDate)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
+        controlPanelSteps.scrollToElementInRecyclerList(titleForNewsGratitude).check(matches(isDisplayed()));
         //Удаляем нашу новость
         controlPanelSteps.deleteItemNews(titleForNewsGratitude);
     }
@@ -277,26 +201,15 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с категорией Массаж")
     public void shouldCreateANewsItemWithCategoryMassage() {
-        String publicationDate = DataHelper.getValidDate(0, 0, 0);
-        //String publicationTime = DataHelper.getValidTime(0, 0);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
 
-
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryMassage);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, 0, 0, titleForNewsMassage, titleForNewsMassage);
-
-        controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
-        //controlPanelElements.newsItemPublishTimeField.check(matches(withText(publicationTime)));
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryMassage);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsMassage, titleForNewsMassage);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображаются новости с заголовком "Тест новость Массаж"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForNewsMassage)), hasDescendant(withText(publicationDate)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
+        controlPanelSteps.scrollToElementInRecyclerList(titleForNewsMassage).check(matches(isDisplayed()));
         //Удаляем нашу новость
         controlPanelSteps.deleteItemNews(titleForNewsMassage);
     }
@@ -304,102 +217,86 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с категорией Нужна помощь")
     public void shouldCreateANewsItemWithCategoryNeedHelp() {
-        String publicationDate = DataHelper.getValidDate(0, 0, 0);
-        //String publicationTime = DataHelper.getValidTime(0, 0);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
 
-
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryNeedHelp);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, 0, 0, titleForNewsNeedHelp, titleForNewsNeedHelp);
-
-        controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
-        //controlPanelElements.newsItemPublishTimeField.check(matches(withText(publicationTime)));
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryNeedHelp);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsNeedHelp, titleForNewsNeedHelp);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображаются новости с заголовком "Тест новость Массаж"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForNewsNeedHelp)), hasDescendant(withText(publicationDate)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
+        controlPanelSteps.scrollToElementInRecyclerList(titleForNewsNeedHelp).check(matches(isDisplayed()));
         //Удаляем нашу новость
         controlPanelSteps.deleteItemNews(titleForNewsNeedHelp);
     }
 
-   //Как проверить отсутствие новости в списке?
     @Test
     @DisplayName("Отмена создания новости")
     public void shouldNotCreateNews() {
-        //int item = CustomRecyclerViewActions.getItemCount(controlPanelElements.newsRecyclerList);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
 
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryNeedHelp);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, 0, 0, titleForNewsShouldNotBeKept, titleForNewsShouldNotBeKept);
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.cancelBut);
-        controlPanelElements.messageChangesWonTBeSaved.check(matches(isDisplayed()));
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
-        SystemClock.sleep(3000);
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryNeedHelp);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsShouldNotBeKept, titleForNewsShouldNotBeKept);
+        TestUtils.waitView(controlPanelSteps.cancelBut).perform(click());
+        TestUtils.waitView(controlPanelSteps.messageChangesWonTBeSaved).check(matches(isDisplayed()));
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         //Проверить отсутствие в списке новостей новости с заголовком "Новость не должна сохраниться"
-        controlPanelElements.newsRecyclerList.check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(titleForNewsShouldNotBeKept))));
+        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(titleForNewsShouldNotBeKept))));
 
     }
 
     @Test
     @DisplayName("Создание новости с категорией не из списка")
     public void shouldShowAWrongMessageWithTextSelectACategoryFromTheList() {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
 
-        controlPanelSteps.replaceTextNewsCategory("Тест");
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, 0, 0, titleForNewsShouldNotBeKept, titleForNewsShouldNotBeKept);
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
+        TestUtils.waitView(controlPanelSteps.newsItemCategoryField).perform(replaceText("Тест"));
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsShouldNotBeKept, titleForNewsShouldNotBeKept);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         controlPanelSteps.checkToast("Wrong category selected. Select a category from the list.", true);
     }
 
     @Test
     @DisplayName("Сохранение пустой формы новости")
     public void shouldNotSaveEmptyNews() {
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         controlPanelSteps.isWrongEmptyFormNews();
-
     }
 
     @Test
     @DisplayName("Создание Новости со статусом Не активна")
     public void shouldToggleTurnOffSwitchActive() {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
 
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categoryMassage);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 0, 0, 0, 0, titleForNewsMassage, titleForNewsMassage);
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.switcherActive);
-        controlPanelElements.switcherNotActive.check(matches(isDisplayed()));
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryMassage);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsMassage, titleForNewsMassage);
+        TestUtils.waitView(controlPanelSteps.switcherActive).perform(click());
+        TestUtils.waitView(controlPanelSteps.switcherNotActive).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Создание Новости с датой публикации завтра")
     public void shouldCreateANewsItemWithPublishDateTomorrow() {
-        String publicationDate = DataHelper.getValidDate(0, 0, 1);
-        //String publicationTime = DataHelper.getValidTime(0, 0);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH)+1;
+        String monthExpected = TestUtils.getDateToString(month);
+        String dayExpected = TestUtils.getDateToString(day);
 
 
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 0, 1, 0, 0, titleForNewsPublicationDateTomorrow, titleForNewsPublicationDateTomorrow);
-
-        controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
-        //controlPanelElements.newsItemPublishTimeField.check(matches(withText(publicationTime)));
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-
-
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsPublicationDateTomorrow, titleForNewsPublicationDateTomorrow);
+        //Проверка, что выбранная дата отображается
+        TestUtils.waitView(controlPanelSteps.newsItemPublishDateField).check(matches(withText(dayExpected + "." + monthExpected + "." + year)));
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображаются новости с заголовком "Тест новость Зарплата"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForNewsPublicationDateTomorrow)), hasDescendant(withText(publicationDate)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
+        controlPanelSteps.scrollToElementInRecyclerList(titleForNewsPublicationDateTomorrow).check(matches(isDisplayed()));
         //Удаляем нашу новость
         controlPanelSteps.deleteItemNews(titleForNewsPublicationDateTomorrow);
     }
@@ -407,26 +304,19 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с датой публикации через месяц")
     public void shouldCreateANewsItemWithPublicationDateInAMonth() {
-        String publicationDate = DataHelper.getValidDate(0, 1, 0);
-        //String publicationTime = DataHelper.getValidTime(0, 0);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+2;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+        String monthExpected = TestUtils.getDateToString(month);
+        String dayExpected = TestUtils.getDateToString(day);
 
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsPublicationDateInAMonth, titleForNewsPublicationDateInAMonth);
 
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(0, 1, 0, 0, 0, titleForNewsPublicationDateInAMonth, titleForNewsPublicationDateInAMonth);
-
-        controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
-        //controlPanelElements.newsItemPublishTimeField.check(matches(withText(publicationTime)));
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-
+        TestUtils.waitView(controlPanelSteps.newsItemPublishDateField).check(matches(withText(dayExpected + "." + monthExpected + "." + year)));
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображаются новости с заголовком "Тест новость Зарплата"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForNewsPublicationDateInAMonth)), hasDescendant(withText(publicationDate)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
+        controlPanelSteps.scrollToElementInRecyclerList(titleForNewsPublicationDateInAMonth).check(matches(isDisplayed()));
         //Удаляем нашу новость
         controlPanelSteps.deleteItemNews(titleForNewsPublicationDateInAMonth);
     }
@@ -435,58 +325,60 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с датой публикации вчера")
     public void shouldCreateANewsItemWithPublicationDateYesterday() {
-        String publicationDate = DataHelper.getValidDate(0, 0, 0);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+        String monthExpected = TestUtils.getDateToString(month);
+        String dayExpected = TestUtils.getDateToString(day);
 
-
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categorySalary);
-        controlPanelSteps.setDateToDatePicker(0, 0, -1);
-
-        controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
+        controlPanelSteps.setDateToDatePicker(year, month, day -1);
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
+        //Проверяем, что в поле Дата отображается сегодняшняя дата
+        TestUtils.waitView(controlPanelSteps.newsItemPublishDateField).check(matches(withText(dayExpected + "." + monthExpected + "." + year)));
     }
 
     //При ручном тестировании этот кейс проходит без ошибки
     @Test
     @DisplayName("Создание Новости с датой публикации год назад")
     public void shouldCreateANewsItemWithPublicationDateOneYearAgo() {
-        String publicationDate = DataHelper.getValidDate(0, 0, 0);
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+        String monthExpected = TestUtils.getDateToString(month);
+        String dayExpected = TestUtils.getDateToString(day);
 
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
+        controlPanelSteps.setDateToDatePicker(year -1, month, day);
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
 
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categorySalary);
-        controlPanelSteps.setDateToDatePicker(-1, 0, 0);
-
-        controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
+        TestUtils.waitView(controlPanelSteps.newsItemPublishDateField).check(matches(withText(dayExpected + "." + monthExpected + "." + year)));
     }
 
     @Test
     @DisplayName("Создание Новости с датой публикации час назад")
     public void shouldCreateANewsItemWithPublicationTimeHourAgo() {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
         int hour = date.get(Calendar.HOUR_OF_DAY)-1;
         int minutes = date.get(Calendar.MINUTE);
-        String publicationDate = DataHelper.getValidDate(0, 0, 0);
+        String hourExpected = TestUtils.getDateToString(hour);
+        String minutesExpected = TestUtils.getDateToString(minutes);
 
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categorySalary);
-        controlPanelElements.newsItemTitleField.perform(replaceText(titleForNewsPublicationTimeHourAgo));
-        controlPanelSteps.setDateToDatePicker(0, 0, 0);
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.newsItemPublishTimeField);
-        controlPanelElements.timePicker.check(matches(isDisplayed()));
-        controlPanelElements.timePicker.perform(setTime(hour, minutes));
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
-
-        controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
-        controlPanelElements.newsItemPublishTimeField.check(matches(withText(hour + ":" + minutes)));
-        controlPanelElements.newsItemDescriptionField.perform(replaceText(titleForNewsPublicationTimeHourAgo));
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
+        TestUtils.waitView(controlPanelSteps.newsItemTitleField).perform(replaceText(titleForNewsPublicationTimeHourAgo));
+        controlPanelSteps.setDateToDatePicker(year, month, day);
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
+        controlPanelSteps.setTimeToTimeField(hour, minutes);
+        //Проверка,что выбранное время отображается
+        TestUtils.waitView(controlPanelSteps.newsItemPublishTimeField).check(matches(withText(hourExpected + ":" + minutesExpected)));
+        //Ввод описания
+        TestUtils.waitView(controlPanelSteps.newsItemDescriptionField).perform(replaceText(titleForNewsPublicationTimeHourAgo));
+        //Сохраняем
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображаются новости с заголовком "Тест новость Зарплата"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForNewsPublicationTimeHourAgo)), hasDescendant(withText(publicationDate)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
+        controlPanelSteps.scrollToElementInRecyclerList(titleForNewsPublicationTimeHourAgo).check(matches(isDisplayed()));
         //Удаляем нашу новость
         controlPanelSteps.deleteItemNews(titleForNewsPublicationTimeHourAgo);
     }
@@ -494,34 +386,27 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Создание Новости с датой публикации через час")
     public void shouldCreateANewsItemWithPublicationTimeInOneHour() {
-        int hour = date.get(Calendar.HOUR_OF_DAY)+1;
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+        int hour =  date.get(Calendar.HOUR_OF_DAY)+1;
         int minutes = date.get(Calendar.MINUTE);
-        String publicationDate = DataHelper.getValidDate(0, 0, 0);
+        String hourExpected = TestUtils.getDateToString(hour);
+        String minutesExpected = TestUtils.getDateToString(minutes);
 
-
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelElements.categorySalary);
-        controlPanelElements.newsItemTitleField.perform(replaceText(titleForNewsPublicationTimeInOneHour));
-        controlPanelSteps.setDateToDatePicker(0, 0, 0);
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.newsItemPublishTimeField);
-        controlPanelElements.timePicker.check(matches(isDisplayed()));
-        controlPanelElements.timePicker.perform(setTime(hour, minutes));
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
-
-        controlPanelElements.newsItemPublishDateField.check(matches(withText(publicationDate)));
-        controlPanelElements.newsItemPublishTimeField.check(matches(withText(hour + ":" + minutes)));
-        controlPanelElements.newsItemDescriptionField.perform(replaceText(titleForNewsPublicationTimeInOneHour));
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.saveBut);
-        SystemClock.sleep(3000);
-
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
+        TestUtils.waitView(controlPanelSteps.newsItemTitleField).perform(replaceText(titleForNewsPublicationTimeInOneHour));
+        controlPanelSteps.setDateToDatePicker(year, month, day);
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
+        controlPanelSteps.setTimeToTimeField(hour, minutes);
+        //Проверка,что выбранное время отображается
+        TestUtils.waitView(controlPanelSteps.newsItemPublishTimeField).check(matches(withText(hourExpected + ":" + minutesExpected)));
+        //Ввод описания
+        TestUtils.waitView(controlPanelSteps.newsItemDescriptionField).perform(replaceText(titleForNewsPublicationTimeInOneHour));
+        //Сохраняем
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверка что отображаются новости с заголовком "Тест новость Зарплата"
-        controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(allOf(
-                        hasDescendant(withText(titleForNewsPublicationTimeInOneHour)), hasDescendant(withText(publicationDate)), hasDescendant(withText("Иванов Д.Д.")))
-                )).check(matches(isDisplayed()));
-
+        controlPanelSteps.scrollToElementInRecyclerList(titleForNewsPublicationTimeInOneHour).check(matches(isDisplayed()));
         //Удаляем нашу новость
         controlPanelSteps.deleteItemNews(titleForNewsPublicationTimeInOneHour);
     }
@@ -530,51 +415,54 @@ public class NewsCreationFormTest {
     @Test
     @DisplayName("Выставление времени публикации Новости вводом цифр")
     public void shouldSetTheTimeByEnteringNumbers() {
-        String timeInOneHour = DataHelper.getValidTime(1, 0);
+        int hour = date.get(Calendar.HOUR_OF_DAY)+1;
+        int minutes = date.get(Calendar.MINUTE);
+        String hourExpected = TestUtils.getDateToString(hour);
+        String minutesExpected = TestUtils.getDateToString(minutes);
 
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.newsItemPublishTimeField);
-        controlPanelElements.timePicker.check(matches(isDisplayed()));
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.timePickerToggleMode);
-        controlPanelSteps.setTimeToTimePicker(1, 0);
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.okBut);
-
-        //controlPanelElements.newsItemPublishTimeField.check(matches(withText(timeInOneHour)));
+        TestUtils.waitView(controlPanelSteps.newsItemPublishTimeField).perform(click());
+        TestUtils.waitView(controlPanelSteps.timePicker).check(matches(isDisplayed()));
+        TestUtils.waitView(controlPanelSteps.timePickerToggleMode).perform(click());
+        controlPanelSteps.setTimeToTimePicker(hour, minutes);
+        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
+        //Проверка
+        TestUtils.waitView(controlPanelSteps.newsItemPublishTimeField).check(matches(withText(hourExpected + ":" + minutesExpected)));
     }
 
     @Test
     @DisplayName("Отмена ввода времени в Форме для создания Новости")
     public void shouldNotSetTime() {
+        int hour = date.get(Calendar.HOUR_OF_DAY)+1;
+        int minutes = date.get(Calendar.MINUTE);
 
+        TestUtils.waitView(controlPanelSteps.newsItemPublishTimeField).perform(click());
+        TestUtils.waitView(controlPanelSteps.timePicker).check(matches(isDisplayed()));
 
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.newsItemPublishTimeField);
-        controlPanelElements.timePicker.check(matches(isDisplayed()));
-
-        controlPanelSteps.setTimeToTimePicker(1, 0);
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.cancelDeleteBut);
-
-        controlPanelElements.newsItemPublishTimeField.check(matches(withText("")));
+        controlPanelSteps.setTimeToTimePicker(hour, minutes);
+        TestUtils.waitView(controlPanelSteps.cancelDeleteBut).perform(click());
+        //Проверяем, что поле Время пустое
+        TestUtils.waitView(controlPanelSteps.newsItemPublishTimeField).check(matches(withText("")));
     }
 
     @Test
     @DisplayName("Отмена ввода даты в Форме для создания Новости")
     public void shouldNotSetDate() {
+        int year = date.get(Calendar.YEAR)+1;
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
 
-        controlPanelSteps.setDateToDatePicker(1, 0, 0);
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.cancelDeleteBut);
-        controlPanelElements.newsItemPublishDateField.check(matches(withText("")));
+        controlPanelSteps.setDateToDatePicker(year, month, day);
+        TestUtils.waitView(controlPanelSteps.cancelDeleteBut).perform(click());
+        TestUtils.waitView(controlPanelSteps.newsItemPublishDateField).check(matches(withText("")));
     }
 
     @Test
     @DisplayName("Отмена Создания Новости и отмена выхода из формы")
     public void shouldNotGetOutOfNewsForm() {
-
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.cancelBut);
-        controlPanelElements.messageChangesWonTBeSaved.check(matches(isDisplayed()));
-        DataHelper.EspressoBaseTest.clickButton(controlPanelElements.cancelDeleteBut);
+        TestUtils.waitView(controlPanelSteps.cancelBut).perform(click());
+        TestUtils.waitView(controlPanelSteps.messageChangesWonTBeSaved).check(matches(isDisplayed()));
+        TestUtils.waitView(controlPanelSteps.cancelDeleteBut).perform(click());
         controlPanelSteps.isCreatingNewsForm();
-
-
     }
 
 

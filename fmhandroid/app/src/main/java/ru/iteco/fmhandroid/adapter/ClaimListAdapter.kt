@@ -30,10 +30,8 @@ class ClaimListAdapter(
     }
 
     override fun onBindViewHolder(holder: ClaimViewHolder, position: Int) {
-        EspressoIdlingResources.increment();
         val fullClaim = getItem(position)
         holder.bind(fullClaim)
-        EspressoIdlingResources.decrement();
     }
 
     class ClaimViewHolder(
