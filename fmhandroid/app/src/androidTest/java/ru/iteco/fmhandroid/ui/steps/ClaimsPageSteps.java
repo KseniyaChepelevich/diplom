@@ -156,8 +156,8 @@ public class ClaimsPageSteps {
     public ViewInteraction scrollToElementInRecyclerList(String description) {
         return TestUtils.waitView(claimRecyclerList).check(matches(isDisplayed()))
                 // scrollTo will fail the test if no item matches.
-                //.perform(RecyclerViewActions.scrollTo(hasDescendant(withText(description))));
-                .perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText(description))));
+                .perform(RecyclerViewActions.scrollTo(hasDescendant(withText(description))));
+                //.perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText(description))));
 
     }
     public void isCommentForm() {
