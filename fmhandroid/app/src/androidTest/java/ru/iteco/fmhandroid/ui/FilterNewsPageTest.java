@@ -94,26 +94,7 @@ public class FilterNewsPageTest {
     @DisplayName("Фильтрация новостей по Категории Обьявление")
     public void shouldFilterTheNewsWithCategoryAnnouncement() {
         //Создание новостей с категорией объявление для фильтрации
-        /*
-        final Dispatcher dispatcher = new Dispatcher() {
-
-            @Override
-            public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
-
-                switch (request.getPath()) {
-                    case "/v1/login/auth/":
-                        return new MockResponse().setResponseCode(200);
-                    case "/v1/check/version/":
-                        return new MockResponse().setResponseCode(200).setBody("version=9");
-                    case "/v1/profile/info":
-                        return new MockResponse().setResponseCode(200).setBody("{\\\"info\\\":{\\\"name\":\"Lucas Albuquerque\",\"age\":\"21\",\"gender\":\"male\"}}");
-                }
-                return new MockResponse().setResponseCode(404);
-            }
-        };
-        mockWebServer.setDispatcher(dispatcher);
-        */
-                TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement1, newsAnnouncement1, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement2, newsAnnouncement2, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement3, newsAnnouncement3, 0, 0, 0);
@@ -143,17 +124,13 @@ public class FilterNewsPageTest {
 
         //Удаляем созданные новости
         TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
-
         controlPanelSteps.deleteItemNews(newsAnnouncement1);
-
         controlPanelSteps.deleteItemNews(newsAnnouncement2);
-
         controlPanelSteps.deleteItemNews(newsAnnouncement3);
         //SystemClock.sleep(5000);
         controlPanelSteps.deleteItemNews(newsBirthday1);
         //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsBirthday2);
-
         controlPanelSteps.deleteItemNews(newsBirthday3);
 
     }
@@ -178,10 +155,8 @@ public class FilterNewsPageTest {
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryBirthday, 0, -1, 0, 0, 0, 0);
         TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
-
         //Проверка, что отображаются новости с категорией День рождения
         newsPageSteps.isNewsPage();
-        //SystemClock.sleep(3000);
         controlPanelSteps.scrollToElementInRecyclerList(newsBirthday1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsBirthday2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsBirthday3).check(matches(isDisplayed()));
@@ -189,20 +164,13 @@ public class FilterNewsPageTest {
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsAnnouncement1))));
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsAnnouncement2))));
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsAnnouncement3))));
-
         //Удаляем созданные новости
         TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
-
         controlPanelSteps.deleteItemNews(newsAnnouncement1);
-
         controlPanelSteps.deleteItemNews(newsAnnouncement2);
-
         controlPanelSteps.deleteItemNews(newsAnnouncement3);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsBirthday1);
-
         controlPanelSteps.deleteItemNews(newsBirthday2);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsBirthday3);
 
     }
@@ -227,10 +195,8 @@ public class FilterNewsPageTest {
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categorySalary, 0, -1, 0, 0, 0, 0);
         TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
-
         //Проверка, что отображаются новости с категорией Объявление
         newsPageSteps.isNewsPage();
-        //SystemClock.sleep(3000);
         controlPanelSteps.scrollToElementInRecyclerList(newsSalary1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsSalary2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsSalary3).check(matches(isDisplayed()));
@@ -238,20 +204,13 @@ public class FilterNewsPageTest {
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsTradeUnion1))));
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsTradeUnion2))));
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsTradeUnion3))));
-
         //Удаляем созданные новости
         TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
-
         controlPanelSteps.deleteItemNews(newsSalary1);
-
         controlPanelSteps.deleteItemNews(newsSalary2);
-
         controlPanelSteps.deleteItemNews(newsSalary3);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsTradeUnion1);
-
         controlPanelSteps.deleteItemNews(newsTradeUnion2);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsTradeUnion3);
 
     }
@@ -276,10 +235,8 @@ public class FilterNewsPageTest {
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryTradeUnion, 0, -1, 0, 0, 0, 0);
         TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
-
         //Проверка, что отображаются новости с категорией Объявление
         newsPageSteps.isNewsPage();
-        //SystemClock.sleep(3000);
         controlPanelSteps.scrollToElementInRecyclerList(newsTradeUnion1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsTradeUnion2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsTradeUnion3).check(matches(isDisplayed()));
@@ -287,20 +244,13 @@ public class FilterNewsPageTest {
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsSalary1))));
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsSalary2))));
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsSalary3))));
-
         //Удаляем созданные новости
         TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
-
         controlPanelSteps.deleteItemNews(newsSalary1);
-
         controlPanelSteps.deleteItemNews(newsSalary2);
-
         controlPanelSteps.deleteItemNews(newsSalary3);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsTradeUnion1);
-
         controlPanelSteps.deleteItemNews(newsTradeUnion2);
-
         controlPanelSteps.deleteItemNews(newsTradeUnion3);
 
     }
@@ -325,10 +275,8 @@ public class FilterNewsPageTest {
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryHoliday, 0, -1, 0, 0, 0, 0);
         TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
-
         //Проверка, что отображаются новости с категорией Объявление
         newsPageSteps.isNewsPage();
-        //SystemClock.sleep(3000);
         controlPanelSteps.scrollToElementInRecyclerList(newsHoliday1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsHoliday2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsHoliday3).check(matches(isDisplayed()));
@@ -336,20 +284,13 @@ public class FilterNewsPageTest {
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsMassage1))));
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsMassage2))));
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsMassage3))));
-
         //Удаляем созданные новости
         TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
-
         controlPanelSteps.deleteItemNews(newsHoliday1);
-
         controlPanelSteps.deleteItemNews(newsHoliday2);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsHoliday3);
-
         controlPanelSteps.deleteItemNews(newsMassage1);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsMassage2);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsMassage3);
 
     }
@@ -374,10 +315,8 @@ public class FilterNewsPageTest {
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryMassage, 0, -1, 0, 0, 0, 0);
         TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
-
         //Проверка, что отображаются новости с категорией Объявление
         newsPageSteps.isNewsPage();
-        //SystemClock.sleep(3000);
         controlPanelSteps.scrollToElementInRecyclerList(newsMassage1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsMassage2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsMassage3).check(matches(isDisplayed()));
@@ -385,20 +324,13 @@ public class FilterNewsPageTest {
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsHoliday1))));
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsHoliday2))));
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsHoliday3))));
-
         //Удаляем созданные новости
         TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
-
         controlPanelSteps.deleteItemNews(newsHoliday1);
-
         controlPanelSteps.deleteItemNews(newsHoliday2);
-
         controlPanelSteps.deleteItemNews(newsHoliday3);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsMassage1);
-
         controlPanelSteps.deleteItemNews(newsMassage2);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsMassage3);
     }
 
@@ -422,10 +354,8 @@ public class FilterNewsPageTest {
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryGratitude, 0, -1, 0, 0, 0, 0);
         TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
-
         //Проверка, что отображаются новости с категорией Объявление
         newsPageSteps.isNewsPage();
-        //SystemClock.sleep(3000);
         controlPanelSteps.scrollToElementInRecyclerList(newsGratitude1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsGratitude2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsGratitude3).check(matches(isDisplayed()));
@@ -433,20 +363,13 @@ public class FilterNewsPageTest {
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsNeedHelp1))));
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsNeedHelp2))));
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsNeedHelp3))));
-
         //Удаляем созданные новости
         TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
-
         controlPanelSteps.deleteItemNews(newsGratitude1);
-
         controlPanelSteps.deleteItemNews(newsGratitude2);
-
         controlPanelSteps.deleteItemNews(newsGratitude3);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsNeedHelp1);
-
         controlPanelSteps.deleteItemNews(newsNeedHelp2);
-
         controlPanelSteps.deleteItemNews(newsNeedHelp3);
 
     }
@@ -471,10 +394,8 @@ public class FilterNewsPageTest {
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryNeedHelp, 0, -1, 0, 0, 0, 0);
         TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
-
         //Проверка, что отображаются новости с категорией Объявление
         newsPageSteps.isNewsPage();
-        //SystemClock.sleep(3000);
         controlPanelSteps.scrollToElementInRecyclerList(newsNeedHelp1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsNeedHelp2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsNeedHelp3).check(matches(isDisplayed()));
@@ -482,20 +403,13 @@ public class FilterNewsPageTest {
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsGratitude1))));
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsGratitude2))));
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsGratitude3))));
-
         //Удаляем созданные новости
         TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
-
         controlPanelSteps.deleteItemNews(newsGratitude1);
-
         controlPanelSteps.deleteItemNews(newsGratitude2);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsGratitude3);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsNeedHelp1);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsNeedHelp2);
-
         controlPanelSteps.deleteItemNews(newsNeedHelp3);
 
     }
@@ -520,31 +434,21 @@ public class FilterNewsPageTest {
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryAnnouncement, 0, -1, 0, 0, 0, 0);
         TestUtils.waitView(controlPanelSteps.cancelBut).perform(click());
-
         //Проверка, что фильтр не включился и отображаются все новости
         newsPageSteps.isNewsPage();
-        //SystemClock.sleep(5000);
         controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsBirthday1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsHoliday1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsMassage1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsGratitude1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsTradeUnion1).check(matches(isDisplayed()));
-
-
         //Удаляем созданные новости
         TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
-
         controlPanelSteps.deleteItemNews(newsAnnouncement1);
-
         controlPanelSteps.deleteItemNews(newsBirthday1);
-
         controlPanelSteps.deleteItemNews(newsHoliday1);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsMassage1);
-
         controlPanelSteps.deleteItemNews(newsGratitude1);
-        //SystemClock.sleep(3000);
         controlPanelSteps.deleteItemNews(newsTradeUnion1);
 
     }
@@ -552,18 +456,15 @@ public class FilterNewsPageTest {
     @Test
     @DisplayName("Фильтрация новостей по несуществующей категории")
     public void shouldShowAMessageSelectACategoryFromTheList() {
-
         //Открываем форму фильтра и заполняем её
         TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
         filterNewsPageSteps.isFilterNewsForm();
         TestUtils.waitView(controlPanelSteps.newsItemCategoryField).perform(replaceText(myCategory));
-
         filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateStartField, 0, -1, 0);
         TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateEndField, 0, 0, 0);
         TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
-
         //Проверка, что появляется сообщение
         controlPanelSteps.checkToast("Invalid category. Select a category from the list.", true);
     }
@@ -583,7 +484,6 @@ public class FilterNewsPageTest {
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryAnnouncement, 0, 0, 1, 1, 0, 1);
         TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
-
         //Проверка, что отображается кнопка REFRESH, текст и картинка пустого списка новостей
         newsPageSteps.isEmptyNewsList();
         //Удаляем созданные новости
@@ -608,27 +508,21 @@ public class FilterNewsPageTest {
         filterNewsPageSteps.isFilterNewsForm();
         controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
         TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
-
         //Проверка, что отображаются все актуальные новости категории Объявление
         newsPageSteps.isNewsPage();
         controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement3).check(matches(isDisplayed()));
-
         //Удаляем созданные новости
         TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
-
         controlPanelSteps.deleteItemNews(newsAnnouncement1);
-
         controlPanelSteps.deleteItemNews(newsAnnouncement2);
-
         controlPanelSteps.deleteItemNews(newsAnnouncement3);
     }
 
     @Test
     @DisplayName("Фильтрация новости с заданным периодом от и незаданным периодом до")
     public void shouldShowMessageWrongPeriodPublishDateEndField() {
-
         //Открываем форму фильтра и заполняем её
         TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
         filterNewsPageSteps.isFilterNewsForm();
@@ -636,7 +530,6 @@ public class FilterNewsPageTest {
         filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateStartField, 0, -1, 0);
         TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
-
         //Проверка сообщения "Wrong period"
         filterNewsPageSteps.isMessageWrongPeriod();
     }
@@ -644,7 +537,6 @@ public class FilterNewsPageTest {
     @Test
     @DisplayName("Фильтрация новости с заданным периодом до и незаданным периодом от")
     public void shouldShowMessageWrongPeriodWithEmptyPublishDateStartField() {
-
         //Открываем форму фильтра и заполняем её
         TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
         filterNewsPageSteps.isFilterNewsForm();
@@ -652,7 +544,6 @@ public class FilterNewsPageTest {
         filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateEndField, 0, 0, 0);
         TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
-
         //Проверка сообщения "Wrong period"
         filterNewsPageSteps.isMessageWrongPeriod();
     }

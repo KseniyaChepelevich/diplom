@@ -1,38 +1,26 @@
 package ru.iteco.fmhandroid.ui;
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.PickerActions.setTime;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withChild;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
-import static ru.iteco.fmhandroid.ui.data.CustomViewAssertion.itemViewMatches;
-import static ru.iteco.fmhandroid.ui.data.CustomViewAssertion.notListed;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 import io.qameta.allure.kotlin.junit4.DisplayName;
-import android.os.SystemClock;
 
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.PerformException;
-import androidx.test.espresso.ViewAssertion;
-import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,12 +32,8 @@ import java.util.Calendar;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
-import ru.iteco.fmhandroid.ui.data.CustomViewAssertion;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
-import ru.iteco.fmhandroid.ui.page.ControlPanelElements;
-import ru.iteco.fmhandroid.ui.page.FilterNewsPageElements;
-import ru.iteco.fmhandroid.ui.page.NewsPageElements;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.ControlPanelSteps;
 import ru.iteco.fmhandroid.ui.steps.FilterNewsPageSteps;
@@ -59,6 +43,8 @@ import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
 @RunWith(AllureAndroidJUnit4.class)
 
 public class ControlPanelTest {
+
+    private UiDevice device;
     AuthSteps authSteps = new AuthSteps();
     MainPageSteps mainPageSteps = new MainPageSteps();
     NewsPageSteps newsPageSteps = new NewsPageSteps();
@@ -88,6 +74,8 @@ public class ControlPanelTest {
 
     @Before
     public void logoutCheckAndOpenControlPanelPage() {
+        device =
+                UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         try {
             authSteps.isAuthScreen();
         } catch (PerformException e) {
@@ -124,6 +112,23 @@ public class ControlPanelTest {
         controlPanelSteps.scrollToElementInRecyclerList(titleNewsWillNotBeDeleted).check(matches(isDisplayed()));
         //Удаляем нашу новость
         controlPanelSteps.deleteItemNews(titleNewsWillNotBeDeleted);
+    }
+
+    @Test
+    @DisplayName("Открытие Новости для редактирования")
+    public void shouldOpenTheNewsForEditing(){
+        //Создаем новость для теста
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, titleNewsWillNotBeEditing, titleNewsWillNotBeEditing, 0, 0, 0);
+        //Находим нашу новость
+        controlPanelSteps.scrollToElementInRecyclerList(titleNewsWillNotBeEditing).check(matches(isDisplayed()));
+        //Нажимаем на кнопку Редактировать в карточке новости
+        controlPanelSteps.getItemNewsEditElement(titleNewsWillNotBeEditing).perform(click());
+        //Проверяем, что октрылась наша новость
+        controlPanelSteps.isCardTestNews(titleNewsWillNotBeEditing);
+        pressBack();
+
+        //Удаляем нашу новость
+        controlPanelSteps.deleteItemNews(titleNewsWillNotBeEditing);
     }
 
 
@@ -358,6 +363,23 @@ public class ControlPanelTest {
     public void shouldOpenTheNewsFilterSettingsForm() {
         TestUtils.waitView(controlPanelSteps.filterNewsBut).perform(click());
         filterNewsPageSteps.isFilterNewsFormControlPanel();
+    }
+
+    @Test
+    @DisplayName("Разрыв соединения в разделе Control panel")
+    public void shouldShowDialogWindowSomethingWrong() throws UiObjectNotFoundException {
+        //Включаем режим В самолете
+        device.openQuickSettings();
+        device.findObject(new UiSelector().description("Airplane mode")).click();
+        device.pressBack();
+        device.pressBack();
+        //Нажимаем кнопку добавить новость
+        TestUtils.waitView(controlPanelSteps.addNewsImBut).perform(click());
+        //Проверяем, что отображается сообщение
+        controlPanelSteps.isDialogWindowMessageTryAgainLatter();
+        //Отключаем режим в самолете
+        device.openQuickSettings();
+        device.findObject(new UiSelector().description("Airplane mode")).click();
     }
 
 }

@@ -21,13 +21,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.UUID;
 
-
-
-//import io.bloco.faker.Faker;
-
 public class DataHelper {
     private DataHelper() {
-
     }
 
     public static class AuthInfo {
@@ -80,7 +75,6 @@ public class DataHelper {
             return false;
         }
 
-
     }
 
     public static class EspressoBaseTest {
@@ -89,50 +83,11 @@ public class DataHelper {
             nameButton.check(matches(isDisplayed()));
             nameButton.perform(click());
         }
-
     }
-
-    public static String generateDate(int plusYear, int plusMonth, int plusDays, String formatPattern) {
-        return LocalDate.now().plusYears(plusYear).plusMonths(plusMonth).plusDays(plusDays).format(DateTimeFormatter.ofPattern(formatPattern));
-    }
-
-    public static String getValidDate(int plusYear, int plusMonth, int plusDays) {
-        //int randomNumber = ThreadLocalRandom.current().nextInt(1,60);
-        String date = generateDate(plusYear, plusMonth, plusDays, "dd.MM.yyyy");
-        return date;
-    }
-
-    public static String generateTime(int plusHours, int plusMinutes, String formatPattern) {
-        return LocalTime.now().plusHours(plusHours).plusMinutes(plusMinutes).format(DateTimeFormatter.ofPattern(formatPattern));
-    }
-
-    public static String getValidTime(int plusHour, int plusMinutes) {
-        //int randomNumber = ThreadLocalRandom.current().nextInt(1,60);
-        String time = generateTime(plusHour, plusMinutes, "HH:mm");
-        return time;
-    }
-
-    public static Calendar getDateForPicker() {
-        Calendar date = Calendar.getInstance();
-        return date;
-    }
-
-
-
-
 
     public static String generateTitleId() {
-        //Faker faker = new Faker();
         String titleId = UUID.randomUUID().toString();
         return titleId;
-
     }
-
-    public String generateTitle(String item) {
-        return (item + generateTitleId());
-
-    }
-
-
 
 }

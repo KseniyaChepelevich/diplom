@@ -90,11 +90,11 @@ public class FilterClaimsPageTest {
 
         //Создать заявки для теста
         creatingClaimsSteps.creatingAClaimWithStatusOpen(year, month, day, hour, minutes, titleForTheTestClaimOpen1, titleForTheTestClaimOpen1);
-        //creatingClaimsSteps.creatingAClaimWithStatusOpen(year, month, day, hour, minutes, titleForTheTestClaimOpen2, titleForTheTestClaimOpen2);
-        //creatingClaimsSteps.creatingAClaimWithStatusOpen(year, month, day, hour, minutes, titleForTheTestClaimOpen3, titleForTheTestClaimOpen3);
+        creatingClaimsSteps.creatingAClaimWithStatusOpen(year, month, day, hour, minutes, titleForTheTestClaimOpen2, titleForTheTestClaimOpen2);
+        creatingClaimsSteps.creatingAClaimWithStatusOpen(year, month, day, hour, minutes, titleForTheTestClaimOpen3, titleForTheTestClaimOpen3);
         creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaimInProgress1, titleForTheTestClaimInProgress1);
-        //creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaimInProgress2, titleForTheTestClaimInProgress2);
-        //creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaimInProgress3, titleForTheTestClaimInProgress3);
+        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaimInProgress2, titleForTheTestClaimInProgress2);
+        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaimInProgress3, titleForTheTestClaimInProgress3);
 
         //Фильтруем заявки со статусом Open
         filterClaimsPageSteps.filterClaims(true, false, false, false);
@@ -103,15 +103,15 @@ public class FilterClaimsPageTest {
         //Проверяем, что отфильтровались только заявки со статусом Open
         //Поиск элементов в RecyclerView работает нестабильно
         filterClaimsPageSteps.checkClaimIsExist(titleForTheTestClaimOpen1);
-        //filterClaimsPageSteps.checkClaimIsExist(titleForTheTestClaimOpen2);
-        //filterClaimsPageSteps.checkClaimIsExist(titleForTheTestClaimOpen3);
+        filterClaimsPageSteps.checkClaimIsExist(titleForTheTestClaimOpen2);
+        filterClaimsPageSteps.checkClaimIsExist(titleForTheTestClaimOpen3);
         /*claimsPageSteps.scrollToElementInRecyclerList(titleForTheTestClaimOpen1).check(matches(isDisplayed()));
         claimsPageSteps.scrollToElementInRecyclerList(titleForTheTestClaimOpen2).check(matches(isDisplayed()));
         claimsPageSteps.scrollToElementInRecyclerList(titleForTheTestClaimOpen3).check(matches(isDisplayed()));*/
         //Проверяем, что заявки со статусом In progress не отображаются
         filterClaimsPageSteps.checkClaimIsNotExist(titleForTheTestClaimInProgress1);
-        //filterClaimsPageSteps.checkClaimIsNotExist(titleForTheTestClaimInProgress2);
-        //filterClaimsPageSteps.checkClaimIsNotExist(titleForTheTestClaimInProgress3);
+        filterClaimsPageSteps.checkClaimIsNotExist(titleForTheTestClaimInProgress2);
+        filterClaimsPageSteps.checkClaimIsNotExist(titleForTheTestClaimInProgress3);
 
     }
 

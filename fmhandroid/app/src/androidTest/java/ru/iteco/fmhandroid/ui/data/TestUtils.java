@@ -7,8 +7,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 
 import static org.hamcrest.EasyMock2Matchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.notNullValue;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -17,6 +23,7 @@ import android.widget.AdapterView;
 
 import androidx.annotation.IdRes;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.PerformException;
@@ -24,25 +31,25 @@ import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.util.HumanReadables;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.uiautomator.By;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.Until;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 
-import java.util.Map;
+import java.util.List;
 
 public class TestUtils {
-    public static <VH extends RecyclerView.ViewHolder> ViewAction actionOnItemViewAtPosition(int position,
-                                                                                             @IdRes
-                                                                                                     int viewId,
-                                                                                             ViewAction viewAction) {
-        return new ActionOnItemViewAtPositionViewAction(position, viewId, viewAction);
-    }
+    private static UiDevice device;
+    private static final int LAUNCH_TIMEOUT = 10000;
+    private ActivityManager mActivityManager;
 
     private static final class ActionOnItemViewAtPositionViewAction<VH extends RecyclerView
             .ViewHolder>
@@ -142,14 +149,11 @@ public class TestUtils {
     }
 
 
-
-
     public static ViewInteraction onViewWithTimeout(Matcher<View> matcher) {
         int retries = 10;
         int retryDelayMs = 500;
-        ViewAssertion retryAssertion= matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE));
-        for (int i = 0; i < retries; i++)
-         {
+        ViewAssertion retryAssertion = matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE));
+        for (int i = 0; i < retries; i++) {
 
             try {
                 ViewInteraction viewInteraction = Espresso.onView(matcher);
@@ -177,7 +181,7 @@ public class TestUtils {
         return Integer.toString(date);
     }
 
-    private static Matcher<View> childAtPosition(
+    public static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
         return new TypeSafeMatcher<View>() {
@@ -229,17 +233,25 @@ public class TestUtils {
         return withItemContent(equalTo(expectedText));
     }
 
-    /*return new BoundedMatcher<Object, Map>(Map.class) {
-        @Override
-        public boolean matchesSafely(Map map) {
-            return hasEntry(equalTo("STR"), itemTextMatcher).matches(map);
-        }
 
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("with item content: ");
-            itemTextMatcher.describeTo(description);
-        }
-    };*/
+    public static void waitForPackage(String packageName) {
+        device =
+                UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        final String launcherPackage = device.getLauncherPackageName();
+        assertThat(launcherPackage, notNullValue());
+        device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)),
+                LAUNCH_TIMEOUT);
+        // Launch the app
+        Context context = ApplicationProvider.getApplicationContext();
+        final Intent intent = context.getPackageManager()
+                .getLaunchIntentForPackage(packageName);
+        // Wait for the app to appear
+        device.wait(Until.hasObject(By.pkg(packageName).depth(0)),
+                LAUNCH_TIMEOUT);
+        // Wait for package
+        context.startActivity(intent);
+        device.wait(Until.hasObject(By.pkg(packageName)), LAUNCH_TIMEOUT);
+    }
+
 
 }

@@ -81,19 +81,15 @@ public class ClaimEditTest {
         String planeTime = hourExpected + ":" + minutesExpected;
 
         //Создать заявку
-        TestUtils.waitView(claimsPageSteps.addNewClaimBut).perform(click());
-        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.creatingAClaimWithStatusOpen(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
         //Открыть карточку заявки
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Отредактировать заявку
         TestUtils.waitView(claimsPageSteps.editClaimBut).perform(click());
-
         creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, newDay, newHour, minutes, newTitle, newTitle);
         TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверить что внесенные изменения сохранились
-        claimsPageSteps.isClaimCard(newTitle,planeDate,planeTime, newTitle);
+        claimsPageSteps.isClaimCard(newTitle, planeDate, planeTime, newTitle);
 
     }
 
@@ -107,10 +103,7 @@ public class ClaimEditTest {
         int hour = date.get(Calendar.HOUR_OF_DAY);
 
         //Создать заявку
-        TestUtils.waitView(claimsPageSteps.addNewClaimBut).perform(click());
-        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.creatingAClaimWithStatusOpen(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
         //Открыть карточку заявки
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Изменить статус заявки
@@ -166,7 +159,6 @@ public class ClaimEditTest {
 
         String hourExpected = TestUtils.getDateToString(hour);
         String minutesExpected = TestUtils.getDateToString(minutes);
-        String planeTime = hourExpected + ":" + minutesExpected;
         String commentForTheTestClaim = "Уже не нужно";
 
         //Создать заявку
@@ -197,10 +189,7 @@ public class ClaimEditTest {
         int hour = date.get(Calendar.HOUR_OF_DAY);
 
         //Создать заявку
-        TestUtils.waitView(claimsPageSteps.addNewClaimBut).perform(click());
-        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
-        SystemClock.sleep(5000);
+        creatingClaimsSteps.creatingAClaimWithStatusOpen(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
         //Открыть карточку заявки
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Изменить статус заявки
@@ -221,16 +210,15 @@ public class ClaimEditTest {
         int hour = date.get(Calendar.HOUR_OF_DAY);
 
         //Создать заявку
-        /*creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
+        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
         SystemClock.sleep(5000);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);*/
-        TestUtils.waitView(claimsPageSteps.claimsListCard1).perform(click());
+        claimsPageSteps.openClaimCard(titleForTheTestClaim);
         SystemClock.sleep(2000);
         //Выйти из карточки заявки, кликнув кнопку Close
         TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
         SystemClock.sleep(2000);
-        //Проверить что внесенные изменения сохранились
+        //Проверить карточка заявки закрылась
         claimsPageSteps.isClaimsPage();
     }
 
@@ -244,13 +232,8 @@ public class ClaimEditTest {
         int minutes = date.get(Calendar.MINUTE);
         int hour = date.get(Calendar.HOUR_OF_DAY);
 
-        String hourExpected = TestUtils.getDateToString(hour);
-        String minutesExpected = TestUtils.getDateToString(minutes);
-        String planeTime = hourExpected + ":" + minutesExpected;
-
         //Создать заявку
         TestUtils.waitView(claimsPageSteps.addNewClaimBut).perform(click());
-
         creatingClaimsSteps.selectAClaimExecutorFromTheList(claimsPageSteps.executorSmirnov);
         creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
         TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
@@ -269,16 +252,8 @@ public class ClaimEditTest {
         int year = date.get(Calendar.YEAR);
         int month = date.get(Calendar.MONTH) + 1;
         int day = date.get(Calendar.DAY_OF_MONTH);
-        int newDay = date.get(Calendar.DAY_OF_MONTH) + 1;
-        String dayExpected = TestUtils.getDateToString(newDay);
-        String monthExpected = TestUtils.getDateToString(month);
-        String planeDate = dayExpected + "." + monthExpected + "." + year;
         int minutes = date.get(Calendar.MINUTE);
         int hour = date.get(Calendar.HOUR_OF_DAY);
-        int newHour = date.get(Calendar.HOUR_OF_DAY) + 1;
-        String hourExpected = TestUtils.getDateToString(newHour);
-        String minutesExpected = TestUtils.getDateToString(minutes);
-        String planeTime = hourExpected + ":" + minutesExpected;
 
         //Создать заявку
         creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
@@ -290,5 +265,6 @@ public class ClaimEditTest {
         //Проверить появление сообщения "The Claim can be edited only in the Open status."
         controlPanelSteps.checkToast("The Claim can be edited only in the Open status.", true);
     }
+
 
 }

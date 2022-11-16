@@ -1,40 +1,29 @@
 package ru.iteco.fmhandroid.ui;
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.PickerActions.setTime;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
-import static androidx.test.espresso.matcher.ViewMatchers.withChild;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.IsNot.not;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
-import android.os.SystemClock;
+import android.os.RemoteException;
 
-import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.PerformException;
-import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObjectNotFoundException;
 
-import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
@@ -43,9 +32,6 @@ import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
-import ru.iteco.fmhandroid.ui.page.ControlPanelElements;
-import ru.iteco.fmhandroid.ui.page.FilterNewsPageElements;
-import ru.iteco.fmhandroid.ui.page.NewsPageElements;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.ControlPanelSteps;
 import ru.iteco.fmhandroid.ui.steps.FilterNewsPageSteps;
@@ -55,10 +41,11 @@ import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
 @RunWith(AllureAndroidJUnit4.class)
 
 public class NewsCreationFormTest {
+    private UiDevice device;
+
     AuthSteps authSteps = new AuthSteps();
     MainPageSteps mainPageSteps = new MainPageSteps();
     NewsPageSteps newsPageSteps = new NewsPageSteps();
-    FilterNewsPageSteps filterNewsPageSteps = new FilterNewsPageSteps();
     ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
     Calendar date = Calendar.getInstance();
@@ -76,6 +63,7 @@ public class NewsCreationFormTest {
     String titleForNewsPublicationDateInAMonth = "Дата публикации через месяц" + " " + DataHelper.generateTitleId();
     String titleForNewsPublicationTimeHourAgo = "Время публикации час назад" + " " + DataHelper.generateTitleId();
     String titleForNewsPublicationTimeInOneHour = "Время публикации через час" + " " + DataHelper.generateTitleId();
+    String nonLetterTitle = ";&&" + " " + DataHelper.generateTitleId();
 
     @Rule
     public ActivityTestRule<AppActivity> activityTestRule =
@@ -83,6 +71,8 @@ public class NewsCreationFormTest {
 
     @Before
     public void logoutCheck() {
+        device =
+                UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         try {
             authSteps.isAuthScreen();
         } catch (PerformException e) {
@@ -244,7 +234,6 @@ public class NewsCreationFormTest {
         TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         //Проверить отсутствие в списке новостей новости с заголовком "Новость не должна сохраниться"
         TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(titleForNewsShouldNotBeKept))));
-
     }
 
     @Test
@@ -288,7 +277,6 @@ public class NewsCreationFormTest {
         int day = date.get(Calendar.DAY_OF_MONTH)+1;
         String monthExpected = TestUtils.getDateToString(month);
         String dayExpected = TestUtils.getDateToString(day);
-
 
         controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
         controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsPublicationDateTomorrow, titleForNewsPublicationDateTomorrow);
@@ -351,7 +339,6 @@ public class NewsCreationFormTest {
         controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
         controlPanelSteps.setDateToDatePicker(year -1, month, day);
         TestUtils.waitView(controlPanelSteps.okBut).perform(click());
-
         TestUtils.waitView(controlPanelSteps.newsItemPublishDateField).check(matches(withText(dayExpected + "." + monthExpected + "." + year)));
     }
 
@@ -420,10 +407,12 @@ public class NewsCreationFormTest {
         String hourExpected = TestUtils.getDateToString(hour);
         String minutesExpected = TestUtils.getDateToString(minutes);
 
+        //Открываем TimePicker и вводим время с клавиатуры
         TestUtils.waitView(controlPanelSteps.newsItemPublishTimeField).perform(click());
         TestUtils.waitView(controlPanelSteps.timePicker).check(matches(isDisplayed()));
         TestUtils.waitView(controlPanelSteps.timePickerToggleMode).perform(click());
-        controlPanelSteps.setTimeToTimePicker(hour, minutes);
+        TestUtils.waitView(controlPanelSteps.inputHour).check(matches(isDisplayed())).perform(replaceText(hourExpected));
+        TestUtils.waitView(controlPanelSteps.inputMinute).check(matches(isDisplayed())).perform(replaceText(minutesExpected));
         TestUtils.waitView(controlPanelSteps.okBut).perform(click());
         //Проверка
         TestUtils.waitView(controlPanelSteps.newsItemPublishTimeField).check(matches(withText(hourExpected + ":" + minutesExpected)));
@@ -437,7 +426,6 @@ public class NewsCreationFormTest {
 
         TestUtils.waitView(controlPanelSteps.newsItemPublishTimeField).perform(click());
         TestUtils.waitView(controlPanelSteps.timePicker).check(matches(isDisplayed()));
-
         controlPanelSteps.setTimeToTimePicker(hour, minutes);
         TestUtils.waitView(controlPanelSteps.cancelDeleteBut).perform(click());
         //Проверяем, что поле Время пустое
@@ -463,6 +451,71 @@ public class NewsCreationFormTest {
         TestUtils.waitView(controlPanelSteps.messageChangesWonTBeSaved).check(matches(isDisplayed()));
         TestUtils.waitView(controlPanelSteps.cancelDeleteBut).perform(click());
         controlPanelSteps.isCreatingNewsForm();
+    }
+
+    @Test
+    @DisplayName("Небуквенные и нецифровые знаки в поле Заголовок при создании новости")
+    public void shouldShowWarningMessageNewsTitleFieldIsIncorrect() {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, nonLetterTitle, titleForNewsAnnouncement);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        //Проверка, что отображается сообщение
+        controlPanelSteps.checkToast("The field must not contain \";&&\" characters.", true);
+    }
+
+    @Test
+    @DisplayName("Небуквенные и нецифровые знаки в поле Описание при создании новости")
+    public void shouldShowWarningMessageNewsDescriptionFieldIsIncorrect() {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsAnnouncement, nonLetterTitle);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        //Проверка, что отображается сообщение
+        controlPanelSteps.checkToast("The field must not contain \";&&\" characters.", true);
+    }
+
+    @Test
+    @DisplayName("Разрыв соединения во время создания новости")
+    public void shouldShowWarningMessageWhenTheConnectionIsBrokenDuringTheCreationOfTheNews() throws UiObjectNotFoundException {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsAnnouncement, titleForNewsAnnouncement);
+        //Включаем режим В самолете
+        authSteps.turnOnAirplaneMode();
+        //Пытаемся сохранить новость
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+       //Проверяем, что отображается сообщение
+        controlPanelSteps.checkToast("Saving failed. Try again later.", true);
+        //Отключаем режим в самолете
+        authSteps.turnOffAirplaneMode();
+    }
+
+    @Test
+    @DisplayName("Поворот экрана при создании новости")
+    public void shouldSaveDataInTheNewsCreationFormOnScreenRotation() throws UiObjectNotFoundException, RemoteException {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH)+1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+        String monthExpected = TestUtils.getDateToString(month);
+        String dayExpected = TestUtils.getDateToString(day);
+
+        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(year, month, day, titleForNewsAnnouncement, titleForNewsAnnouncement);
+        device.setOrientationLeft();
+        //Проверяем, что введенные данные сохранились
+        TestUtils.waitView(controlPanelSteps.newsItemTitleField).check(matches(withText(titleForNewsAnnouncement)));
+        TestUtils.waitView(controlPanelSteps.newsItemPublishDateField).check(matches(withText(dayExpected + "." + monthExpected + "." + year)));
+        TestUtils.waitView(controlPanelSteps.newsItemDescriptionField).check(matches(withText(titleForNewsAnnouncement)));
     }
 
 

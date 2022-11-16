@@ -2,22 +2,21 @@ package ru.iteco.fmhandroid.ui;
 
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
+
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 import android.os.SystemClock;
 
-import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.PerformException;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.ActivityTestRule;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,7 +30,6 @@ import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
-import ru.iteco.fmhandroid.ui.page.ClaimsPageElements;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.ClaimsPageSteps;
 import ru.iteco.fmhandroid.ui.steps.ControlPanelSteps;
@@ -208,6 +206,57 @@ public class ClaimsPageTest {
         TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
         //Проверяем,что сохранился новый комментарий
         TestUtils.waitView(claimsPageSteps.commentDescriptionText).check(matches(withText(newComment)));
+
+    }
+
+    @Test
+    @DisplayName("Небуквенные и нецифровые знаки в поле Комментарий при редактировании заявки")
+    public void shouldShowWarningMessageClaimCommentFieldIsIncorrect() {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH) + 1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+
+        int minutes = date.get(Calendar.MINUTE);
+        int hour = date.get(Calendar.HOUR_OF_DAY);
+
+
+        String nonLetterComment = ";&&";
+
+        //Создать заявку
+        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
+        SystemClock.sleep(3000);
+        //Открываем заявку для редактирования
+        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        //Добавить комментарий
+        TestUtils.waitView(claimsPageSteps.addCommentBut).perform(click());
+        claimsPageSteps.isCommentForm();
+        //SystemClock.sleep(3000);
+        TestUtils.waitView(claimsPageSteps.commentTextInputField).perform(replaceText(nonLetterComment));
+
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        controlPanelSteps.checkToast("The field must not contain \";&&\" characters.", true);
+
+    }
+
+    @Test
+    @DisplayName("Отображение только что закрытой заявки на экране в списке заявок")
+    public void shouldFindOnTheScreenJustClosedClaim() {
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH) + 1;
+        int day = date.get(Calendar.DAY_OF_MONTH);
+
+        int minutes = date.get(Calendar.MINUTE);
+        int hour = date.get(Calendar.HOUR_OF_DAY);
+
+        //Создать заявку
+        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
+        SystemClock.sleep(3000);
+        //Находим заявку в списке и отркываем ее
+        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        //Закрываем заявку
+        TestUtils.waitView(claimsPageSteps.closeImBut).check(matches(isDisplayed())).perform(click());
+        //Проверяем, что только-что закрытая заявка видна на экране
+        claimsPageSteps.getItemClaimCompatImView(titleForTheTestClaim).check(matches(isDisplayed()));
 
     }
 
