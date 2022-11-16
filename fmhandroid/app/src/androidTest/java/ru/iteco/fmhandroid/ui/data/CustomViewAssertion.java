@@ -4,6 +4,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,7 +17,7 @@ import androidx.test.espresso.matcher.BoundedMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
-import ru.iteco.fmhandroid.R;
+import java.util.List;
 
 public class CustomViewAssertion {
 
@@ -75,9 +78,21 @@ public class CustomViewAssertion {
 
                 }
 
-            return true;
+                return true;
 
             }
         };
+    }
+
+    public static boolean isApplicationSentToBackground(final Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+        if (!((List<?>) tasks).isEmpty()) {
+            ComponentName topActivity = tasks.get(0).topActivity;
+            if (!topActivity.getPackageName().equals(context.getPackageName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -3,7 +3,6 @@ package ru.iteco.fmhandroid.ui;
 import android.content.Intent;
 import android.os.SystemClock;
 
-import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.intent.Intents;
@@ -12,23 +11,19 @@ import androidx.test.rule.ActivityTestRule;
 
 import io.qameta.allure.kotlin.junit4.DisplayName;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
-import ru.iteco.fmhandroid.ui.page.AboutPageElements;
-import ru.iteco.fmhandroid.ui.page.MainPageElements;
 import ru.iteco.fmhandroid.ui.steps.AboutPageSteps;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasData;
@@ -58,7 +53,6 @@ public class AboutPageTest {
             mainPageSteps.clickLogOutBut();
         }
         authSteps.authWithValidData(authInfo());
-        //SystemClock.sleep(3000);
         mainPageSteps.isMainPage();
         mainPageSteps.openAboutPageThroughTheMainMenu();
     }
@@ -66,30 +60,32 @@ public class AboutPageTest {
     @Test
     @DisplayName("Переход по ссылке Политика конфиденциальности")
     public void shouldOpenPrivacyPolicyDetailsPage() {
+        String uriPrivacyPolicy = "https://vhospice.org/#/privacy-policy/";
+        String headerPrivacyPolicyPage = "Privacy policy";
         Intents.init();
+
         aboutPageSteps.openPrivacyPolicy();
-        //SystemClock.sleep(3000);
-        intended(allOf(hasData("https://vhospice.org/#/privacy-policy/"), hasAction(Intent.ACTION_VIEW)));
+        intended(allOf(hasData(uriPrivacyPolicy), hasAction(Intent.ACTION_VIEW)));
         Intents.release();
 
-        //Проверка что загрузилась страница с Политикой конфиденциальности. Не работает. Страница не загружается.
-        /*ViewInteraction mainText = onView(allOf(
-                withText(containsString("Privacy Policy")), hasMultilineText()));*/
-        //onView(withText("ERR_CONNECTION_TIMED_OUT")) .check(doesNotExist());
+        //Проверка что загрузилась страница с Политикой конфиденциальности.
+        TestUtils.waitView(aboutPageSteps.headerPrivacyPolicyPage).check(matches(withText(headerPrivacyPolicyPage)));
 
     }
 
     @Test
     @DisplayName("Переход по ссылке Пользовательское соглашение")
     public void shouldOpenTermsOfUseDetailsPage() {
+        String uriTermsOfUse = "https://vhospice.org/#/terms-of-use";
+        String headerTermsOfUsePege = "Terms of use";
         Intents.init();
+
         aboutPageSteps.openTermsOfUse();
         SystemClock.sleep(3000);
-        intended(allOf(hasData("https://vhospice.org/#/terms-of-use"), hasAction(Intent.ACTION_VIEW)));
+        intended(allOf(hasData(uriTermsOfUse), hasAction(Intent.ACTION_VIEW)));
         Intents.release();
-        //Проверка что загрузилась страница с Пользовательским соглашением. Не работает. Страница не загружается.
-        ViewInteraction mainText = onView(allOf(
-                withText(containsString("Terms of use")), hasMultilineText()));
+        //Проверка что загрузилась страница с Пользовательским соглашением.
+        TestUtils.waitView(aboutPageSteps.headerTermsOfUsePage).check(matches(withText(headerTermsOfUsePege)));
 
     }
 

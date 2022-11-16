@@ -43,21 +43,15 @@ import java.util.Calendar;
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
-import ru.iteco.fmhandroid.ui.page.ControlPanelElements;
-import ru.iteco.fmhandroid.ui.page.NewsPageElements;
 
 
 public class ControlPanelSteps {
     Calendar date = Calendar.getInstance();
 
-    ControlPanelElements controlPanelElements = new ControlPanelElements();
-    NewsPageElements newsPageElements = new NewsPageElements();
-
     public Matcher<View> addNewsImBut = withId(R.id.add_news_image_view);
     public Matcher<View> filterNewsBut = withId(R.id.filter_news_material_button);
-    //Форса создания нововсти
+    //Форма создания новости
     public Matcher<View> newsItemCategoryField = withId(R.id.news_item_category_text_auto_complete_text_view);
-    public Matcher<View> showDropdownMenuBut = withContentDescription("Show dropdown menu");
     public Matcher<View> newsItemTitleField = withId(R.id.news_item_title_text_input_edit_text);
     public Matcher<View> newsItemPublishDateField = withId(R.id.news_item_publish_date_text_input_edit_text);
     public Matcher<View> newsItemPublishTimeField = withId(R.id.news_item_publish_time_text_input_edit_text);
@@ -69,8 +63,6 @@ public class ControlPanelSteps {
     //Категории новостей
     public ViewInteraction categoryAnnouncement = onView(withText("Объявление")).inRoot((RootMatchers.isPlatformPopup()));
     public ViewInteraction categoryBirthday = onView(withText("День рождения")).inRoot((RootMatchers.isPlatformPopup()));
-    public Matcher<View> categoryBirthday1 = withText("День рождения");
-    public Matcher<View> categoryAnnouncement1 = withText("Объявление");
     public ViewInteraction categorySalary = onView(withText("Зарплата")).inRoot((RootMatchers.isPlatformPopup()));
     public ViewInteraction categoryTradeUnion = onView(withText("Профсоюз")).inRoot((RootMatchers.isPlatformPopup()));
     public ViewInteraction categoryMassage = onView(withText("Массаж")).inRoot((RootMatchers.isPlatformPopup()));
@@ -84,22 +76,20 @@ public class ControlPanelSteps {
     public Matcher<View> timePicker = isAssignableFrom(TimePicker.class);
     public Matcher<View> timePickerToggleMode = withContentDescription("Switch to text input mode for the time input.");
     public Matcher<View> inputHour = Matchers.allOf(withClassName(is("androidx.appcompat.widget.AppCompatEditText")),
-            childAtPosition(
+            TestUtils.childAtPosition(
                     Matchers.allOf(withClassName(is("android.widget.RelativeLayout")),
-                            childAtPosition(
+                            TestUtils.childAtPosition(
                                     withClassName(is("android.widget.TextInputTimePickerView")),
                                     1)),
                     0));
     public Matcher<View> inputMinute = Matchers.allOf(withClassName(is("androidx.appcompat.widget.AppCompatEditText")),
-            childAtPosition(
+            TestUtils.childAtPosition(
                     Matchers.allOf(withClassName(is("android.widget.RelativeLayout")),
-                            childAtPosition(
+                            TestUtils.childAtPosition(
                                     withClassName(is("android.widget.TextInputTimePickerView")),
                                     1)),
                     3));
 
-
-    public Matcher<View> deleteNewsItemBut = withId(R.id.delete_news_item_image_view);
     public Matcher<View> messageAboutDelete = withText("Are you sure you want to permanently delete the document? These changes cannot be reversed in the future.");
     public Matcher<View> newsRecyclerList = withId(R.id.news_list_recycler_view);
     public Matcher<View> categoryTextInputStartIcon = allOf(withId(R.id.text_input_start_icon), withParent(withParent(withParent(withId(R.id.news_item_category_text_input_layout)))));
@@ -109,7 +99,6 @@ public class ControlPanelSteps {
     public Matcher<View> descriptionTextInputEndIcon = allOf(withId(R.id.text_input_end_icon), withParent(withParent(withParent(withParent(withId(R.id.news_item_description_text_input_layout))))));
     public Matcher<View> messageChangesWonTBeSaved = withText("The changes won't be saved, do you really want to log out?");
 
-
     public ViewInteraction wrongСategoryToast(String text) {
         return onView(withText(text)).inRoot(new DataHelper.ToastMatcher());
     }
@@ -117,7 +106,6 @@ public class ControlPanelSteps {
     public ViewInteraction getCategory(String text) {
         return onView(withText("text")).inRoot((RootMatchers.isPlatformPopup()));
     }
-
 
     public void isControlPanel() {
         TestUtils.waitView(withText("Control panel")).check(matches(isDisplayed()));
@@ -148,7 +136,6 @@ public class ControlPanelSteps {
         TestUtils.waitView(newsItemCategoryField).perform(click());
         Espresso.closeSoftKeyboard();
         SystemClock.sleep(3000);
-
         DataHelper.EspressoBaseTest.clickButton(nameCategory);
     }
 
@@ -156,15 +143,6 @@ public class ControlPanelSteps {
         TestUtils.waitView(newsItemCategoryField).perform(click());
         Espresso.closeSoftKeyboard();
         TestUtils.waitPopupView(nameCategory).perform(click());
-    }
-
-    public void selectANewsCategoryFromTheList1(String nameCategory) {
-        TestUtils.waitView(newsItemCategoryField).perform(click());
-        Espresso.closeSoftKeyboard();
-        //TestUtils.waitView(showDropdownMenuBut).check(matches(isDisplayed()));
-
-        //getCategory(nameCategory).perform(click());
-        TestUtils.waitView(withText(nameCategory)).perform(click());
     }
 
     public void setDateToDatePicker(int year, int month, int day) {
@@ -194,10 +172,6 @@ public class ControlPanelSteps {
 
     public ViewInteraction getItemNewsDeleteElement(String title) {
         return TestUtils.waitView(allOf(withId(R.id.delete_news_item_image_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title))))))));
-    }
-
-    public ViewInteraction getItemNewsDeleteElement1(String title) {
-        return TestUtils.waitView(allOf(withId(R.id.delete_news_item_image_view), hasSibling(withText(title))));
     }
 
     public ViewInteraction getItemNewsEditElement(String title) {
@@ -263,55 +237,20 @@ public class ControlPanelSteps {
     public void creatingTestNews(ViewInteraction newsItemCategory, String title, String description, int plusYear, int plusMonth, int plusDay) {
         TestUtils.waitView(addNewsImBut).perform(click());
         selectANewsCategoryFromTheList(newsItemCategory);
-        fillingOutTheFormCreatingNewsWithDateToday(date.get(Calendar.YEAR) + plusYear, date.get(Calendar.MONTH)+1+plusMonth, date.get(Calendar.DAY_OF_MONTH)+plusDay, title, description);
+        fillingOutTheFormCreatingNewsWithDateToday(date.get(Calendar.YEAR) + plusYear, date.get(Calendar.MONTH) + 1 + plusMonth, date.get(Calendar.DAY_OF_MONTH) + plusDay, title, description);
         TestUtils.waitView(saveBut).perform(click());
     }
 
     public void creatingTestNews1(Matcher<View> newsItemCategory, String title, String description, int plusYear, int plusMonth, int plusDay) {
         TestUtils.waitView(addNewsImBut).perform(click());
         selectANewsCategoryFromTheList1(newsItemCategory);
-        fillingOutTheFormCreatingNewsWithDateToday(date.get(Calendar.YEAR) + plusYear, date.get(Calendar.MONTH)+1+plusMonth, date.get(Calendar.DAY_OF_MONTH)+plusDay, title, description);
+        fillingOutTheFormCreatingNewsWithDateToday(date.get(Calendar.YEAR) + plusYear, date.get(Calendar.MONTH) + 1 + plusMonth, date.get(Calendar.DAY_OF_MONTH) + plusDay, title, description);
         TestUtils.waitView(saveBut).perform(click());
     }
 
-   /* public void checkExistNewsInList() {
-        for (int childCount = recyclerView.getChildCount(), i = 0; i < childCount; ++i) {
-            final ViewHolder holder = recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
-   ...
-        }
-    }*/
-
-
-
-    /*public boolean NoNewsCheck(String title) {
-        if (controlPanelElements.newsRecyclerList
-                // scrollTo will fail the test if no item matches.
-                .perform(RecyclerViewActions.scrollTo(
-                        hasDescendant(withText(title))
-                )) == null) {
-            return true;
-        }
-        return false;
-    }*/
-
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
+    public void isDialogWindowMessageTryAgainLatter() {
+        TestUtils.waitView(withText("Something went wrong. Try again later.")).check(matches(isDisplayed()));
+        TestUtils.waitView(okBut).check(matches(isDisplayed()));
     }
-
 
 }

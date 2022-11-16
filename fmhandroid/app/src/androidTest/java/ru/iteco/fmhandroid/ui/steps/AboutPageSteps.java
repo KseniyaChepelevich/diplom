@@ -2,9 +2,7 @@ package ru.iteco.fmhandroid.ui.steps;
 
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
-import ru.iteco.fmhandroid.ui.page.AboutPageElements;
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -13,13 +11,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.view.View;
 
-import androidx.test.espresso.ViewInteraction;
-
 import org.hamcrest.Matcher;
 
 public class AboutPageSteps {
-    //AboutPageElements aboutPageElements = new AboutPageElements();
     public Matcher<View> aboutBackImageBut = withId(R.id.about_back_image_button);
+    public Matcher<View> headerTermsOfUsePage = withText("Terms of use");
+    public Matcher<View> headerPrivacyPolicyPage = withText("Privacy policy");
 
     public void isAboutPage() {
         TestUtils.waitView(withText("Version:")).check(matches(isDisplayed()));

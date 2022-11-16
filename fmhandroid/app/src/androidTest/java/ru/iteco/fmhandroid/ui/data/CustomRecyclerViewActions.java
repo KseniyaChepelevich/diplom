@@ -140,43 +140,4 @@ public class CustomRecyclerViewActions {
         ;
     }
 
-
-
-
-
-
-
-    /*public static class CustomViewMatcher {
-        public static Matcher<View> recyclerViewSizeMatcher(final int matcherSize) {
-            return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
-
-                String result;
-
-                @Override
-                public void describeTo(Description description) {
-                    description.appendText("Item count: " + matcherSize);
-                    description.appendText("\nGot: ");
-                    description.appendText("result");
-                }
-
-                @Override
-                protected boolean matchesSafely(RecyclerView recyclerView) {
-                    int items = recyclerView.getAdapter().getItemCount();
-                    result = "List size: " + items;
-                    return matcherSize == items;
-
-                }
-            };
-
-        }
-    }*/
-
-    public static int getItemCount(RecyclerView recyclerView) {
-        if (recyclerView != null)
-            return recyclerView.getAdapter().getItemCount();
-        return 0;
-
-    }
-
-
 }
