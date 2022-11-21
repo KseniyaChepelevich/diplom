@@ -13,10 +13,12 @@ import static org.hamcrest.core.AllOf.allOf;
 
 import android.view.View;
 
+import androidx.test.espresso.ViewInteraction;
+
 import org.hamcrest.Matcher;
 
 public class NewsPageSteps {
-    MainPageSteps mainPageSteps = new MainPageSteps();
+    private static MainPageSteps mainPageSteps = new MainPageSteps();
 
     public Matcher<View> newsItemMaterialCardView1 = TestUtils.withRecyclerView(R.id.news_list_recycler_view)
             .atPositionOnView(1, R.id.news_item_material_card_view);
@@ -39,6 +41,25 @@ public class NewsPageSteps {
         TestUtils.waitView(mainPageSteps.mainMenuImBut).perform(click());
         TestUtils.waitView(mainPageSteps.mainInTheMainMenu).perform(click());
     }
+
+    public void openFilterNews() {
+        TestUtils.waitView(filterNewsMaterialBut).perform(click());
+    }
+
+    public void openNewsOnNewsPage(int position) {
+        TestUtils.waitView(TestUtils.withRecyclerView(R.id.news_list_recycler_view)
+                .atPositionOnView(position, R.id.news_item_material_card_view)).perform(click());
+    }
+
+    public ViewInteraction getNewsItemDescription(int position) {
+        return TestUtils.waitView(TestUtils.withRecyclerView(R.id.news_list_recycler_view).atPositionOnView(position, R.id.news_item_description_text_view));
+    }
+
+    public void openControlPanel() {
+        TestUtils.waitView(editNewsMaterialBut).perform(click());
+    }
+
+
 
 
 }

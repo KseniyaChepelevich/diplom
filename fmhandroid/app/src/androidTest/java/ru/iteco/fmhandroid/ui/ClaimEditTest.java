@@ -4,6 +4,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isNotClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isNotEnabled;
@@ -34,12 +35,12 @@ import ru.iteco.fmhandroid.ui.steps.CreatingClaimsSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 
 @RunWith(AllureAndroidJUnit4.class)
-public class ClaimEditTest {
-    AuthSteps authSteps = new AuthSteps();
-    MainPageSteps mainPageSteps = new MainPageSteps();
-    ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
-    CreatingClaimsSteps creatingClaimsSteps = new CreatingClaimsSteps();
-    ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+public class ClaimEditTest extends BaseTest{
+    private static AuthSteps authSteps = new AuthSteps();
+    private static MainPageSteps mainPageSteps = new MainPageSteps();
+    private static ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
+    private static CreatingClaimsSteps creatingClaimsSteps = new CreatingClaimsSteps();
+    private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
     Calendar date = Calendar.getInstance();
 
@@ -85,9 +86,7 @@ public class ClaimEditTest {
         //Открыть карточку заявки
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Отредактировать заявку
-        TestUtils.waitView(claimsPageSteps.editClaimBut).perform(click());
-        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, newDay, newHour, minutes, newTitle, newTitle);
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        claimsPageSteps.editClaim(year, month, newDay, newHour, minutes, newTitle, newTitle);
         //Проверить что внесенные изменения сохранились
         claimsPageSteps.isClaimCard(newTitle, planeDate, planeTime, newTitle);
 
@@ -107,11 +106,10 @@ public class ClaimEditTest {
         //Открыть карточку заявки
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.takeToWorkMenuItem).perform(click());
+        claimsPageSteps.setStatusInProcess();
         SystemClock.sleep(2000);
         //Проверить что внесенные изменения сохранились
-        TestUtils.waitView(claimsPageSteps.statusLabelText).check(matches(withText("In progress")));
+        claimsPageSteps.getStatusLabel().check(matches(withText("In progress")));
     }
 
     @Test
@@ -136,16 +134,16 @@ public class ClaimEditTest {
         //Открыть карточку заявки
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.toExecuteMenuItem).perform(click());
+        claimsPageSteps.setStatusExecute();
         claimsPageSteps.isStatusCommentDialog();
-        TestUtils.waitView(claimsPageSteps.statusCommentTextInputField).perform(replaceText(commentForTheTestClaim));
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
+        claimsPageSteps.replaceClaimStatusCommentText(commentForTheTestClaim);
+        controlPanelSteps.okButtonClick();
         SystemClock.sleep(3000);
         //Проверить что статус изменился
-        TestUtils.waitView(claimsPageSteps.statusLabelText).check(matches(withText("Executed")));
+        claimsPageSteps.getStatusLabel().check(matches(withText("Executed")));
         //Проверяем что у заявки появился комментарий
-        TestUtils.waitView(claimsPageSteps.commentDescriptionText).check(matches(withText(commentForTheTestClaim)));
+        claimsPageSteps.getCommentDescriptionText().check(matches(withText(commentForTheTestClaim)));
+
     }
 
     @Test
@@ -167,16 +165,16 @@ public class ClaimEditTest {
         //Открыть карточку заявки
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.throwOffMenuItem).perform(click());
+        claimsPageSteps.setStatusOpen();
         claimsPageSteps.isStatusCommentDialog();
-        TestUtils.waitView(claimsPageSteps.statusCommentTextInputField).perform(replaceText(commentForTheTestClaim));
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
+        claimsPageSteps.replaceClaimStatusCommentText(commentForTheTestClaim);
+        controlPanelSteps.okButtonClick();
         SystemClock.sleep(3000);
         //Проверить что статус изменился
-        TestUtils.waitView(claimsPageSteps.statusLabelText).check(matches(withText("Open")));
+        claimsPageSteps.getStatusLabel().check(matches(withText("Open")));
         //Проверяем что у заявки появился комментарий
-        TestUtils.waitView(claimsPageSteps.commentDescriptionText).check(matches(withText(commentForTheTestClaim)));
+        claimsPageSteps.getCommentDescriptionText().check(matches(withText(commentForTheTestClaim)));
+
     }
 
     @Test
@@ -193,11 +191,10 @@ public class ClaimEditTest {
         //Открыть карточку заявки
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.cancelMenuItem).perform(click());
+        claimsPageSteps.setStatusCanceled();
         SystemClock.sleep(2000);
         //Проверить что внесенные изменения сохранились
-        TestUtils.waitView(claimsPageSteps.statusLabelText).check(matches(withText("Canceled")));
+        claimsPageSteps.getStatusLabel().check(matches(withText("Canceled")));
     }
 
     @Test
@@ -216,7 +213,7 @@ public class ClaimEditTest {
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         SystemClock.sleep(2000);
         //Выйти из карточки заявки, кликнув кнопку Close
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
         //Проверить карточка заявки закрылась
         claimsPageSteps.isClaimsPage();
@@ -233,10 +230,7 @@ public class ClaimEditTest {
         int hour = date.get(Calendar.HOUR_OF_DAY);
 
         //Создать заявку
-        TestUtils.waitView(claimsPageSteps.addNewClaimBut).perform(click());
-        creatingClaimsSteps.selectAClaimExecutorFromTheList(claimsPageSteps.executorSmirnov);
-        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        creatingClaimsSteps.creatingAClaimExecutorSmirnov(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
         SystemClock.sleep(5000);
         //Открыть карточку заявки
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
@@ -261,7 +255,7 @@ public class ClaimEditTest {
         //Открыть карточку заявки
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Тапнуть кнопку редактировать
-        TestUtils.waitView(claimsPageSteps.editClaimBut).perform(click());
+        claimsPageSteps.editClaimButClick();
         //Проверить появление сообщения "The Claim can be edited only in the Open status."
         controlPanelSteps.checkToast("The Claim can be edited only in the Open status.", true);
     }

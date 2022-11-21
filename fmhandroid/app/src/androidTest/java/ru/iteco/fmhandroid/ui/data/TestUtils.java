@@ -181,6 +181,20 @@ public class TestUtils {
         return Integer.toString(date);
     }
 
+    public static int getHourMinus(int timeNow) {
+        if (timeNow == 0) {
+            return 24;
+        }
+        return timeNow;
+    }
+
+    public static int getMinutesMinus(int timeNow) {
+        if (timeNow == 0) {
+            return 60;
+        }
+        return timeNow;
+    }
+
     public static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 

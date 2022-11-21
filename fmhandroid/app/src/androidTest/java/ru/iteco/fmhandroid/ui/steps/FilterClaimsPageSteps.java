@@ -10,10 +10,10 @@ import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.data.ViewActions;
 
 public class FilterClaimsPageSteps {
-    ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
+    private static ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
 
     public void filterClaims(boolean openStatus, boolean inProgressStatus, boolean executedStatus, boolean cancelledStatus) {
-        TestUtils.waitView(claimsPageSteps.claimsFiltersButton).perform(click());
+        claimsPageSteps.openClaimsFilter();
         TestUtils.waitView(claimsPageSteps.itemFilterOpen).perform(ViewActions.setChecked(openStatus));
         TestUtils.waitView(claimsPageSteps.itemFilterInProgress).perform(ViewActions.setChecked(inProgressStatus));
         TestUtils.waitView(claimsPageSteps.itemFilterExecuted).perform(ViewActions.setChecked(executedStatus));

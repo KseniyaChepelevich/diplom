@@ -30,16 +30,13 @@ import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 @RunWith(AllureAndroidJUnit4.class)
 
-public class AuthPageValidTest {
+public class AuthPageValidTest extends BaseTest{
     private UiDevice device;
 
-    AuthSteps authSteps = new AuthSteps();
-    MainPageSteps mainPageSteps = new MainPageSteps();
-    ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+    private static AuthSteps authSteps = new AuthSteps();
+    private static MainPageSteps mainPageSteps = new MainPageSteps();
+    private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
-    @Rule
-    public ActivityTestRule<AppActivity> activityTestRule =
-            new ActivityTestRule<>(AppActivity.class);
 
     @Before
     public void logoutCheck() {
@@ -73,7 +70,7 @@ public class AuthPageValidTest {
         //Включаем режим В самолете
         authSteps.turnOnAirplaneMode();
         //Нажимаем кнопку signIn
-        TestUtils.waitView(authSteps.signBtn).perform(click());
+        authSteps.signBtnClick();
         //Проверяем, что отображается сообщение
         controlPanelSteps.checkToast("Something went wrong. Try again later.", true);
         //Отключаем режим в самолете
@@ -83,12 +80,13 @@ public class AuthPageValidTest {
     @Test
     @DisplayName("Поворот экрана во время авторизации")
     public void shouldSaveDataOnTheAuthPageOnScreenRotation() throws UiObjectNotFoundException, RemoteException {
+        String expectedLogin = "login2";
+        String expectedPassword = "•••••••••";
         //Вводим логин и пароль
         authSteps.enterAValidUsernameAndPassword(authInfo());
         device.setOrientationLeft();
         //Проверяем, что введенные данные сохранились
-        TestUtils.waitView(authSteps.loginField).check(matches(withText("login2")));
-        TestUtils.waitView(authSteps.passField).check(matches(withText("•••••••••")));
-
+        authSteps.getLoginText().check(matches(withText("login2")));
+        authSteps.getPasswordText().check(matches(withText("•••••••••")));
     }
 }

@@ -21,7 +21,7 @@ import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 
 public class FilterNewsPageSteps {
-    ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+    private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
     Calendar date = Calendar.getInstance();
 
     public Matcher<View> filterNewsTitleTextView = withId(R.id.filter_news_title_text_view);
@@ -65,5 +65,9 @@ public class FilterNewsPageSteps {
     public void isMessageWrongPeriod() {
         TestUtils.waitView(withText("Wrong period")).check(matches(isDisplayed()));
         TestUtils.waitView(controlPanelSteps.okBut).check(matches(isDisplayed()));
+    }
+
+    public void filterNewsButtonClick() {
+        TestUtils.waitView(filterBut).perform(click());
     }
 }

@@ -42,14 +42,14 @@ import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
 
 @RunWith(AllureAndroidJUnit4.class)
 
-public class ControlPanelTest {
+public class ControlPanelTest extends BaseTest{
 
     private UiDevice device;
-    AuthSteps authSteps = new AuthSteps();
-    MainPageSteps mainPageSteps = new MainPageSteps();
-    NewsPageSteps newsPageSteps = new NewsPageSteps();
-    FilterNewsPageSteps filterNewsPageSteps = new FilterNewsPageSteps();
-    ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+    private static AuthSteps authSteps = new AuthSteps();
+    private static MainPageSteps mainPageSteps = new MainPageSteps();
+    private static NewsPageSteps newsPageSteps = new NewsPageSteps();
+    private static FilterNewsPageSteps filterNewsPageSteps = new FilterNewsPageSteps();
+    private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
     Calendar date = Calendar.getInstance();
 
@@ -84,14 +84,14 @@ public class ControlPanelTest {
         authSteps.authWithValidData(authInfo());
         mainPageSteps.isMainPage();
         mainPageSteps.openNewsPageThroughTheMainMenu();
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
 
     }
 
     @Test
     @DisplayName("Открытие формы создания новости")
     public void shouldOpenCreateNewsForm() {
-        TestUtils.waitView(controlPanelSteps.addNewsImBut).perform(click());
+        controlPanelSteps.openCreatingNewsForm();
         controlPanelSteps.isCreatingNewsForm();
     }
 
@@ -105,9 +105,9 @@ public class ControlPanelTest {
         //Нажимаем на кнопку удалить в карточке новости
         controlPanelSteps.getItemNewsDeleteElement(titleNewsWillNotBeDeleted).perform(click());
         //Отображается сообщение об удалении
-        TestUtils.waitView(controlPanelSteps.messageAboutDelete).check(matches(isDisplayed()));
+        controlPanelSteps.getMessageAboutDelete().check(matches(isDisplayed()));
         //Отменяем удаление
-        TestUtils.waitView(controlPanelSteps.cancelDeleteBut).perform(click());
+        controlPanelSteps.cancelDeleteButtonClick();
         //Проверяем, что наша новость осталась в списке
         controlPanelSteps.scrollToElementInRecyclerList(titleNewsWillNotBeDeleted).check(matches(isDisplayed()));
         //Удаляем нашу новость
@@ -145,10 +145,10 @@ public class ControlPanelTest {
         //Проверяем, что октрылась наща новость
         controlPanelSteps.isCardTestNews(titleNewsWillNotBeEditing);
         //Отменяем редактирование новости
-        TestUtils.waitView(controlPanelSteps.cancelBut).perform(click());
+        controlPanelSteps.cancelButtonClick();
         //Отображается сообщение, что изменения не будут сохранены
-        TestUtils.waitView(controlPanelSteps.messageChangesWonTBeSaved).check(matches(isDisplayed()));
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
+        controlPanelSteps.getMessageChangesWonTBeSaved().check(matches(isDisplayed()));
+        controlPanelSteps.okButtonClick();
         //Проверяем, что наша новость есть в списке
         controlPanelSteps.scrollToElementInRecyclerList(titleNewsWillNotBeEditing).check(matches(isDisplayed()));
         //Удаляем нашу новость
@@ -167,7 +167,7 @@ public class ControlPanelTest {
         //Проверяем, что октрылась наща новость
         controlPanelSteps.isCardTestNews(titleNewsSavedWithoutChanges);
         //Сохраняем новость без изменений
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        controlPanelSteps.saveNewsButtonClick();
         //Проверяем, что наша новость есть в списке
         controlPanelSteps.scrollToElementInRecyclerList(titleNewsSavedWithoutChanges).check(matches(isDisplayed()));
         //Удаляем новость
@@ -186,10 +186,10 @@ public class ControlPanelTest {
         //Проверяем, что октрылась наща новость
         controlPanelSteps.isCardTestNews(titleNewsTurnOffActiveStatus);
         //Переключаем статус новости из Active в NotActive
-        TestUtils.waitView(controlPanelSteps.switcherActive).perform(click());
-        TestUtils.waitView(controlPanelSteps.switcherNotActive).check(matches(isDisplayed()));
+        controlPanelSteps.switchNewsStatus();
+        controlPanelSteps.getSwitcherNoteActive().check(matches(isDisplayed()));
         //Сохраняем
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        controlPanelSteps.saveNewsButtonClick();
         //Проверяем, что наша новость отображается в списке
         controlPanelSteps.scrollToElementInRecyclerList(titleNewsTurnOffActiveStatus).check(matches(isDisplayed()));
         //Удаляем нашу новость
@@ -214,11 +214,11 @@ public class ControlPanelTest {
         controlPanelSteps.isCardTestNews(titleNewsWithModifiedPublicationDate);
        //Редактируем дату публикации
         controlPanelSteps.setDateToDatePicker(year, month, day +1);
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
+        controlPanelSteps.okButtonClick();
         //Проверяем, что в поле Дата публикации отображается новая дата
-        TestUtils.waitView(controlPanelSteps.newsItemPublishDateField).check(matches(withText(dayExpected + "." + monthExpected + "." + year)));
+        controlPanelSteps.getNewsItemPublishDate().check(matches(withText(dayExpected + "." + monthExpected + "." + year)));
         //Сохраняем изменения
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        controlPanelSteps.saveNewsButtonClick();
         //Проверяем, что наша новость есть в списке
         controlPanelSteps.scrollToElementInRecyclerList(titleNewsWithModifiedPublicationDate).check(matches(isDisplayed()));
         //Удаляем новость
@@ -238,9 +238,9 @@ public class ControlPanelTest {
         //Проверяем, что октрылась наща новость
         controlPanelSteps.isCardTestNews(titleNewsWithModifiedDescription);
         //Редактируем описание новости
-        TestUtils.waitView(controlPanelSteps.newsItemDescriptionField).perform(replaceText(titleNewsWithModifiedDescription + " проверка"));
+        controlPanelSteps.getNewsItemDescription().perform(replaceText(titleNewsWithModifiedDescription + " проверка"));
         //Сохраняем изменения
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        controlPanelSteps.saveNewsButtonClick();
         //Проверяем, что наша новость есть в списке, что она имеет новое описание
         controlPanelSteps.scrollToElementInRecyclerList(titleNewsWithModifiedDescription).check(matches(isDisplayed()));
         controlPanelSteps.getItemNewsButViewElement(titleNewsWithModifiedDescription).perform(click());
@@ -269,12 +269,12 @@ public class ControlPanelTest {
         //Редактируем время публикации
         controlPanelSteps.setTimeToTimeField(hour, minutes);
         //Сохраняем изменения
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        controlPanelSteps.saveNewsButtonClick();
 
         controlPanelSteps.scrollToElementInRecyclerList(titleNewsWithModifiedPublicationTime).check(matches(isDisplayed()));
         //Открываем новость для проверки сохранилось ли измененное время публикации
         controlPanelSteps.getItemNewsEditElement(titleNewsWithModifiedPublicationTime).perform(click());
-        TestUtils.waitView(controlPanelSteps.newsItemPublishTimeField).check(matches(withText(hourExpected + ":" + minutesExpected)));
+        controlPanelSteps.getNewsItemPublishTime().check(matches(withText(hourExpected + ":" + minutesExpected)));
 
         pressBack();
         //Удаляем нашу новость
@@ -293,9 +293,9 @@ public class ControlPanelTest {
         controlPanelSteps.getItemNewsEditElement(titleNewsWithModifiedTitle).perform(click());
         controlPanelSteps.isCardTestNews(titleNewsWithModifiedTitle);
         //Редактируем заголовок
-        TestUtils.waitView(controlPanelSteps.newsItemTitleField).perform(replaceText(titleNewsWithModifiedTitle + " проверка"));
+        controlPanelSteps.getNewsItemTitle().perform(replaceText(titleNewsWithModifiedTitle + " проверка"));
         //Сохраняем измененную новость
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        controlPanelSteps.saveNewsButtonClick();
         //Проверяем что наша новость с новым заголовком отображается в списке
         controlPanelSteps.scrollToElementInRecyclerList(newTitle).check(matches(isDisplayed()));
         //Удаляем нашу новость
@@ -318,11 +318,11 @@ public class ControlPanelTest {
         //Меняем категорию
         controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryBirthday);
         //Сохраняем изменения
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        controlPanelSteps.saveNewsButtonClick();
         //Проверяем что наша новость с новой категорией есть в списке
         controlPanelSteps.scrollToElementInRecyclerList(titleNewsWithModifiedCategory).check(matches(isDisplayed()));
         controlPanelSteps.getItemNewsEditElement(titleNewsWithModifiedCategory).perform(click());
-        TestUtils.waitView(controlPanelSteps.newsItemCategoryField).check(matches(withText(newCategory)));
+        controlPanelSteps.getNewsItemCategory().check(matches(withText(newCategory)));
 
         pressBack();
         //Удаляем новость
@@ -353,7 +353,7 @@ public class ControlPanelTest {
         //Удаляем новость
         controlPanelSteps.deleteItemNews(titleNewsToDelete);
         //Проверяем, что новость удалилась
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(titleNewsToDelete))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(titleNewsToDelete))));
 
 
     }
@@ -361,7 +361,7 @@ public class ControlPanelTest {
     @Test
     @DisplayName("Открытие фильтра новостей по кнопке Filter во вкладке Control panel")
     public void shouldOpenTheNewsFilterSettingsForm() {
-        TestUtils.waitView(controlPanelSteps.filterNewsBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsFormControlPanel();
     }
 
@@ -374,7 +374,7 @@ public class ControlPanelTest {
         device.pressBack();
         device.pressBack();
         //Нажимаем кнопку добавить новость
-        TestUtils.waitView(controlPanelSteps.addNewsImBut).perform(click());
+        controlPanelSteps.openCreatingNewsForm();
         //Проверяем, что отображается сообщение
         controlPanelSteps.isDialogWindowMessageTryAgainLatter();
         //Отключаем режим в самолете

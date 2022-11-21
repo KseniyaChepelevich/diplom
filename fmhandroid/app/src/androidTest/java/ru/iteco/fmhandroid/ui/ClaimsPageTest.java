@@ -38,22 +38,18 @@ import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 
 @RunWith(AllureAndroidJUnit4.class)
 
-public class ClaimsPageTest {
-    AuthSteps authSteps = new AuthSteps();
-    MainPageSteps mainPageSteps = new MainPageSteps();
-    ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
-    CreatingClaimsSteps creatingClaimsSteps = new CreatingClaimsSteps();
-    ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+public class ClaimsPageTest extends BaseTest{
+    private static AuthSteps authSteps = new AuthSteps();
+    private static MainPageSteps mainPageSteps = new MainPageSteps();
+    private static ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
+    private static CreatingClaimsSteps creatingClaimsSteps = new CreatingClaimsSteps();
+    private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
     Calendar date = Calendar.getInstance();
 
     String titleForTheTestClaim = "Заголовок" + " " + DataHelper.generateTitleId();
     String commentForTheTestClaim = "Комментарий" + " " + DataHelper.generateTitleId();
 
-
-    @Rule
-    public ActivityTestRule<AppActivity> activityTestRule =
-            new ActivityTestRule<>(AppActivity.class);
 
     @Before
     public void logoutCheck() {
@@ -70,14 +66,14 @@ public class ClaimsPageTest {
     @Test
     @DisplayName("Открытие фильтра заявок по кнопке Filter")
     public void shouldOpenTheClaimsFilterSettingsForm() {
-        TestUtils.waitView(claimsPageSteps.claimsFiltersButton).perform(click());
+        claimsPageSteps.openClaimsFilter();
         claimsPageSteps.isClaimsFilteringDialog();
     }
 
     @Test
     @DisplayName("Открытие формы Создания заявки в разделе Заявки")
     public void shouldOpenTheCreateClaimForm() {
-        TestUtils.waitView(claimsPageSteps.addNewClaimBut).perform(click());
+        claimsPageSteps.openCreatingClaimsCard();
         claimsPageSteps.isClaimsForm();
     }
 
@@ -122,13 +118,13 @@ public class ClaimsPageTest {
         //Открываем заявку для редактирования
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Добавить комментарий
-        TestUtils.waitView(claimsPageSteps.addCommentBut).perform(click());
+        claimsPageSteps.openCreatingCommentForm();
         claimsPageSteps.isCommentForm();
 
-        TestUtils.waitView(claimsPageSteps.commentTextInputField).perform(replaceText(commentForTheTestClaim));
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        claimsPageSteps.replaceCommentTextInputText(commentForTheTestClaim);
+        controlPanelSteps.saveNewsButtonClick();
         //Проверить что комментарий сохранился
-        TestUtils.waitView(claimsPageSteps.commentDescriptionText).check(matches(withText(commentForTheTestClaim)));
+        claimsPageSteps.getCommentDescriptionText().check(matches(withText(commentForTheTestClaim)));
     }
 
     @Test
@@ -146,10 +142,10 @@ public class ClaimsPageTest {
         //Открываем заявку для редактирования
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Добавить пустой комментарий
-        TestUtils.waitView(claimsPageSteps.addCommentBut).perform(click());
+        claimsPageSteps.openCreatingCommentForm();
         claimsPageSteps.isCommentForm();
 
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+       controlPanelSteps.saveNewsButtonClick();
         //Проверить что отображается сообщение
         controlPanelSteps.checkToast("The field cannot be empty.", true);
     }
@@ -169,13 +165,15 @@ public class ClaimsPageTest {
         //Открываем заявку для редактирования
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Добавить комментарий
-        TestUtils.waitView(claimsPageSteps.addCommentBut).perform(click());
+        claimsPageSteps.openCreatingCommentForm();
         claimsPageSteps.isCommentForm();
         //SystemClock.sleep(3000);
-        TestUtils.waitView(claimsPageSteps.commentTextInputField).perform(replaceText(commentForTheTestClaim));
-        TestUtils.waitView(controlPanelSteps.cancelBut).perform(click());
+        claimsPageSteps.replaceCommentTextInputText(commentForTheTestClaim);
+        controlPanelSteps.cancelButtonClick();
         //Проверить что комментарий сохранился
-        TestUtils.waitView(claimsPageSteps.claimCommentsListRecyclerView).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.comment_description_text_view, withText(commentForTheTestClaim))));
+        claimsPageSteps.getClaimCommentsListRecyclerView()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher
+                        .matchChildViewIsNotExist(claimsPageSteps.commentDescriptionTextView, withText(commentForTheTestClaim))));
     }
 
     @Test
@@ -194,18 +192,15 @@ public class ClaimsPageTest {
         //Открываем заявку для редактирования
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Добавить комментарий
-        TestUtils.waitView(claimsPageSteps.addCommentBut).perform(click());
+        claimsPageSteps.openCreatingCommentForm();
         claimsPageSteps.isCommentForm();
         //SystemClock.sleep(3000);
-        TestUtils.waitView(claimsPageSteps.commentTextInputField).perform(replaceText(commentForTheTestClaim));
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        claimsPageSteps.replaceCommentTextInputText(commentForTheTestClaim);
+        controlPanelSteps.saveNewsButtonClick();
         //Редактируем комменарий
-        TestUtils.waitView(claimsPageSteps.editCommentImBut).perform(click());
-        claimsPageSteps.isCommentForm();
-        TestUtils.waitView(claimsPageSteps.commentTextInputField).perform(replaceText(newComment));
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        claimsPageSteps.editComment(newComment);
         //Проверяем,что сохранился новый комментарий
-        TestUtils.waitView(claimsPageSteps.commentDescriptionText).check(matches(withText(newComment)));
+        claimsPageSteps.getCommentDescriptionText().check(matches(withText(newComment)));
 
     }
 
@@ -228,12 +223,12 @@ public class ClaimsPageTest {
         //Открываем заявку для редактирования
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Добавить комментарий
-        TestUtils.waitView(claimsPageSteps.addCommentBut).perform(click());
+        claimsPageSteps.openCreatingCommentForm();
         claimsPageSteps.isCommentForm();
         //SystemClock.sleep(3000);
-        TestUtils.waitView(claimsPageSteps.commentTextInputField).perform(replaceText(nonLetterComment));
+        claimsPageSteps.replaceCommentTextInputText(nonLetterComment);
 
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        controlPanelSteps.saveNewsButtonClick();
         controlPanelSteps.checkToast("The field must not contain \";&&\" characters.", true);
 
     }
@@ -254,7 +249,7 @@ public class ClaimsPageTest {
         //Находим заявку в списке и отркываем ее
         claimsPageSteps.openClaimCard(titleForTheTestClaim);
         //Закрываем заявку
-        TestUtils.waitView(claimsPageSteps.closeImBut).check(matches(isDisplayed())).perform(click());
+        claimsPageSteps.closeImButtonClick();
         //Проверяем, что только-что закрытая заявка видна на экране
         claimsPageSteps.getItemClaimCompatImView(titleForTheTestClaim).check(matches(isDisplayed()));
 

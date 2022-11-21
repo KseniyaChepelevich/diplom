@@ -35,15 +35,11 @@ import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 @RunWith(AndroidJUnit4.class)
 
-public class AboutPageTest {
+public class AboutPageTest extends BaseTest{
 
-    AuthSteps authSteps = new AuthSteps();
-    MainPageSteps mainPageSteps = new MainPageSteps();
-    AboutPageSteps aboutPageSteps = new AboutPageSteps();
-
-    @Rule
-    public ActivityTestRule<AppActivity> activityTestRule =
-            new ActivityTestRule<>(AppActivity.class);
+    private static AuthSteps authSteps = new AuthSteps();
+    private static MainPageSteps mainPageSteps = new MainPageSteps();
+    private static AboutPageSteps aboutPageSteps = new AboutPageSteps();
 
     @Before
     public void logoutCheck() {
@@ -69,7 +65,7 @@ public class AboutPageTest {
         Intents.release();
 
         //Проверка что загрузилась страница с Политикой конфиденциальности.
-        TestUtils.waitView(aboutPageSteps.headerPrivacyPolicyPage).check(matches(withText(headerPrivacyPolicyPage)));
+        aboutPageSteps.getHeaderPrivacyPolicyPage().check(matches(withText(headerPrivacyPolicyPage)));
 
     }
 
@@ -85,14 +81,14 @@ public class AboutPageTest {
         intended(allOf(hasData(uriTermsOfUse), hasAction(Intent.ACTION_VIEW)));
         Intents.release();
         //Проверка что загрузилась страница с Пользовательским соглашением.
-        TestUtils.waitView(aboutPageSteps.headerTermsOfUsePage).check(matches(withText(headerTermsOfUsePege)));
+        aboutPageSteps.getHeaderTermsOfUsePage().check(matches(withText(headerTermsOfUsePege)));
 
     }
 
     @Test
     @DisplayName("Переход по кнопке Back в AppBar")
     public void shouldGoBackBut() {
-        TestUtils.waitView(aboutPageSteps.aboutBackImageBut).perform(click());
+        aboutPageSteps.aboutBackImageButClick();
         mainPageSteps.isMainPage();
     }
 

@@ -19,14 +19,10 @@ import static ru.iteco.fmhandroid.ui.data.DataHelper.invalidAuthInfo;
 
 @RunWith(AllureAndroidJUnit4.class)
 
-public class AuthPageInvalidTest {
+public class AuthPageInvalidTest extends BaseTest{
 
-    AuthSteps authSteps = new AuthSteps();
-    MainPageSteps mainPageSteps = new MainPageSteps();
-
-    @Rule
-    public ActivityTestRule<AppActivity> activityTestRule =
-            new ActivityTestRule<>(AppActivity.class);
+    private static AuthSteps authSteps = new AuthSteps();
+    private static MainPageSteps mainPageSteps = new MainPageSteps();
 
     @Before
     public void logoutCheck() {

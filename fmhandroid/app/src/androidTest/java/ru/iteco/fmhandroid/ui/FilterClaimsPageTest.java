@@ -36,13 +36,13 @@ import ru.iteco.fmhandroid.ui.steps.FilterClaimsPageSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 
 @RunWith(AllureAndroidJUnit4.class)
-public class FilterClaimsPageTest {
-    AuthSteps authSteps = new AuthSteps();
-    MainPageSteps mainPageSteps = new MainPageSteps();
-    ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
-    CreatingClaimsSteps creatingClaimsSteps = new CreatingClaimsSteps();
-    ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
-    FilterClaimsPageSteps filterClaimsPageSteps = new FilterClaimsPageSteps();
+public class FilterClaimsPageTest extends BaseTest{
+    private static AuthSteps authSteps = new AuthSteps();
+    private static MainPageSteps mainPageSteps = new MainPageSteps();
+    private static ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
+    private static CreatingClaimsSteps creatingClaimsSteps = new CreatingClaimsSteps();
+    private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+    private static FilterClaimsPageSteps filterClaimsPageSteps = new FilterClaimsPageSteps();
 
     Calendar date = Calendar.getInstance();
 
@@ -61,9 +61,6 @@ public class FilterClaimsPageTest {
     String newTitle = "Новый" + " " + DataHelper.generateTitleId();
     String commentForTheTestClaim = "Комментарий" + " " + DataHelper.generateTitleId();
 
-    @Rule
-    public ActivityTestRule<AppActivity> activityTestRule =
-            new ActivityTestRule<>(AppActivity.class);
 
     @Before
     public void logoutCheck() {
@@ -170,34 +167,31 @@ public class FilterClaimsPageTest {
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimExecuted1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.toExecuteMenuItem).perform(click());
+        claimsPageSteps.setStatusExecute();
         claimsPageSteps.isStatusCommentDialog();
-        TestUtils.waitView(claimsPageSteps.statusCommentTextInputField).perform(replaceText(commentForTheTestClaim));
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.replaceClaimStatusCommentText(commentForTheTestClaim);
+        controlPanelSteps.okButtonClick();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimExecuted2);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.toExecuteMenuItem).perform(click());
+        claimsPageSteps.setStatusExecute();
         claimsPageSteps.isStatusCommentDialog();
-        TestUtils.waitView(claimsPageSteps.statusCommentTextInputField).perform(replaceText(commentForTheTestClaim));
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.replaceClaimStatusCommentText(commentForTheTestClaim);
+        controlPanelSteps.okButtonClick();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimExecuted3);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.toExecuteMenuItem).perform(click());
+        claimsPageSteps.setStatusExecute();
         claimsPageSteps.isStatusCommentDialog();
-        TestUtils.waitView(claimsPageSteps.statusCommentTextInputField).perform(replaceText(commentForTheTestClaim));
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.replaceClaimStatusCommentText(commentForTheTestClaim);
+        controlPanelSteps.okButtonClick();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
 
@@ -239,25 +233,22 @@ public class FilterClaimsPageTest {
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimCanceled1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.cancelMenuItem).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.setStatusCanceled();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimCanceled2);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.cancelMenuItem).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.setStatusCanceled();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimCanceled3);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.cancelMenuItem).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.setStatusCanceled();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
 
@@ -299,9 +290,8 @@ public class FilterClaimsPageTest {
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimCanceled1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.cancelMenuItem).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.setStatusCanceled();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Фильтруем заявки со статусом Open
@@ -337,20 +327,17 @@ public class FilterClaimsPageTest {
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimExecuted1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.toExecuteMenuItem).perform(click());
+        claimsPageSteps.setStatusExecute();
         claimsPageSteps.isStatusCommentDialog();
-        TestUtils.waitView(claimsPageSteps.statusCommentTextInputField).perform(replaceText(commentForTheTestClaim));
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.replaceClaimStatusCommentText(commentForTheTestClaim);
+        controlPanelSteps.okButtonClick();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimCanceled1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.cancelMenuItem).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Фильтруем заявки со статусом Open
@@ -386,9 +373,8 @@ public class FilterClaimsPageTest {
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimCanceled1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.cancelMenuItem).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.setStatusCanceled();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Фильтруем заявки со статусом Open
@@ -424,9 +410,8 @@ public class FilterClaimsPageTest {
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimCanceled1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.cancelMenuItem).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.setStatusCanceled();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Фильтруем заявки со статусом Open
@@ -462,20 +447,18 @@ public class FilterClaimsPageTest {
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimExecuted1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.toExecuteMenuItem).perform(click());
+        claimsPageSteps.setStatusExecute();
         claimsPageSteps.isStatusCommentDialog();
-        TestUtils.waitView(claimsPageSteps.statusCommentTextInputField).perform(replaceText(commentForTheTestClaim));
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.replaceClaimStatusCommentText(commentForTheTestClaim);
+        controlPanelSteps.okButtonClick();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimCanceled1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.cancelMenuItem).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.setStatusCanceled();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Фильтруем заявки со статусом Open
@@ -511,12 +494,11 @@ public class FilterClaimsPageTest {
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimExecuted1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.toExecuteMenuItem).perform(click());
+        claimsPageSteps.setStatusExecute();
         claimsPageSteps.isStatusCommentDialog();
-        TestUtils.waitView(claimsPageSteps.statusCommentTextInputField).perform(replaceText(commentForTheTestClaim));
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.replaceClaimStatusCommentText(commentForTheTestClaim);
+        controlPanelSteps.okButtonClick();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Фильтруем заявки со статусом Open
@@ -554,20 +536,18 @@ public class FilterClaimsPageTest {
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimExecuted1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.toExecuteMenuItem).perform(click());
+        claimsPageSteps.setStatusExecute();
         claimsPageSteps.isStatusCommentDialog();
-        TestUtils.waitView(claimsPageSteps.statusCommentTextInputField).perform(replaceText(commentForTheTestClaim));
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.replaceClaimStatusCommentText(commentForTheTestClaim);
+        controlPanelSteps.okButtonClick();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimCanceled1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.cancelMenuItem).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.setStatusCanceled();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Фильтруем заявки со статусом Open
@@ -606,20 +586,18 @@ public class FilterClaimsPageTest {
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimExecuted1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.toExecuteMenuItem).perform(click());
+        claimsPageSteps.setStatusExecute();
         claimsPageSteps.isStatusCommentDialog();
-        TestUtils.waitView(claimsPageSteps.statusCommentTextInputField).perform(replaceText(commentForTheTestClaim));
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.replaceClaimStatusCommentText(commentForTheTestClaim);
+        controlPanelSteps.okButtonClick();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimCanceled1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.cancelMenuItem).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.setStatusCanceled();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Фильтруем заявки со статусом Open
@@ -658,20 +636,18 @@ public class FilterClaimsPageTest {
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimExecuted1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.toExecuteMenuItem).perform(click());
+        claimsPageSteps.setStatusExecute();
         claimsPageSteps.isStatusCommentDialog();
-        TestUtils.waitView(claimsPageSteps.statusCommentTextInputField).perform(replaceText(commentForTheTestClaim));
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.replaceClaimStatusCommentText(commentForTheTestClaim);
+        controlPanelSteps.okButtonClick();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(titleForTheTestClaimCanceled1);
         //Изменить статус заявки
-        TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
-        TestUtils.waitView(claimsPageSteps.cancelMenuItem).perform(click());
-        TestUtils.waitView(claimsPageSteps.closeImBut).perform(click());
+        claimsPageSteps.setStatusCanceled();
+        claimsPageSteps.closeImButtonClick();
         SystemClock.sleep(2000);
 
         //Фильтруем заявки со статусом Open
@@ -692,8 +668,8 @@ public class FilterClaimsPageTest {
     @Test
     @DisplayName("Кнопка отмены фильтрации")
     public void shouldCloseTheClaimsFilterSettingsForm() {
-        TestUtils.waitView(claimsPageSteps.claimsFiltersButton).perform(click());
-        TestUtils.waitView(claimsPageSteps.claimFilterCancelBut).perform(click());
+        claimsPageSteps.openClaimsFilter();
+        claimsPageSteps.claimFilterCancelButtonClick();
         claimsPageSteps.isClaimsPage();
     }
 }

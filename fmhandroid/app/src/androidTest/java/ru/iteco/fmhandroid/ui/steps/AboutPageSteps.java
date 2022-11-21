@@ -11,6 +11,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.view.View;
 
+import androidx.test.espresso.ViewInteraction;
+
 import org.hamcrest.Matcher;
 
 public class AboutPageSteps {
@@ -33,5 +35,17 @@ public class AboutPageSteps {
     public void openTermsOfUse() {
         TestUtils.waitView(withId(R.id.about_terms_of_use_value_text_view)).check(matches(isDisplayed()));
         TestUtils.waitView(withId(R.id.about_terms_of_use_value_text_view)).perform(click());
+    }
+
+    public ViewInteraction getHeaderPrivacyPolicyPage() {
+        return TestUtils.waitView(headerPrivacyPolicyPage);
+    }
+
+    public ViewInteraction getHeaderTermsOfUsePage() {
+        return TestUtils.waitView(headerTermsOfUsePage);
+    }
+
+    public void aboutBackImageButClick() {
+        TestUtils.waitView(aboutBackImageBut).perform(click());
     }
 }

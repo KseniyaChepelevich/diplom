@@ -15,10 +15,15 @@ import androidx.test.espresso.PerformException;
 import androidx.test.rule.ActivityTestRule;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 
+import io.qameta.allure.android.rules.LogcatRule;
+import io.qameta.allure.android.rules.ScreenshotRule;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import okhttp3.mockwebserver.Dispatcher;
@@ -37,43 +42,39 @@ import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
 
 @RunWith(AllureAndroidJUnit4.class)
 
-public class FilterNewsPageTest {
-    AuthSteps authSteps = new AuthSteps();
-    MainPageSteps mainPageSteps = new MainPageSteps();
-    NewsPageSteps newsPageSteps = new NewsPageSteps();
-    FilterNewsPageSteps filterNewsPageSteps = new FilterNewsPageSteps();
-    ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+public class FilterNewsPageTest extends BaseTest{
+    private static AuthSteps authSteps = new AuthSteps();
+    private static MainPageSteps mainPageSteps = new MainPageSteps();
+    private static NewsPageSteps newsPageSteps = new NewsPageSteps();
+    private static FilterNewsPageSteps filterNewsPageSteps = new FilterNewsPageSteps();
+    private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
-    static String newsAnnouncement1 = "Объявление" + " " + DataHelper.generateTitleId();
-    static String newsAnnouncement2 = "Объявление" + " " + DataHelper.generateTitleId();
-    static String newsAnnouncement3 = "Объявление" + " " + DataHelper.generateTitleId();
-    static String newsBirthday1 = "День рождения" + " " + DataHelper.generateTitleId();
-    static String newsBirthday2 = "День рождения" + " " + DataHelper.generateTitleId();
-    static String newsBirthday3 = "День рождения" + " " + DataHelper.generateTitleId();
-    static String newsSalary1 = "Зарплата" + " " + DataHelper.generateTitleId();
-    static String newsSalary2 = "Зарплата" + " " + DataHelper.generateTitleId();
-    static String newsSalary3 = "Зарплата" + " " + DataHelper.generateTitleId();
-    static String newsTradeUnion1 = "Профсоюз" + " " + DataHelper.generateTitleId();
-    static String newsTradeUnion2 = "Профсоюз" + " " + DataHelper.generateTitleId();
-    static String newsTradeUnion3 = "Профсоюз" + " " + DataHelper.generateTitleId();
-    static String newsHoliday1 = "Праздник" + " " + DataHelper.generateTitleId();
-    static String newsHoliday2 = "Праздник" + " " + DataHelper.generateTitleId();
-    static String newsHoliday3 = "Праздник" + " " + DataHelper.generateTitleId();
-    static String newsGratitude1 = "Благодарность" + " " + DataHelper.generateTitleId();
-    static String newsGratitude2 = "Благодарность" + " " + DataHelper.generateTitleId();
-    static String newsGratitude3 = "Благодарность" + " " + DataHelper.generateTitleId();
-    static String newsMassage1 = "Массаж" + " " + DataHelper.generateTitleId();
-    static String newsMassage2 = "Массаж" + " " + DataHelper.generateTitleId();
-    static String newsMassage3 = "Массаж" + " " + DataHelper.generateTitleId();
-    static String newsNeedHelp1 = "Нужна помощь" + " " + DataHelper.generateTitleId();
-    static String newsNeedHelp2 = "Нужна помощь" + " " + DataHelper.generateTitleId();
-    static String newsNeedHelp3 = "Нужна помощь" + " " + DataHelper.generateTitleId();
+    static String newsAnnouncement1 = "Объяв" + " " + DataHelper.generateTitleId();
+    static String newsAnnouncement2 = "Объяв" + " " + DataHelper.generateTitleId();
+    static String newsAnnouncement3 = "Объяв" + " " + DataHelper.generateTitleId();
+    static String newsBirthday1 = "ДP" + " " + DataHelper.generateTitleId();
+    static String newsBirthday2 = "ДP" + " " + DataHelper.generateTitleId();
+    static String newsBirthday3 = "ДP" + " " + DataHelper.generateTitleId();
+    static String newsSalary1 = "Зарп" + " " + DataHelper.generateTitleId();
+    static String newsSalary2 = "Зарп" + " " + DataHelper.generateTitleId();
+    static String newsSalary3 = "Зарп" + " " + DataHelper.generateTitleId();
+    static String newsTradeUnion1 = "Проф" + " " + DataHelper.generateTitleId();
+    static String newsTradeUnion2 = "Проф" + " " + DataHelper.generateTitleId();
+    static String newsTradeUnion3 = "Профз" + " " + DataHelper.generateTitleId();
+    static String newsHoliday1 = "Празд" + " " + DataHelper.generateTitleId();
+    static String newsHoliday2 = "Празд" + " " + DataHelper.generateTitleId();
+    static String newsHoliday3 = "Празд" + " " + DataHelper.generateTitleId();
+    static String newsGratitude1 = "Благ" + " " + DataHelper.generateTitleId();
+    static String newsGratitude2 = "Благ" + " " + DataHelper.generateTitleId();
+    static String newsGratitude3 = "Благ" + " " + DataHelper.generateTitleId();
+    static String newsMassage1 = "Мас" + " " + DataHelper.generateTitleId();
+    static String newsMassage2 = "Мас" + " " + DataHelper.generateTitleId();
+    static String newsMassage3 = "Мас" + " " + DataHelper.generateTitleId();
+    static String newsNeedHelp1 = "НП" + " " + DataHelper.generateTitleId();
+    static String newsNeedHelp2 = "НП" + " " + DataHelper.generateTitleId();
+    static String newsNeedHelp3 = "НП" + " " + DataHelper.generateTitleId();
     static String myCategory = "Моя категория" + " " + DataHelper.generateTitleId();
     static String newsPublicationDateInTheFuture = "Новость из будущего" + " " + DataHelper.generateTitleId();
-
-    @Rule
-    public ActivityTestRule<AppActivity> activityTestRule =
-            new ActivityTestRule<>(AppActivity.class);
 
     private MockWebServer mockWebServer = new MockWebServer();
 
@@ -94,7 +95,7 @@ public class FilterNewsPageTest {
     @DisplayName("Фильтрация новостей по Категории Обьявление")
     public void shouldFilterTheNewsWithCategoryAnnouncement() {
         //Создание новостей с категорией объявление для фильтрации
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement1, newsAnnouncement1, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement2, newsAnnouncement2, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement3, newsAnnouncement3, 0, 0, 0);
@@ -106,10 +107,10 @@ public class FilterNewsPageTest {
         mainPageSteps.openNewsPageThroughTheMainMenu();
         newsPageSteps.isNewsPage();
         //Открываем форму фильтра и заполняем её
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryAnnouncement, 0, -1, 0, 0, 0, 0);
-        TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
+        filterNewsPageSteps.filterNewsButtonClick();
 
         //Проверка, что отображаются новости с категорией Объявление
         newsPageSteps.isNewsPage();
@@ -118,12 +119,12 @@ public class FilterNewsPageTest {
         controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement3).check(matches(isDisplayed()));
         //Проверка, что новости с категорией День рождения не отображаются
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsBirthday1))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsBirthday2))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsBirthday3))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsBirthday1))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsBirthday2))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsBirthday3))));
 
         //Удаляем созданные новости
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.deleteItemNews(newsAnnouncement1);
         controlPanelSteps.deleteItemNews(newsAnnouncement2);
         controlPanelSteps.deleteItemNews(newsAnnouncement3);
@@ -139,7 +140,7 @@ public class FilterNewsPageTest {
     @DisplayName("Фильтрация новостей по Категории День рождения")
     public void shouldFilterTheNewsWithCategoryBirthday() {
         //Создание новостей с категорией объявление для фильтрации
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement1, newsAnnouncement1, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement2, newsAnnouncement2, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement3, newsAnnouncement3, 0, 0, 0);
@@ -151,21 +152,21 @@ public class FilterNewsPageTest {
         mainPageSteps.openNewsPageThroughTheMainMenu();
         newsPageSteps.isNewsPage();
         //Открываем форму фильтра и заполняем её
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryBirthday, 0, -1, 0, 0, 0, 0);
-        TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
+        filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что отображаются новости с категорией День рождения
         newsPageSteps.isNewsPage();
         controlPanelSteps.scrollToElementInRecyclerList(newsBirthday1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsBirthday2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsBirthday3).check(matches(isDisplayed()));
         //Проверка, что новости с категорией День рождения не отображаются
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsAnnouncement1))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsAnnouncement2))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsAnnouncement3))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsAnnouncement1))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsAnnouncement2))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsAnnouncement3))));
         //Удаляем созданные новости
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.deleteItemNews(newsAnnouncement1);
         controlPanelSteps.deleteItemNews(newsAnnouncement2);
         controlPanelSteps.deleteItemNews(newsAnnouncement3);
@@ -179,7 +180,7 @@ public class FilterNewsPageTest {
     @DisplayName("Фильтрация новостей по Категории Зарплата")
     public void shouldFilterTheNewsWithCategorySalary() {
         //Создание новостей с категорией объявление для фильтрации
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, newsSalary1, newsSalary1, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, newsSalary2, newsSalary2, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, newsSalary3, newsSalary3, 0, 0, 0);
@@ -191,21 +192,21 @@ public class FilterNewsPageTest {
         mainPageSteps.openNewsPageThroughTheMainMenu();
         newsPageSteps.isNewsPage();
         //Открываем форму фильтра и заполняем её
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categorySalary, 0, -1, 0, 0, 0, 0);
-        TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
+        filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что отображаются новости с категорией Объявление
         newsPageSteps.isNewsPage();
         controlPanelSteps.scrollToElementInRecyclerList(newsSalary1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsSalary2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsSalary3).check(matches(isDisplayed()));
         //Проверка, что новости с категорией День рождения не отображаются
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsTradeUnion1))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsTradeUnion2))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsTradeUnion3))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsTradeUnion1))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsTradeUnion2))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsTradeUnion3))));
         //Удаляем созданные новости
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.deleteItemNews(newsSalary1);
         controlPanelSteps.deleteItemNews(newsSalary2);
         controlPanelSteps.deleteItemNews(newsSalary3);
@@ -219,7 +220,7 @@ public class FilterNewsPageTest {
     @DisplayName("Фильтрация новостей по Категории Профсоюз")
     public void shouldFilterTheNewsWithCategoryTradeUnion() {
         //Создание новостей с категорией объявление для фильтрации
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, newsSalary1, newsSalary1, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, newsSalary2, newsSalary2, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, newsSalary3, newsSalary3, 0, 0, 0);
@@ -231,21 +232,21 @@ public class FilterNewsPageTest {
         mainPageSteps.openNewsPageThroughTheMainMenu();
         newsPageSteps.isNewsPage();
         //Открываем форму фильтра и заполняем её
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryTradeUnion, 0, -1, 0, 0, 0, 0);
-        TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
+        filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что отображаются новости с категорией Объявление
         newsPageSteps.isNewsPage();
         controlPanelSteps.scrollToElementInRecyclerList(newsTradeUnion1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsTradeUnion2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsTradeUnion3).check(matches(isDisplayed()));
         //Проверка, что новости с категорией День рождения не отображаются
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsSalary1))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsSalary2))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsSalary3))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsSalary1))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsSalary2))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsSalary3))));
         //Удаляем созданные новости
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.deleteItemNews(newsSalary1);
         controlPanelSteps.deleteItemNews(newsSalary2);
         controlPanelSteps.deleteItemNews(newsSalary3);
@@ -259,7 +260,7 @@ public class FilterNewsPageTest {
     @DisplayName("Фильтрация новостей по Категории Праздник")
     public void shouldFilterTheNewsWithCategoryHoliday() {
         //Создание новостей с категорией объявление для фильтрации
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, newsHoliday1, newsHoliday1, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, newsHoliday2, newsHoliday2, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, newsHoliday3, newsHoliday3, 0, 0, 0);
@@ -271,21 +272,21 @@ public class FilterNewsPageTest {
         mainPageSteps.openNewsPageThroughTheMainMenu();
         newsPageSteps.isNewsPage();
         //Открываем форму фильтра и заполняем её
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryHoliday, 0, -1, 0, 0, 0, 0);
-        TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
+        filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что отображаются новости с категорией Объявление
         newsPageSteps.isNewsPage();
         controlPanelSteps.scrollToElementInRecyclerList(newsHoliday1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsHoliday2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsHoliday3).check(matches(isDisplayed()));
         //Проверка, что новости с категорией День рождения не отображаются
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsMassage1))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsMassage2))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsMassage3))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsMassage1))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsMassage2))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsMassage3))));
         //Удаляем созданные новости
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.deleteItemNews(newsHoliday1);
         controlPanelSteps.deleteItemNews(newsHoliday2);
         controlPanelSteps.deleteItemNews(newsHoliday3);
@@ -295,11 +296,12 @@ public class FilterNewsPageTest {
 
     }
 
+
     @Test
     @DisplayName("Фильтрация новостей по Категории Массаж")
     public void shouldFilterTheNewsWithCategoryMassage() {
         //Создание новостей с категорией объявление для фильтрации
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, newsHoliday1, newsHoliday1, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, newsHoliday2, newsHoliday2, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, newsHoliday3, newsHoliday3, 0, 0, 0);
@@ -311,21 +313,21 @@ public class FilterNewsPageTest {
         mainPageSteps.openNewsPageThroughTheMainMenu();
         newsPageSteps.isNewsPage();
         //Открываем форму фильтра и заполняем её
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+       newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryMassage, 0, -1, 0, 0, 0, 0);
-        TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
+        filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что отображаются новости с категорией Объявление
         newsPageSteps.isNewsPage();
         controlPanelSteps.scrollToElementInRecyclerList(newsMassage1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsMassage2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsMassage3).check(matches(isDisplayed()));
         //Проверка, что новости с категорией День рождения не отображаются
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsHoliday1))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsHoliday2))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsHoliday3))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsHoliday1))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsHoliday2))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsHoliday3))));
         //Удаляем созданные новости
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.deleteItemNews(newsHoliday1);
         controlPanelSteps.deleteItemNews(newsHoliday2);
         controlPanelSteps.deleteItemNews(newsHoliday3);
@@ -334,11 +336,12 @@ public class FilterNewsPageTest {
         controlPanelSteps.deleteItemNews(newsMassage3);
     }
 
+
     @Test
     @DisplayName("Фильтрация новостей по Категории Благодарность")
     public void shouldFilterTheNewsWithCategoryGratitude() {
         //Создание новостей с категорией объявление для фильтрации
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, newsGratitude1, newsGratitude1, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, newsGratitude2, newsGratitude2, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, newsGratitude3, newsGratitude3, 0, 0, 0);
@@ -350,21 +353,21 @@ public class FilterNewsPageTest {
         mainPageSteps.openNewsPageThroughTheMainMenu();
         newsPageSteps.isNewsPage();
         //Открываем форму фильтра и заполняем её
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryGratitude, 0, -1, 0, 0, 0, 0);
-        TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
+        filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что отображаются новости с категорией Объявление
         newsPageSteps.isNewsPage();
         controlPanelSteps.scrollToElementInRecyclerList(newsGratitude1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsGratitude2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsGratitude3).check(matches(isDisplayed()));
         //Проверка, что новости с категорией День рождения не отображаются
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsNeedHelp1))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsNeedHelp2))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsNeedHelp3))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsNeedHelp1))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsNeedHelp2))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsNeedHelp3))));
         //Удаляем созданные новости
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.deleteItemNews(newsGratitude1);
         controlPanelSteps.deleteItemNews(newsGratitude2);
         controlPanelSteps.deleteItemNews(newsGratitude3);
@@ -374,11 +377,12 @@ public class FilterNewsPageTest {
 
     }
 
+
     @Test
     @DisplayName("Фильтрация новостей по Категории Нужна помощь")
     public void shouldFilterTheNewsWithCategoryNeedHelp() {
         //Создание новостей с категорией объявление для фильтрации
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, newsGratitude1, newsGratitude1, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, newsGratitude2, newsGratitude2, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, newsGratitude3, newsGratitude3, 0, 0, 0);
@@ -390,21 +394,21 @@ public class FilterNewsPageTest {
         mainPageSteps.openNewsPageThroughTheMainMenu();
         newsPageSteps.isNewsPage();
         //Открываем форму фильтра и заполняем её
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryNeedHelp, 0, -1, 0, 0, 0, 0);
-        TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
+        filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что отображаются новости с категорией Объявление
         newsPageSteps.isNewsPage();
         controlPanelSteps.scrollToElementInRecyclerList(newsNeedHelp1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsNeedHelp2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsNeedHelp3).check(matches(isDisplayed()));
         //Проверка, что новости с категорией День рождения не отображаются
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsGratitude1))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsGratitude2))));
-        TestUtils.waitView(controlPanelSteps.newsRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.news_item_title_text_view, withText(newsGratitude3))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsGratitude1))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsGratitude2))));
+        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsGratitude3))));
         //Удаляем созданные новости
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.deleteItemNews(newsGratitude1);
         controlPanelSteps.deleteItemNews(newsGratitude2);
         controlPanelSteps.deleteItemNews(newsGratitude3);
@@ -414,11 +418,12 @@ public class FilterNewsPageTest {
 
     }
 
+
     @Test
     @DisplayName("Отмена филтрации новостей")
     public void shouldNotFilterNewsByCategoryAnnouncement() {
         //Создание новостей с категорией объявление для фильтрации
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement1, newsAnnouncement1, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsBirthday1, newsBirthday1, 0, 0, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsHoliday1, newsHoliday1, 0, 0, 0);
@@ -430,10 +435,10 @@ public class FilterNewsPageTest {
         mainPageSteps.openNewsPageThroughTheMainMenu();
         newsPageSteps.isNewsPage();
         //Открываем форму фильтра и заполняем её
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryAnnouncement, 0, -1, 0, 0, 0, 0);
-        TestUtils.waitView(controlPanelSteps.cancelBut).perform(click());
+        filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что фильтр не включился и отображаются все новости
         newsPageSteps.isNewsPage();
         controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement1).check(matches(isDisplayed()));
@@ -443,7 +448,7 @@ public class FilterNewsPageTest {
         controlPanelSteps.scrollToElementInRecyclerList(newsGratitude1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsTradeUnion1).check(matches(isDisplayed()));
         //Удаляем созданные новости
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.deleteItemNews(newsAnnouncement1);
         controlPanelSteps.deleteItemNews(newsBirthday1);
         controlPanelSteps.deleteItemNews(newsHoliday1);
@@ -453,49 +458,52 @@ public class FilterNewsPageTest {
 
     }
 
+
     @Test
     @DisplayName("Фильтрация новостей по несуществующей категории")
     public void shouldShowAMessageSelectACategoryFromTheList() {
         //Открываем форму фильтра и заполняем её
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
-        TestUtils.waitView(controlPanelSteps.newsItemCategoryField).perform(replaceText(myCategory));
+        controlPanelSteps.replaceNewsCategoryText(myCategory);
         filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateStartField, 0, -1, 0);
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
+        controlPanelSteps.okButtonClick();
         filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateEndField, 0, 0, 0);
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
-        TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
+        controlPanelSteps.okButtonClick();
+        filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что появляется сообщение
         controlPanelSteps.checkToast("Invalid category. Select a category from the list.", true);
     }
+
 
     @Test
     @DisplayName("Фильрация актуальных новостей за период из будущего")
     public void shouldShowATextThereIsNothingHere() {
         //Создаем новость с датой публикации в будущем
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsPublicationDateInTheFuture, newsPublicationDateInTheFuture, 0, 1, 0);
         //Переходим в раздел Новости
         controlPanelSteps.isControlPanel();
         mainPageSteps.openNewsPageThroughTheMainMenu();
         newsPageSteps.isNewsPage();
         //Открываем форму фильтра и заполняем её
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryAnnouncement, 0, 0, 1, 1, 0, 1);
-        TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
+        filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что отображается кнопка REFRESH, текст и картинка пустого списка новостей
         newsPageSteps.isEmptyNewsList();
         //Удаляем созданные новости
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.deleteItemNews(newsPublicationDateInTheFuture);
     }
+
 
     @Test
     @DisplayName("Фильтрация новостей без заданного периода")
     public void shouldShowAllActualNewsCategoryAnnouncement() {
         //Создаем новость с датой публикации в будущем
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement1, newsAnnouncement1, 0, -1, 0);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement2, newsAnnouncement2, 0, 0, -10);
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement3, newsAnnouncement3, 0, 0, 0);
@@ -504,17 +512,17 @@ public class FilterNewsPageTest {
         mainPageSteps.openNewsPageThroughTheMainMenu();
         newsPageSteps.isNewsPage();
         //Открываем форму фильтра и заполняем её
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
-        TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
+        filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что отображаются все актуальные новости категории Объявление
         newsPageSteps.isNewsPage();
         controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement1).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement2).check(matches(isDisplayed()));
         controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement3).check(matches(isDisplayed()));
         //Удаляем созданные новости
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.deleteItemNews(newsAnnouncement1);
         controlPanelSteps.deleteItemNews(newsAnnouncement2);
         controlPanelSteps.deleteItemNews(newsAnnouncement3);
@@ -524,12 +532,12 @@ public class FilterNewsPageTest {
     @DisplayName("Фильтрация новости с заданным периодом от и незаданным периодом до")
     public void shouldShowMessageWrongPeriodPublishDateEndField() {
         //Открываем форму фильтра и заполняем её
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
         filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateStartField, 0, -1, 0);
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
-        TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
+        controlPanelSteps.okButtonClick();
+        filterNewsPageSteps.filterNewsButtonClick();
         //Проверка сообщения "Wrong period"
         filterNewsPageSteps.isMessageWrongPeriod();
     }
@@ -538,12 +546,12 @@ public class FilterNewsPageTest {
     @DisplayName("Фильтрация новости с заданным периодом до и незаданным периодом от")
     public void shouldShowMessageWrongPeriodWithEmptyPublishDateStartField() {
         //Открываем форму фильтра и заполняем её
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
         filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateEndField, 0, 0, 0);
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
-        TestUtils.waitView(filterNewsPageSteps.filterBut).perform(click());
+        controlPanelSteps.okButtonClick();
+        filterNewsPageSteps.filterNewsButtonClick();
         //Проверка сообщения "Wrong period"
         filterNewsPageSteps.isMessageWrongPeriod();
     }

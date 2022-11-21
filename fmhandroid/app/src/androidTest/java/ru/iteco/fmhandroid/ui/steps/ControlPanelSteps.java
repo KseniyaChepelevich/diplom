@@ -38,6 +38,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 
+import java.security.PublicKey;
 import java.util.Calendar;
 
 import ru.iteco.fmhandroid.R;
@@ -99,6 +100,8 @@ public class ControlPanelSteps {
     public Matcher<View> descriptionTextInputEndIcon = allOf(withId(R.id.text_input_end_icon), withParent(withParent(withParent(withParent(withId(R.id.news_item_description_text_input_layout))))));
     public Matcher<View> messageChangesWonTBeSaved = withText("The changes won't be saved, do you really want to log out?");
 
+    public int newsItemTitleTextView=(R.id.news_item_title_text_view);
+
     public ViewInteraction wrongСategoryToast(String text) {
         return onView(withText(text)).inRoot(new DataHelper.ToastMatcher());
     }
@@ -139,6 +142,8 @@ public class ControlPanelSteps {
         DataHelper.EspressoBaseTest.clickButton(nameCategory);
     }
 
+
+
     public void selectANewsCategoryFromTheList1(Matcher<View> nameCategory) {
         TestUtils.waitView(newsItemCategoryField).perform(click());
         Espresso.closeSoftKeyboard();
@@ -156,10 +161,22 @@ public class ControlPanelSteps {
         TestUtils.waitView(timePicker).perform(setTime(hour, minute));
     }
 
+    public void setTimeToTimePickerFromTheKeyboard(String hour, String minutes) {
+        TestUtils.waitView(timePicker).check(matches(isDisplayed()));
+        TestUtils.waitView(timePickerToggleMode).perform(click());
+        TestUtils.waitView(inputHour).check(matches(isDisplayed())).perform(replaceText(hour));
+        TestUtils.waitView(inputMinute).check(matches(isDisplayed())).perform(replaceText(minutes));
+        okButtonClick();
+    }
+
+    public void openNewsTimePicker() {
+        TestUtils.waitView(newsItemPublishTimeField).perform(click());
+    }
+
     public void setTimeToTimeField(int hour, int minute) {
         TestUtils.waitView(newsItemPublishTimeField).perform(click());
         setTimeToTimePicker(hour, minute);
-        TestUtils.waitView(okBut).perform(click());
+        okButtonClick();
     }
 
     public void fillingOutTheFormCreatingNewsWithDateToday(int year, int month, int day, String title, String description) {
@@ -167,6 +184,14 @@ public class ControlPanelSteps {
         setDateToDatePicker(year, month, day);
         TestUtils.waitView(okBut).perform(click());
         setTimeToTimeField(date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE));
+        TestUtils.waitView(newsItemDescriptionField).perform(replaceText(description));
+    }
+
+    public void replaceNewsTitleText(String title) {
+        TestUtils.waitView(newsItemTitleField).perform(replaceText(title));
+    }
+
+    public void replaceNewsDescriptionText(String description) {
         TestUtils.waitView(newsItemDescriptionField).perform(replaceText(description));
     }
 
@@ -242,7 +267,7 @@ public class ControlPanelSteps {
     }
 
     public void creatingTestNews1(Matcher<View> newsItemCategory, String title, String description, int plusYear, int plusMonth, int plusDay) {
-        TestUtils.waitView(addNewsImBut).perform(click());
+        openCreatingNewsForm();
         selectANewsCategoryFromTheList1(newsItemCategory);
         fillingOutTheFormCreatingNewsWithDateToday(date.get(Calendar.YEAR) + plusYear, date.get(Calendar.MONTH) + 1 + plusMonth, date.get(Calendar.DAY_OF_MONTH) + plusDay, title, description);
         TestUtils.waitView(saveBut).perform(click());
@@ -252,5 +277,70 @@ public class ControlPanelSteps {
         TestUtils.waitView(withText("Something went wrong. Try again later.")).check(matches(isDisplayed()));
         TestUtils.waitView(okBut).check(matches(isDisplayed()));
     }
+
+    public void openCreatingNewsForm(){
+        TestUtils.waitView(addNewsImBut).perform(click());
+    }
+
+    public ViewInteraction getNewsItemTitle() {
+        return TestUtils.waitView(newsItemTitleField);
+    }
+
+    public void saveNewsButtonClick() {
+        TestUtils.waitView(saveBut).perform(click());
+    }
+
+    public void cancelButtonClick() {
+        TestUtils.waitView(cancelBut).perform(click());
+    }
+
+    public ViewInteraction getMessageChangesWonTBeSaved() {
+        return TestUtils.waitView(messageChangesWonTBeSaved);
+    }
+
+    public void okButtonClick() {
+        TestUtils.waitView(okBut).perform(click());
+    }
+
+    public void cancelDeleteButtonClick() {
+        TestUtils.waitView(cancelDeleteBut).perform(click());
+    }
+
+    public ViewInteraction getNewsRecyclerList() {
+        return TestUtils.waitView(newsRecyclerList);
+    }
+
+    public void replaceNewsCategoryText(String category) {
+        TestUtils.waitView(newsItemCategoryField).perform(replaceText(category));
+    }
+
+    public void switchNewsStatus() {
+        TestUtils.waitView(switcherActive).perform(click());
+    }
+
+    public ViewInteraction getSwitcherNoteActive() {
+        return TestUtils.waitView(switcherNotActive);
+    }
+
+    public ViewInteraction getNewsItemPublishDate () {
+        return TestUtils.waitView(newsItemPublishDateField);
+    }
+
+    public ViewInteraction getNewsItemPublishTime() {
+        return TestUtils.waitView(newsItemPublishTimeField);
+    }
+
+    public ViewInteraction getNewsItemCategory() {
+        return TestUtils.waitView(newsItemCategoryField);
+    }
+
+    public ViewInteraction getNewsItemDescription() {
+        return TestUtils.waitView(newsItemDescriptionField);
+    }
+
+    public ViewInteraction getMessageAboutDelete() {
+        return TestUtils.waitView(messageAboutDelete);
+    }
+
 
 }
