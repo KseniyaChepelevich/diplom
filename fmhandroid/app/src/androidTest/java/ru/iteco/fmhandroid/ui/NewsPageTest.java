@@ -25,16 +25,13 @@ import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
 @RunWith(AllureAndroidJUnit4.class)
 
 
-public class NewsPageTest {
-    AuthSteps authSteps = new AuthSteps();
-    MainPageSteps mainPageSteps = new MainPageSteps();
-    NewsPageSteps newsPageSteps = new NewsPageSteps();
-    FilterNewsPageSteps filterNewsPageSteps = new FilterNewsPageSteps();
-    ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+public class NewsPageTest extends BaseTest{
+    private static AuthSteps authSteps = new AuthSteps();
+    private static MainPageSteps mainPageSteps = new MainPageSteps();
+    private static NewsPageSteps newsPageSteps = new NewsPageSteps();
+    private static FilterNewsPageSteps filterNewsPageSteps = new FilterNewsPageSteps();
+    private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
-    @Rule
-    public ActivityTestRule<AppActivity> activityTestRule =
-            new ActivityTestRule<>(AppActivity.class);
 
     @Before
     public void logoutCheck() {
@@ -51,21 +48,22 @@ public class NewsPageTest {
     @Test
     @DisplayName("Открытие фильтра новостей по кнопке Filter")
     public void shouldOpenTheNewsFilterSettingsForm() {
-        TestUtils.waitView(newsPageSteps.filterNewsMaterialBut).perform(click());
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
     }
 
     @Test
     @DisplayName("Разворачиване описания новости")
     public void shouldOpenTheNewsDescription() {
-        TestUtils.waitView(newsPageSteps.newsItemMaterialCardView1).perform(click());
-        TestUtils.waitView(newsPageSteps.newsItemDescriptionTextView1).check(matches(isDisplayed()));
+        int positionNews = 1;
+        newsPageSteps.openNewsOnNewsPage(positionNews);
+        newsPageSteps.getNewsItemDescription(positionNews).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Переход по кнопке Edit News")
     public void shouldOpenTheControlPanel() {
-        TestUtils.waitView(newsPageSteps.editNewsMaterialBut).perform(click());
+        newsPageSteps.openControlPanel();
         controlPanelSteps.isControlPanel();
     }
 

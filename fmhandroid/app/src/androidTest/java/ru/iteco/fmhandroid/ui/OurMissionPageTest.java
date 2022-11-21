@@ -14,8 +14,12 @@ import androidx.test.uiautomator.UiDevice;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 
+import io.qameta.allure.android.rules.LogcatRule;
+import io.qameta.allure.android.rules.ScreenshotRule;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
@@ -24,14 +28,10 @@ import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 import ru.iteco.fmhandroid.ui.steps.OurMissionPageSteps;
 
 @RunWith(AllureAndroidJUnit4.class)
-public class OurMissionPageTest {
-    AuthSteps authSteps = new AuthSteps();
-    MainPageSteps mainPageSteps = new MainPageSteps();
-    OurMissionPageSteps ourMissionPageSteps = new OurMissionPageSteps();
-
-    @Rule
-    public ActivityTestRule<AppActivity> activityTestRule =
-            new ActivityTestRule<>(AppActivity.class);
+public class OurMissionPageTest extends BaseTest{
+    private static AuthSteps authSteps = new AuthSteps();
+    private static MainPageSteps mainPageSteps = new MainPageSteps();
+    private static OurMissionPageSteps ourMissionPageSteps = new OurMissionPageSteps();
 
     @Before
     public void logoutCheck() {
@@ -43,7 +43,7 @@ public class OurMissionPageTest {
         }
         authSteps.authWithValidData(authInfo());
         mainPageSteps.isMainPage();
-        TestUtils.waitView(mainPageSteps.ourMissionImBut).perform(click());
+        mainPageSteps.openOurMissionPage();
         ourMissionPageSteps.isOurMissionPage();
     }
 
@@ -51,7 +51,7 @@ public class OurMissionPageTest {
     @DisplayName("Просмотр цитаты")
     public void shouldOpenOurMissionPage() {
         int missionItemPosition = 3;
-        TestUtils.waitView(ourMissionPageSteps.ourMissionItemListRecyclerView).perform(actionOnItemAtPosition(missionItemPosition, click()));
+        ourMissionPageSteps.openCitation(missionItemPosition);
         ourMissionPageSteps.getOurMissionItemDescriptionTextView(missionItemPosition).check(matches(isDisplayed()));
     }
 

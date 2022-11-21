@@ -5,6 +5,7 @@ import ru.iteco.fmhandroid.ui.data.TestUtils;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
@@ -18,20 +19,17 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.RootMatchers;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.AllOf;
 
 public class ClaimsPageSteps {
-    ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+    private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+    private static CreatingClaimsSteps creatingClaimsSteps = new CreatingClaimsSteps();
 
     public Matcher<View> claimsItemDescription = withId(R.id.description_text_view);
     public Matcher<View> titleClaimField = allOf(withId(R.id.title_edit_text), withParent(withParent(withId(R.id.title_text_input_layout))));
@@ -85,6 +83,8 @@ public class ClaimsPageSteps {
     public Matcher<View> statusCommentTextInputField = allOf(withHint("Comment"), withId(R.id.editText));
     public Matcher<View> claimsListCard1 = TestUtils.withRecyclerView(R.id.claim_list_recycler_view)
             .atPositionOnView(1, R.id.claim_list_card);
+
+    public int commentDescriptionTextView= R.id.comment_description_text_view;
 
     public ViewInteraction getItemClaimCompatImView(String title) {
         return TestUtils.waitView(allOf(compatImageView, hasSibling(withText(title))));
@@ -164,6 +164,104 @@ public class ClaimsPageSteps {
                 TestUtils.childAtPosition(TestUtils.childAtPosition(AllOf.allOf(withId(R.id.claim_list_card),
                         TestUtils.childAtPosition(withId(R.id.claim_list_recycler_view), position)), 0), 8)));
     }
+
+    public ViewInteraction getClaimItemDescription() {
+        return TestUtils.waitView(claimsItemDescription);
+    }
+
+    public void setStatusExecute() {
+        TestUtils.waitView(statusProcessingImBut).perform(click());
+        TestUtils.waitView(toExecuteMenuItem).perform(click());
+    }
+
+    public void replaceClaimStatusCommentText(String comment) {
+        TestUtils.waitView(statusCommentTextInputField).perform(replaceText(comment));
+    }
+
+    public void setStatusCanceled() {
+        TestUtils.waitView(statusProcessingImBut).perform(click());
+        TestUtils.waitView(cancelMenuItem).perform(click());
+
+    }
+
+
+    public void closeImButtonClick() {
+        TestUtils.waitView(closeImBut).perform(click());
+    }
+
+    public void openClaimsFilter() {
+        TestUtils.waitView(claimsFiltersButton).perform(click());
+    }
+
+    public void claimFilterCancelButtonClick() {
+        TestUtils.waitView(claimFilterCancelBut).perform(click());
+    }
+
+    public void openCreatingClaimsCard() {
+        TestUtils.waitView(addNewClaimBut).perform(click());
+    }
+
+    public void openCreatingCommentForm() {
+        TestUtils.waitView(addCommentBut).perform(click());
+    }
+
+    public void replaceCommentTextInputText(String comment) {
+        TestUtils.waitView(commentTextInputField).perform(replaceText(comment));
+    }
+
+    public ViewInteraction getCommentDescriptionText() {
+        return TestUtils.waitView(commentDescriptionText);
+    }
+
+    public ViewInteraction getClaimCommentsListRecyclerView() {
+        return TestUtils.waitView(claimCommentsListRecyclerView);
+    }
+
+    public void editComment(String newComment) {
+        TestUtils.waitView(editCommentImBut).perform(click());
+        isCommentForm();
+        replaceCommentTextInputText(newComment);
+        controlPanelSteps.saveNewsButtonClick();
+    }
+
+    public ViewInteraction getLabelError () {
+        return TestUtils.waitView(labelError);
+    }
+
+    public ViewInteraction getTitleClaim() {
+        return TestUtils.waitView(titleClaimField);
+    }
+
+    public ViewInteraction getDescriptionClaimField() {
+        return TestUtils.waitView(descriptionClaimField);
+    }
+
+    public void editClaim(int year, int month, int newDay, int newHour, int minutes, String newTitle, String newDescription) {
+        editClaimButClick();
+        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, newDay, newHour, minutes, newTitle, newDescription);
+        controlPanelSteps.saveNewsButtonClick();
+    }
+
+    public void setStatusInProcess() {
+        TestUtils.waitView(statusProcessingImBut).perform(click());
+        TestUtils.waitView(takeToWorkMenuItem).perform(click());
+    }
+
+    public ViewInteraction getStatusLabel() {
+        return TestUtils.waitView(statusLabelText);
+    }
+
+    public void setStatusOpen() {
+        TestUtils.waitView(statusProcessingImBut).perform(click());
+        TestUtils.waitView(throwOffMenuItem).perform(click());
+    }
+
+    public void editClaimButClick() {
+        TestUtils.waitView(editClaimBut).perform(click());
+    }
+
+
+
 
 
 }

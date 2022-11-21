@@ -30,8 +30,8 @@ import ru.iteco.fmhandroid.ui.data.TestUtils;
 
 public class CreatingClaimsSteps {
     Calendar date = Calendar.getInstance();
-    ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
-    ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+    private static ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
+    private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
     public void replaceTextClaimExecutor(String nameExecutor) {
         TestUtils.waitView(claimsPageSteps.executorClaimField).check(matches(isDisplayed())).perform(click(), replaceText(nameExecutor));
@@ -54,13 +54,19 @@ public class CreatingClaimsSteps {
     public void setTimeToTimeField(int hour, int minute) {
         TestUtils.waitView(claimsPageSteps.timeClaimField).perform(click());
         controlPanelSteps.setTimeToTimePicker(hour, minute);
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
+        controlPanelSteps.okButtonClick();
+    }
+
+
+
+    public void openClaimTimePicker() {
+        TestUtils.waitView(claimsPageSteps.timeClaimField).perform(click());
     }
 
     public void fillingOutTheFormCreatingClaimWithDateToday(int year, int month, int day, int hour, int minute, String title, String description) {
-        TestUtils.waitView(claimsPageSteps.titleClaimField).perform(replaceText(title));
+        replaceTitleClaimText(title);
         setDateToDatePicker(year, month, day);
-        TestUtils.waitView(controlPanelSteps.okBut).perform(click());
+        controlPanelSteps.okButtonClick();
         setTimeToTimeField(hour, minute);
         TestUtils.waitView(claimsPageSteps.descriptionClaimField).perform(replaceText(description));
     }
@@ -70,6 +76,13 @@ public class CreatingClaimsSteps {
         selectAClaimExecutorFromTheList(claimsPageSteps.executorIvanov);
         fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, title, description);
         TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+    }
+
+    public void creatingAClaimExecutorSmirnov(int year, int month, int day, int hour, int minutes, String title, String description) {
+        TestUtils.waitView(claimsPageSteps.addNewClaimBut).perform(click());
+        selectAClaimExecutorFromTheList(claimsPageSteps.executorSmirnov);
+        fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, title, description);
+        controlPanelSteps.saveNewsButtonClick();
     }
 
     public void creatingAClaimWithStatusOpen(int year, int month, int day, int hour, int minutes, String title, String description) {
@@ -89,6 +102,18 @@ public class CreatingClaimsSteps {
         TestUtils.waitView(Matchers.allOf(withId(R.id.text_input_end_icon), withParent(withParent(withParent(withParent(withId(R.id.date_in_plan_text_input_layout))))))).check(matches(isDisplayed()));
         TestUtils.waitView(Matchers.allOf(withId(R.id.text_input_end_icon), withParent(withParent(withParent(withParent(withId(R.id.time_in_plan_text_input_layout))))))).check(matches(isDisplayed()));
         TestUtils.waitView(Matchers.allOf(withId(R.id.text_input_end_icon), withParent(withParent(withParent(withParent(withId(R.id.description_text_input_layout))))))).check(matches(isDisplayed()));
+    }
+
+    public ViewInteraction getClaimTime () {
+        return TestUtils.waitView(claimsPageSteps.timeClaimField);
+    }
+
+    public ViewInteraction getClaimDateInPlane() {
+        return TestUtils.waitView(claimsPageSteps.dateClaimField);
+    }
+
+    public void replaceTitleClaimText(String title) {
+        TestUtils.waitView(claimsPageSteps.titleClaimField).perform(replaceText(title));
     }
 
 }

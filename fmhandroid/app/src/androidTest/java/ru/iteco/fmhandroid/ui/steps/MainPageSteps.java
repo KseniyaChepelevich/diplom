@@ -1,13 +1,16 @@
 package ru.iteco.fmhandroid.ui.steps;
 
+import android.os.SystemClock;
 import android.view.View;
 
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
@@ -81,6 +84,34 @@ public class MainPageSteps {
         TestUtils.waitView(claimsBlockHeader).check(matches(isDisplayed()));
         TestUtils.waitView(allClaimsBut).check(matches(not(isDisplayed())));
         TestUtils.waitView(allClaimsCardsBlockConstraintLayout).check(matches(not(isDisplayed())));
+    }
+
+    public void openOurMissionPage() {
+        TestUtils.waitView(ourMissionImBut).perform(click());
+    }
+
+    public void clickAllNewsBut() {TestUtils.waitView(allNewsBut).perform(click());}
+
+    public void clickAllClaimsBut() {TestUtils.waitView(allClaimsBut).perform(click());}
+
+    public void newsExpandMaterialButtonClick() {
+        TestUtils.waitView(newsExpandMaterialBut).perform(click());
+    }
+
+    public void claimsExpandMaterialButtonClick(){
+        TestUtils.waitView(claimsExpandMaterialBut).perform(click());
+    }
+
+    public void openClaimItemDescription(int position) {
+        TestUtils.waitView(scrollView).check(matches(isEnabled()));
+        TestUtils.waitView(scrollView).perform(swipeUp());
+        SystemClock.sleep(3000);
+        TestUtils.waitView(TestUtils.withRecyclerView(R.id.claim_list_recycler_view)
+                .atPositionOnView(position, R.id.claim_list_card)).perform(click());
+    }
+
+    public void addNewClaimButtonClick() {
+        TestUtils.waitView(addNewClaimBut).perform(click());
     }
 
 }

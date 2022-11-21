@@ -4,7 +4,9 @@ import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -37,6 +39,10 @@ public class OurMissionPageSteps {
                 TestUtils.childAtPosition(TestUtils.childAtPosition(allOf(withId(R.id.our_mission_item_material_card_view),
                         TestUtils.childAtPosition(withId(R.id.our_mission_item_list_recycler_view), position)), 0), 3)));
 
+    }
+
+    public void openCitation(int missionItemPosition) {
+        TestUtils.waitView(ourMissionItemListRecyclerView).perform(actionOnItemAtPosition(missionItemPosition, click()));
     }
 
 }

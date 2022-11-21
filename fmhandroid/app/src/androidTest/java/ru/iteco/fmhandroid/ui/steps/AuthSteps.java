@@ -40,6 +40,18 @@ public class AuthSteps {
         return onView(withText(id)).inRoot(new DataHelper.ToastMatcher());
     }
 
+    public void signBtnClick(){
+        TestUtils.waitView(signBtn).perform(click());
+    }
+
+    public ViewInteraction getLoginText() {
+        return TestUtils.waitView(loginField);
+    }
+
+    public ViewInteraction getPasswordText() {
+        return TestUtils.waitView(passField);
+    }
+
     public void isAuthScreen() {
         TestUtils.waitView(allOf(withText("Authorization"), withParent(withParent(withId(R.id.nav_host_fragment))))).check(matches(isDisplayed()));
         TestUtils.waitView(loginField).check(matches(isDisplayed()));
@@ -101,6 +113,8 @@ public class AuthSteps {
                 UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         device.openQuickSettings();
         device.findObject(new UiSelector().description("Airplane mode")).click();
+        device.pressBack();
+        device.pressBack();
     }
 
 }

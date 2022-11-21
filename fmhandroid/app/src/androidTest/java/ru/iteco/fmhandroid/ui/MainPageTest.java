@@ -17,6 +17,7 @@ import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,21 +41,17 @@ import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 @RunWith(AllureAndroidJUnit4.class)
 
-public class MainPageTest {
+public class MainPageTest extends BaseTest{
     private UiDevice device;
 
-    AuthSteps authSteps = new AuthSteps();
-    MainPageSteps mainPageSteps = new MainPageSteps();
-    NewsPageSteps newsPageSteps = new NewsPageSteps();
-    ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
-    AboutPageSteps aboutPageSteps = new AboutPageSteps();
-    OurMissionPageSteps ourMissionPageSteps = new OurMissionPageSteps();
+    private static AuthSteps authSteps = new AuthSteps();
+    private static MainPageSteps mainPageSteps = new MainPageSteps();
+    private static NewsPageSteps newsPageSteps = new NewsPageSteps();
+    private static ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
+    private static AboutPageSteps aboutPageSteps = new AboutPageSteps();
+    private static OurMissionPageSteps ourMissionPageSteps = new OurMissionPageSteps();
 
     private static final String APPS_PACKAGE = "com.google.android.apps.nexuslauncher";
-
-    @Rule
-    public ActivityTestRule<AppActivity> activityTestRule =
-            new ActivityTestRule<>(AppActivity.class);
 
     @Before
     public void logoutCheck() {
@@ -72,7 +69,7 @@ public class MainPageTest {
     @Test
     @DisplayName("Переход по кнопке ALL NEWS")
     public void shouldOpenNewsPageByButAllNews() {
-        TestUtils.waitView(mainPageSteps.allNewsBut).perform(click());
+        mainPageSteps.clickAllNewsBut();
         newsPageSteps.isNewsPage();
     }
 
@@ -93,7 +90,7 @@ public class MainPageTest {
     @Test
     @DisplayName("Переход по кнопке ALL CLAIMS")
     public void shouldOpenClaimsPageByButAllClaims() {
-        TestUtils.waitView(mainPageSteps.allClaimsBut).perform(click());
+        mainPageSteps.clickAllClaimsBut();
         claimsPageSteps.isClaimsPage();
     }
 
@@ -107,45 +104,44 @@ public class MainPageTest {
     @Test
     @DisplayName("Переход в раздел Our mission по кнопке в AppBar")
     public void shouldOpenOurMissionPage() {
-        TestUtils.waitView(mainPageSteps.ourMissionImBut).perform(click());
+        mainPageSteps.openOurMissionPage();
         ourMissionPageSteps.isOurMissionPage();
     }
 
     @Test
     @DisplayName("Разворот описания новости на Главной странице")
     public void shouldOpenNewsItemDescription() {
-        TestUtils.waitView(newsPageSteps.newsItemMaterialCardView1).perform(click());
-        TestUtils.waitView(newsPageSteps.newsItemDescriptionTextView1).check(matches(isDisplayed()));
+        int positionNews = 1;
+        newsPageSteps.openNewsOnNewsPage(positionNews);
+        newsPageSteps.getNewsItemDescription(positionNews).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Сворачивание списка новостей на Главной странице")
     public void shouldCollapseTheListOfNews() {
-        TestUtils.waitView(mainPageSteps.newsExpandMaterialBut).perform(click());
+        mainPageSteps.newsExpandMaterialButtonClick();
         mainPageSteps.isNewsBlockCollapsed();
     }
 
     @Test
     @DisplayName("Сворачивание списка заявок на Главной странице")
     public void shouldCollapseTheListOfClaims() {
-        TestUtils.waitView(mainPageSteps.claimsExpandMaterialBut).perform(click());
+        mainPageSteps.claimsExpandMaterialButtonClick();
         mainPageSteps.isClaimsBlockCollapsed();
     }
 
     @Test
     @DisplayName("Разворот описания заявки на Главной странице")
     public void shouldOpenClaimsItemDescription() {
-        TestUtils.waitView(mainPageSteps.scrollView).check(matches(isEnabled()));
-        TestUtils.waitView(mainPageSteps.scrollView).perform(swipeUp());
-        SystemClock.sleep(3000);
-        TestUtils.waitView(mainPageSteps.claimsListCard4).perform(click());
-        TestUtils.waitView(claimsPageSteps.claimsItemDescription).check(matches(isDisplayed()));
+        int claimPosition = 4;
+        mainPageSteps.openClaimItemDescription(claimPosition);
+        claimsPageSteps.getClaimItemDescription().check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Добавление заявки с главной страницы")
     public void shouldOpenTheClaimsForm() {
-        TestUtils.waitView(mainPageSteps.addNewClaimBut).perform(click());
+        mainPageSteps.addNewClaimButtonClick();
         claimsPageSteps.isClaimsForm();
     }
 
@@ -167,6 +163,7 @@ public class MainPageTest {
         mainPageSteps.isMainPage();
     }
 
+    @Ignore//Ненадежная проверка
     @Test
     @DisplayName("Переход по кнопке Home")
     public void shouldCloseTheApp() {
