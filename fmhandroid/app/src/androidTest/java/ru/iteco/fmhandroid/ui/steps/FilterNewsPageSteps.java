@@ -70,4 +70,20 @@ public class FilterNewsPageSteps {
     public void filterNewsButtonClick() {
         TestUtils.waitView(filterBut).perform(click());
     }
+
+    public ViewInteraction getNewsFilterCategoryField() {
+        return TestUtils.waitView(controlPanelSteps.newsItemCategoryField);
+    }
+
+    public ViewInteraction getNewsFilterPublishDateStartField() {
+        return TestUtils.waitView(newsItemPublishDateStartField);
+    }
+
+    public ViewInteraction getNewsFilterPublishDateEndField() {
+        return TestUtils.waitView(newsItemPublishDateEndField);
+    }
+
+    public void cancelFilterNewsButtonClick() {
+        TestUtils.waitView(controlPanelSteps.cancelBut).perform(click());
+    }
 }

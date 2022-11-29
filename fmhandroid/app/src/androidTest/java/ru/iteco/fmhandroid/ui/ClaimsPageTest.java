@@ -12,16 +12,21 @@ import static org.hamcrest.core.IsNot.not;
 
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
+import android.os.RemoteException;
 import android.os.SystemClock;
 
 import androidx.test.espresso.PerformException;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.uiautomator.UiDevice;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
@@ -29,6 +34,7 @@ import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
+import ru.iteco.fmhandroid.ui.data.NamingHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.ClaimsPageSteps;
@@ -38,21 +44,22 @@ import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 
 @RunWith(AllureAndroidJUnit4.class)
 
-public class ClaimsPageTest extends BaseTest{
+public class ClaimsPageTest extends BaseTest {
+    private UiDevice device;
     private static AuthSteps authSteps = new AuthSteps();
     private static MainPageSteps mainPageSteps = new MainPageSteps();
     private static ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
     private static CreatingClaimsSteps creatingClaimsSteps = new CreatingClaimsSteps();
     private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+    private static NamingHelper namingHelper = new NamingHelper();
 
-    Calendar date = Calendar.getInstance();
-
-    String titleForTheTestClaim = "Заголовок" + " " + DataHelper.generateTitleId();
-    String commentForTheTestClaim = "Комментарий" + " " + DataHelper.generateTitleId();
-
+    LocalDateTime date = LocalDateTime.now();
 
     @Before
-    public void logoutCheck() {
+    public void logoutCheck() throws RemoteException {
+        device =
+                UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device.setOrientationNatural();
         try {
             authSteps.isAuthScreen();
         } catch (PerformException e) {
@@ -80,72 +87,51 @@ public class ClaimsPageTest extends BaseTest{
     @Test
     @DisplayName("Окрытие Заявки с помощью кнопки со стрелкой")
     public void shouldOpenTheClaimCard() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH)+1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-        String dayExpected = TestUtils.getDateToString(day);
-        String monthExpected = TestUtils.getDateToString(month);
-        String planeDate = dayExpected + "." + monthExpected + "." + year;
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY)+1;
-        String hourExpected = TestUtils.getDateToString(hour);
-        String minutesExpected = TestUtils.getDateToString(minutes);
-        String planeTime = hourExpected + ":" + minutesExpected;
+        String title = namingHelper.getClaimInProgressName();
+        String planeDate = TestUtils.getDateToString(date);
+        String planeTime = TestUtils.getTimeToString(date);
 
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
+                date.getHour(), date.getMinute(), title, title);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
-
+        claimsPageSteps.openClaimCard(title);
         //Проверить, что отображается карточка созданной заявки
-        claimsPageSteps.isClaimCard(titleForTheTestClaim,planeDate,planeTime, titleForTheTestClaim);
+        claimsPageSteps.isClaimCard(title, planeDate, planeTime, title);
     }
 
     @Test
     @DisplayName("Добавление комментария к заявке")
     public void shouldAddACommentToTheClaim() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH)+1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY);
+        String title = namingHelper.getClaimInProgressName();
+        String comment = namingHelper.getComment();
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
+                date.getHour(), date.getMinute(), title, title);
         //Открываем заявку для редактирования
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        claimsPageSteps.openClaimCard(title);
         //Добавить комментарий
         claimsPageSteps.openCreatingCommentForm();
         claimsPageSteps.isCommentForm();
-
-        claimsPageSteps.replaceCommentTextInputText(commentForTheTestClaim);
+        claimsPageSteps.replaceCommentTextInputText(comment);
         controlPanelSteps.saveNewsButtonClick();
         //Проверить что комментарий сохранился
-        claimsPageSteps.getCommentDescriptionText().check(matches(withText(commentForTheTestClaim)));
+        claimsPageSteps.getCommentDescriptionText().check(matches(withText(comment)));
     }
 
     @Test
     @DisplayName("Добавление пустого комментария")
     public void shouldShowMessageFieldCannotBeEmpty() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH)+1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY);
-
+        String title = namingHelper.getClaimInProgressName();
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
+                date.getHour(), date.getMinute(), title, title);
         //Открываем заявку для редактирования
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        claimsPageSteps.openClaimCard(title);
         //Добавить пустой комментарий
         claimsPageSteps.openCreatingCommentForm();
         claimsPageSteps.isCommentForm();
-
-       controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.saveNewsButtonClick();
         //Проверить что отображается сообщение
         controlPanelSteps.checkToast("The field cannot be empty.", true);
     }
@@ -153,106 +139,79 @@ public class ClaimsPageTest extends BaseTest{
     @Test
     @DisplayName("Отмена добавления комментария")
     public void shouldNotSaveCommentWhenCancelButtonIsClicked() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH)+1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY);
-
+        String title = namingHelper.getClaimInProgressName();
+        String comment = namingHelper.getComment();
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
+                date.getHour(), date.getMinute(), title, title);
         //Открываем заявку для редактирования
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        claimsPageSteps.openClaimCard(title);
         //Добавить комментарий
         claimsPageSteps.openCreatingCommentForm();
         claimsPageSteps.isCommentForm();
-        //SystemClock.sleep(3000);
-        claimsPageSteps.replaceCommentTextInputText(commentForTheTestClaim);
+        claimsPageSteps.replaceCommentTextInputText(comment);
         controlPanelSteps.cancelButtonClick();
-        //Проверить что комментарий сохранился
+        //Проверить что комментарий не сохранился
         claimsPageSteps.getClaimCommentsListRecyclerView()
                 .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher
-                        .matchChildViewIsNotExist(claimsPageSteps.commentDescriptionTextView, withText(commentForTheTestClaim))));
+                        .matchChildViewIsNotExist(claimsPageSteps.commentDescriptionTextView, withText(comment))));
     }
 
     @Test
     @DisplayName("Редактирование комментария")
     public void shouldEditTheComment() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH)+1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-        String newComment = "Отредактированный" + " " + DataHelper.generateTitleId();
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY);
+        String title = namingHelper.getClaimInProgressName();
+        String comment = namingHelper.getComment();
+        String newComment = namingHelper.getComment();;
 
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
+                date.getHour(), date.getMinute(), title, title);
         //Открываем заявку для редактирования
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        claimsPageSteps.openClaimCard(title);
         //Добавить комментарий
         claimsPageSteps.openCreatingCommentForm();
         claimsPageSteps.isCommentForm();
-        //SystemClock.sleep(3000);
-        claimsPageSteps.replaceCommentTextInputText(commentForTheTestClaim);
+        claimsPageSteps.replaceCommentTextInputText(comment);
         controlPanelSteps.saveNewsButtonClick();
         //Редактируем комменарий
         claimsPageSteps.editComment(newComment);
         //Проверяем,что сохранился новый комментарий
         claimsPageSteps.getCommentDescriptionText().check(matches(withText(newComment)));
-
     }
 
     @Test
     @DisplayName("Небуквенные и нецифровые знаки в поле Комментарий при редактировании заявки")
     public void shouldShowWarningMessageClaimCommentFieldIsIncorrect() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH) + 1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY);
-
-
+        String title = namingHelper.getClaimInProgressName();
         String nonLetterComment = ";&&";
 
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
+                date.getHour(), date.getMinute(), title, title);
         //Открываем заявку для редактирования
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        claimsPageSteps.openClaimCard(title);
         //Добавить комментарий
         claimsPageSteps.openCreatingCommentForm();
         claimsPageSteps.isCommentForm();
-        //SystemClock.sleep(3000);
         claimsPageSteps.replaceCommentTextInputText(nonLetterComment);
-
         controlPanelSteps.saveNewsButtonClick();
         controlPanelSteps.checkToast("The field must not contain \";&&\" characters.", true);
-
     }
 
     @Test
     @DisplayName("Отображение только что закрытой заявки на экране в списке заявок")
     public void shouldFindOnTheScreenJustClosedClaim() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH) + 1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY);
-
+        String title = namingHelper.getClaimInProgressName();
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
+                date.getHour(), date.getMinute(), title, title);
         //Находим заявку в списке и отркываем ее
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        claimsPageSteps.openClaimCard(title);
         //Закрываем заявку
         claimsPageSteps.closeImButtonClick();
         //Проверяем, что только-что закрытая заявка видна на экране
-        claimsPageSteps.getItemClaimCompatImView(titleForTheTestClaim).check(matches(isDisplayed()));
-
+        claimsPageSteps.getItemClaimCompatImView(title).check(matches(isDisplayed()));
     }
 
 }

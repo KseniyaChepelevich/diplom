@@ -12,7 +12,6 @@ import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.notNullValue;
 
 import android.app.ActivityManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -37,6 +36,8 @@ import androidx.test.espresso.util.HumanReadables;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
 import org.hamcrest.Description;
@@ -44,7 +45,9 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class TestUtils {
     private static UiDevice device;
@@ -136,7 +139,7 @@ public class TestUtils {
 
     public static ViewInteraction waitView(Matcher<View> matcher) {
         onView(isRoot()).perform(ViewActions
-                .waitElement(matcher, 20000));
+                .waitElement(matcher, 30000));
         return onView((matcher));
 
     }
@@ -265,6 +268,37 @@ public class TestUtils {
         // Wait for package
         context.startActivity(intent);
         device.wait(Until.hasObject(By.pkg(packageName)), LAUNCH_TIMEOUT);
+    }
+
+    public static void disableAirplaneMode() throws UiObjectNotFoundException {
+        device =
+                UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device.openQuickSettings();
+        if (device.findObject(new UiSelector().description("Airplane mode")).isChecked()) {
+            device.findObject(new UiSelector().description("Airplane mode")).click();
+        }
+        device.pressBack();
+        device.pressBack();
+    }
+
+    public static String getDateToString(LocalDateTime date) {
+        String formatPattern = "dd.MM.yyyy";
+        return date.format(DateTimeFormatter.ofPattern(formatPattern));
+    }
+
+    public static String getTimeToString(LocalDateTime date) {
+        String formatPattern = "HH:mm";
+        return date.format(DateTimeFormatter.ofPattern(formatPattern));
+    }
+
+    public static String getHourToString(LocalDateTime date) {
+        String formatPattern = "HH";
+        return date.format(DateTimeFormatter.ofPattern(formatPattern));
+    }
+
+    public static String getMinuteToString(LocalDateTime date) {
+        String formatPattern = "mm";
+        return date.format(DateTimeFormatter.ofPattern(formatPattern));
     }
 
 

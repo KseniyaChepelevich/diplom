@@ -10,6 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withChild;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -32,6 +33,10 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.RootMatchers;
+import androidx.test.uiautomator.BySelector;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -48,6 +53,8 @@ import ru.iteco.fmhandroid.ui.data.TestUtils;
 
 public class ControlPanelSteps {
     Calendar date = Calendar.getInstance();
+
+    private UiDevice device;
 
     public Matcher<View> addNewsImBut = withId(R.id.add_news_image_view);
     public Matcher<View> filterNewsBut = withId(R.id.filter_news_material_button);
@@ -259,10 +266,10 @@ public class ControlPanelSteps {
         TestUtils.waitView(descriptionTextInputEndIcon).check(matches(isDisplayed()));
     }
 
-    public void creatingTestNews(ViewInteraction newsItemCategory, String title, String description, int plusYear, int plusMonth, int plusDay) {
+    public void creatingTestNews(ViewInteraction newsItemCategory, String title, String description, int year, int month, int day) {
         TestUtils.waitView(addNewsImBut).perform(click());
         selectANewsCategoryFromTheList(newsItemCategory);
-        fillingOutTheFormCreatingNewsWithDateToday(date.get(Calendar.YEAR) + plusYear, date.get(Calendar.MONTH) + 1 + plusMonth, date.get(Calendar.DAY_OF_MONTH) + plusDay, title, description);
+        fillingOutTheFormCreatingNewsWithDateToday(year, month, day, title, description);
         TestUtils.waitView(saveBut).perform(click());
     }
 
@@ -341,6 +348,8 @@ public class ControlPanelSteps {
     public ViewInteraction getMessageAboutDelete() {
         return TestUtils.waitView(messageAboutDelete);
     }
+
+
 
 
 }

@@ -5,8 +5,12 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
+import android.os.RemoteException;
+
 import androidx.test.espresso.PerformException;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.uiautomator.UiDevice;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,6 +30,7 @@ import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
 
 
 public class NewsPageTest extends BaseTest{
+    private UiDevice device;
     private static AuthSteps authSteps = new AuthSteps();
     private static MainPageSteps mainPageSteps = new MainPageSteps();
     private static NewsPageSteps newsPageSteps = new NewsPageSteps();
@@ -34,7 +39,10 @@ public class NewsPageTest extends BaseTest{
 
 
     @Before
-    public void logoutCheck() {
+    public void logoutCheck() throws RemoteException {
+        device =
+                UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device.setOrientationNatural();
         try {
             authSteps.isAuthScreen();
         } catch (PerformException e) {

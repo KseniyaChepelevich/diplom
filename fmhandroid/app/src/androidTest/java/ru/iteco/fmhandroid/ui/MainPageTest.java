@@ -3,6 +3,7 @@ package ru.iteco.fmhandroid.ui;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.RemoteException;
 import android.os.SystemClock;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -51,12 +52,11 @@ public class MainPageTest extends BaseTest{
     private static AboutPageSteps aboutPageSteps = new AboutPageSteps();
     private static OurMissionPageSteps ourMissionPageSteps = new OurMissionPageSteps();
 
-    private static final String APPS_PACKAGE = "com.google.android.apps.nexuslauncher";
-
     @Before
-    public void logoutCheck() {
+    public void logoutCheck() throws RemoteException {
         device =
                 UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device.setOrientationNatural();
         try {
             authSteps.isAuthScreen();
         } catch (PerformException e) {
@@ -171,7 +171,7 @@ public class MainPageTest extends BaseTest{
 
         device =
                 UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        //device.pressHome();
+        device.pressHome();
 
         //Проверка, что приложение отправлено в фоновый режим.
         //Придумать как проверить что работает проверка

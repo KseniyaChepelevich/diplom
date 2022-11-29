@@ -16,10 +16,9 @@ import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class DataHelper {
     private DataHelper() {
@@ -89,5 +88,35 @@ public class DataHelper {
         String titleId = UUID.randomUUID().toString();
         return titleId;
     }
+
+
+
+    public static LocalDateTime generateDate(int plusDays) {
+        return LocalDateTime.now().plusDays(plusDays);
+    }
+
+    public static LocalDateTime getValidDate() {
+        int randomNumber = ThreadLocalRandom.current().nextInt(1,368);
+        LocalDateTime date = generateDate(randomNumber);
+        return date;
+    }
+
+    public static LocalDateTime getDateOneMonthAgo() {
+        LocalDateTime date = generateDate(-31);
+        return date;
+    }
+
+    public static LocalDateTime getDateTenDaysAgo() {
+        LocalDateTime date = generateDate(-10);
+        return date;
+    }
+
+    public static LocalDateTime getDateToday() {
+        LocalDateTime date = generateDate(0);
+        return date;
+    }
+
+
+
 
 }
