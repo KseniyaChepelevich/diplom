@@ -15,6 +15,7 @@ import androidx.test.uiautomator.UiObjectNotFoundException;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,7 +40,7 @@ public class AuthPageValidTest extends BaseTest{
 
 
     @Before
-    public void logoutCheck() {
+    public void logoutCheck() throws RemoteException {
         device =
                 UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         try {
@@ -47,6 +48,12 @@ public class AuthPageValidTest extends BaseTest{
         } catch (PerformException e) {
             mainPageSteps.clickLogOutBut();
         }
+    }
+
+    @After
+    public void disableAirplaneMode() throws RemoteException, UiObjectNotFoundException {
+        device.setOrientationNatural();
+        TestUtils.disableAirplaneMode();
     }
 
     @Test
@@ -74,7 +81,7 @@ public class AuthPageValidTest extends BaseTest{
         //Проверяем, что отображается сообщение
         controlPanelSteps.checkToast("Something went wrong. Try again later.", true);
         //Отключаем режим в самолете
-        authSteps.turnOffAirplaneMode();
+        TestUtils.disableAirplaneMode();
     }
 
     @Test

@@ -9,10 +9,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
+import android.os.RemoteException;
 import android.os.SystemClock;
 
 import androidx.test.espresso.PerformException;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.uiautomator.UiDevice;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -21,6 +24,10 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import io.qameta.allure.android.rules.LogcatRule;
 import io.qameta.allure.android.rules.ScreenshotRule;
@@ -33,6 +40,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
+import ru.iteco.fmhandroid.ui.data.NamingHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.ControlPanelSteps;
@@ -42,44 +50,23 @@ import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
 
 @RunWith(AllureAndroidJUnit4.class)
 
-public class FilterNewsPageTest extends BaseTest{
+public class FilterNewsPageTest extends BaseTest {
+    private UiDevice device;
+
     private static AuthSteps authSteps = new AuthSteps();
     private static MainPageSteps mainPageSteps = new MainPageSteps();
     private static NewsPageSteps newsPageSteps = new NewsPageSteps();
     private static FilterNewsPageSteps filterNewsPageSteps = new FilterNewsPageSteps();
     private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+    private static NamingHelper namingHelper = new NamingHelper();
 
-    static String newsAnnouncement1 = "Объяв" + " " + DataHelper.generateTitleId();
-    static String newsAnnouncement2 = "Объяв" + " " + DataHelper.generateTitleId();
-    static String newsAnnouncement3 = "Объяв" + " " + DataHelper.generateTitleId();
-    static String newsBirthday1 = "ДP" + " " + DataHelper.generateTitleId();
-    static String newsBirthday2 = "ДP" + " " + DataHelper.generateTitleId();
-    static String newsBirthday3 = "ДP" + " " + DataHelper.generateTitleId();
-    static String newsSalary1 = "Зарп" + " " + DataHelper.generateTitleId();
-    static String newsSalary2 = "Зарп" + " " + DataHelper.generateTitleId();
-    static String newsSalary3 = "Зарп" + " " + DataHelper.generateTitleId();
-    static String newsTradeUnion1 = "Проф" + " " + DataHelper.generateTitleId();
-    static String newsTradeUnion2 = "Проф" + " " + DataHelper.generateTitleId();
-    static String newsTradeUnion3 = "Профз" + " " + DataHelper.generateTitleId();
-    static String newsHoliday1 = "Празд" + " " + DataHelper.generateTitleId();
-    static String newsHoliday2 = "Празд" + " " + DataHelper.generateTitleId();
-    static String newsHoliday3 = "Празд" + " " + DataHelper.generateTitleId();
-    static String newsGratitude1 = "Благ" + " " + DataHelper.generateTitleId();
-    static String newsGratitude2 = "Благ" + " " + DataHelper.generateTitleId();
-    static String newsGratitude3 = "Благ" + " " + DataHelper.generateTitleId();
-    static String newsMassage1 = "Мас" + " " + DataHelper.generateTitleId();
-    static String newsMassage2 = "Мас" + " " + DataHelper.generateTitleId();
-    static String newsMassage3 = "Мас" + " " + DataHelper.generateTitleId();
-    static String newsNeedHelp1 = "НП" + " " + DataHelper.generateTitleId();
-    static String newsNeedHelp2 = "НП" + " " + DataHelper.generateTitleId();
-    static String newsNeedHelp3 = "НП" + " " + DataHelper.generateTitleId();
-    static String myCategory = "Моя категория" + " " + DataHelper.generateTitleId();
-    static String newsPublicationDateInTheFuture = "Новость из будущего" + " " + DataHelper.generateTitleId();
-
-    private MockWebServer mockWebServer = new MockWebServer();
+    LocalDateTime today = LocalDateTime.now();
 
     @Before
-    public void logoutCheck() {
+    public void logoutCheck() throws RemoteException {
+        device =
+                UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device.setOrientationNatural();
         try {
             authSteps.isAuthScreen();
         } catch (PerformException e) {
@@ -90,18 +77,35 @@ public class FilterNewsPageTest extends BaseTest{
         mainPageSteps.openNewsPageThroughTheMainMenu();
     }
 
-
     @Test
     @DisplayName("Фильтрация новостей по Категории Обьявление")
     public void shouldFilterTheNewsWithCategoryAnnouncement() {
+        LocalDateTime beginningOfPeriod = today.minusDays(1);
+        LocalDateTime endOfPeriod = today.plusDays(369);
+        String first = namingHelper.getNewsAnnouncementName();
+        String second = namingHelper.getNewsAnnouncementName();
+        String third = namingHelper.getNewsAnnouncementName();
+        String forth = namingHelper.getNewsBirthdayName();
+        String fifth = namingHelper.getNewsBirthdayName();
+        String sixth = namingHelper.getNewsBirthdayName();
+        String categoryForFilter = "Объявление";
+        String publishDateStartExpected = TestUtils.getDateToString(beginningOfPeriod);
+        String publishDateEndExpected = TestUtils.getDateToString(endOfPeriod);
+
         //Создание новостей с категорией объявление для фильтрации
         newsPageSteps.openControlPanel();
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement1, newsAnnouncement1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement2, newsAnnouncement2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement3, newsAnnouncement3, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, newsBirthday1, newsBirthday1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, newsBirthday2, newsBirthday2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, newsBirthday3, newsBirthday3, 0, 0, 0);
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, first, first,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, second, second,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, third, third,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, forth, forth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, fifth, fifth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, sixth, sixth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
         //Переходим в раздел Новости
         controlPanelSteps.isControlPanel();
         mainPageSteps.openNewsPageThroughTheMainMenu();
@@ -109,44 +113,57 @@ public class FilterNewsPageTest extends BaseTest{
         //Открываем форму фильтра и заполняем её
         newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
-        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryAnnouncement, 0, -1, 0, 0, 0, 0);
+        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryAnnouncement,
+                beginningOfPeriod.getYear(), beginningOfPeriod.getMonthValue(), beginningOfPeriod.getDayOfMonth(),
+                endOfPeriod.getYear(), endOfPeriod.getMonthValue(), endOfPeriod.getDayOfMonth());
+        //Проверяем, что в полях формы отображаются введенные данные, а не другие
+        filterNewsPageSteps.getNewsFilterCategoryField().check(matches(withText(categoryForFilter)));
+        filterNewsPageSteps.getNewsFilterPublishDateStartField().check(matches(withText(publishDateStartExpected)));
+        filterNewsPageSteps.getNewsFilterPublishDateEndField().check(matches(withText(publishDateEndExpected)));
+        //Включаем фильтрацию
         filterNewsPageSteps.filterNewsButtonClick();
-
         //Проверка, что отображаются новости с категорией Объявление
         newsPageSteps.isNewsPage();
-        //SystemClock.sleep(3000);
-        controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement1).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement2).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement3).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(first).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(second).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(third).check(matches(isDisplayed()));
         //Проверка, что новости с категорией День рождения не отображаются
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsBirthday1))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsBirthday2))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsBirthday3))));
-
-        //Удаляем созданные новости
-        newsPageSteps.openControlPanel();
-        controlPanelSteps.deleteItemNews(newsAnnouncement1);
-        controlPanelSteps.deleteItemNews(newsAnnouncement2);
-        controlPanelSteps.deleteItemNews(newsAnnouncement3);
-        //SystemClock.sleep(5000);
-        controlPanelSteps.deleteItemNews(newsBirthday1);
-        //SystemClock.sleep(3000);
-        controlPanelSteps.deleteItemNews(newsBirthday2);
-        controlPanelSteps.deleteItemNews(newsBirthday3);
-
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(forth))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(fifth))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(sixth))));
     }
 
     @Test
     @DisplayName("Фильтрация новостей по Категории День рождения")
     public void shouldFilterTheNewsWithCategoryBirthday() {
+        LocalDateTime beginningOfPeriod = today.minusDays(1);
+        LocalDateTime endOfPeriod = today.plusDays(369);
+        String first = namingHelper.getNewsAnnouncementName();
+        String second = namingHelper.getNewsAnnouncementName();
+        String third = namingHelper.getNewsAnnouncementName();
+        String forth = namingHelper.getNewsBirthdayName();
+        String fifth = namingHelper.getNewsBirthdayName();
+        String sixth = namingHelper.getNewsBirthdayName();
+        String categoryForFilter = "День рождения";
+        String publishDateStartExpected = TestUtils.getDateToString(beginningOfPeriod);
+        String publishDateEndExpected = TestUtils.getDateToString(endOfPeriod);
         //Создание новостей с категорией объявление для фильтрации
         newsPageSteps.openControlPanel();
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement1, newsAnnouncement1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement2, newsAnnouncement2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement3, newsAnnouncement3, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, newsBirthday1, newsBirthday1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, newsBirthday2, newsBirthday2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, newsBirthday3, newsBirthday3, 0, 0, 0);
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, first, first,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, second, second,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, third, third,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, forth, forth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, fifth, fifth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, sixth, sixth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
         //Переходим в раздел Новости
         controlPanelSteps.isControlPanel();
         mainPageSteps.openNewsPageThroughTheMainMenu();
@@ -154,39 +171,57 @@ public class FilterNewsPageTest extends BaseTest{
         //Открываем форму фильтра и заполняем её
         newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
-        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryBirthday, 0, -1, 0, 0, 0, 0);
+        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryBirthday,
+                beginningOfPeriod.getYear(), beginningOfPeriod.getMonthValue(), beginningOfPeriod.getDayOfMonth(),
+                endOfPeriod.getYear(), endOfPeriod.getMonthValue(), endOfPeriod.getDayOfMonth());
+        //Проверяем, что в полях формы отображаются введенные данные, а не другие
+        filterNewsPageSteps.getNewsFilterCategoryField().check(matches(withText(categoryForFilter)));
+        filterNewsPageSteps.getNewsFilterPublishDateStartField().check(matches(withText(publishDateStartExpected)));
+        filterNewsPageSteps.getNewsFilterPublishDateEndField().check(matches(withText(publishDateEndExpected)));
+        //Включаем фильтрацию
         filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что отображаются новости с категорией День рождения
         newsPageSteps.isNewsPage();
-        controlPanelSteps.scrollToElementInRecyclerList(newsBirthday1).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsBirthday2).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsBirthday3).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(forth).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(fifth).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(sixth).check(matches(isDisplayed()));
         //Проверка, что новости с категорией День рождения не отображаются
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsAnnouncement1))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsAnnouncement2))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsAnnouncement3))));
-        //Удаляем созданные новости
-        newsPageSteps.openControlPanel();
-        controlPanelSteps.deleteItemNews(newsAnnouncement1);
-        controlPanelSteps.deleteItemNews(newsAnnouncement2);
-        controlPanelSteps.deleteItemNews(newsAnnouncement3);
-        controlPanelSteps.deleteItemNews(newsBirthday1);
-        controlPanelSteps.deleteItemNews(newsBirthday2);
-        controlPanelSteps.deleteItemNews(newsBirthday3);
-
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(first))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(second))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(third))));
     }
 
     @Test
     @DisplayName("Фильтрация новостей по Категории Зарплата")
     public void shouldFilterTheNewsWithCategorySalary() {
+        LocalDateTime beginningOfPeriod = today.minusDays(1);
+        LocalDateTime endOfPeriod = today.plusDays(369);
+        String first = namingHelper.getNewsSalaryName();
+        String second = namingHelper.getNewsSalaryName();
+        String third = namingHelper.getNewsSalaryName();
+        String forth = namingHelper.getNewsTradeUnionName();
+        String fifth = namingHelper.getNewsTradeUnionName();
+        String sixth = namingHelper.getNewsTradeUnionName();
+        String categoryForFilter = "Зарплата";
+        String publishDateStartExpected = TestUtils.getDateToString(beginningOfPeriod);
+        String publishDateEndExpected = TestUtils.getDateToString(endOfPeriod);
         //Создание новостей с категорией объявление для фильтрации
         newsPageSteps.openControlPanel();
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, newsSalary1, newsSalary1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, newsSalary2, newsSalary2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, newsSalary3, newsSalary3, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryTradeUnion, newsTradeUnion1, newsTradeUnion1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryTradeUnion, newsTradeUnion2, newsTradeUnion2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryTradeUnion, newsTradeUnion3, newsTradeUnion3, 0, 0, 0);
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, first, first,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, second, second,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, third, third,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryTradeUnion, forth, forth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryTradeUnion, fifth, fifth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryTradeUnion, sixth, sixth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
         //Переходим в раздел Новости
         controlPanelSteps.isControlPanel();
         mainPageSteps.openNewsPageThroughTheMainMenu();
@@ -194,39 +229,57 @@ public class FilterNewsPageTest extends BaseTest{
         //Открываем форму фильтра и заполняем её
         newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
-        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categorySalary, 0, -1, 0, 0, 0, 0);
+        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categorySalary,
+                beginningOfPeriod.getYear(), beginningOfPeriod.getMonthValue(), beginningOfPeriod.getDayOfMonth(),
+                endOfPeriod.getYear(), endOfPeriod.getMonthValue(), endOfPeriod.getDayOfMonth());
+        //Проверяем, что в полях формы отображаются введенные данные, а не другие
+        filterNewsPageSteps.getNewsFilterCategoryField().check(matches(withText(categoryForFilter)));
+        filterNewsPageSteps.getNewsFilterPublishDateStartField().check(matches(withText(publishDateStartExpected)));
+        filterNewsPageSteps.getNewsFilterPublishDateEndField().check(matches(withText(publishDateEndExpected)));
+        //Включаем фильтрацию
         filterNewsPageSteps.filterNewsButtonClick();
-        //Проверка, что отображаются новости с категорией Объявление
+        //Проверка, что отображаются новости с категорией Зарплата
         newsPageSteps.isNewsPage();
-        controlPanelSteps.scrollToElementInRecyclerList(newsSalary1).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsSalary2).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsSalary3).check(matches(isDisplayed()));
-        //Проверка, что новости с категорией День рождения не отображаются
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsTradeUnion1))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsTradeUnion2))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsTradeUnion3))));
-        //Удаляем созданные новости
-        newsPageSteps.openControlPanel();
-        controlPanelSteps.deleteItemNews(newsSalary1);
-        controlPanelSteps.deleteItemNews(newsSalary2);
-        controlPanelSteps.deleteItemNews(newsSalary3);
-        controlPanelSteps.deleteItemNews(newsTradeUnion1);
-        controlPanelSteps.deleteItemNews(newsTradeUnion2);
-        controlPanelSteps.deleteItemNews(newsTradeUnion3);
-
+        controlPanelSteps.scrollToElementInRecyclerList(first).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(second).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(third).check(matches(isDisplayed()));
+        //Проверка, что новости с категорией Профсоюз не отображаются
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(forth))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(fifth))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(sixth))));
     }
 
     @Test
     @DisplayName("Фильтрация новостей по Категории Профсоюз")
     public void shouldFilterTheNewsWithCategoryTradeUnion() {
+        LocalDateTime beginningOfPeriod = today.minusDays(1);
+        LocalDateTime endOfPeriod = today.plusDays(369);
+        String first = namingHelper.getNewsSalaryName();
+        String second = namingHelper.getNewsSalaryName();
+        String third = namingHelper.getNewsSalaryName();
+        String forth = namingHelper.getNewsTradeUnionName();
+        String fifth = namingHelper.getNewsTradeUnionName();
+        String sixth = namingHelper.getNewsTradeUnionName();
+        String categoryForFilter = "Профсоюз";
+        String publishDateStartExpected = TestUtils.getDateToString(beginningOfPeriod);
+        String publishDateEndExpected = TestUtils.getDateToString(endOfPeriod);
         //Создание новостей с категорией объявление для фильтрации
         newsPageSteps.openControlPanel();
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, newsSalary1, newsSalary1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, newsSalary2, newsSalary2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, newsSalary3, newsSalary3, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryTradeUnion, newsTradeUnion1, newsTradeUnion1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryTradeUnion, newsTradeUnion2, newsTradeUnion2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryTradeUnion, newsTradeUnion3, newsTradeUnion3, 0, 0, 0);
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, first, first,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, second, second,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categorySalary, third, third,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryTradeUnion, forth, forth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryTradeUnion, fifth, fifth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryTradeUnion, sixth, sixth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
         //Переходим в раздел Новости
         controlPanelSteps.isControlPanel();
         mainPageSteps.openNewsPageThroughTheMainMenu();
@@ -234,39 +287,62 @@ public class FilterNewsPageTest extends BaseTest{
         //Открываем форму фильтра и заполняем её
         newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
-        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryTradeUnion, 0, -1, 0, 0, 0, 0);
+        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryTradeUnion,
+                beginningOfPeriod.getYear(), beginningOfPeriod.getMonthValue(), beginningOfPeriod.getDayOfMonth(),
+                endOfPeriod.getYear(), endOfPeriod.getMonthValue(), endOfPeriod.getDayOfMonth());
+        //Проверяем, что в полях формы отображаются введенные данные, а не другие
+        filterNewsPageSteps.getNewsFilterCategoryField().check(matches(withText(categoryForFilter)));
+        filterNewsPageSteps.getNewsFilterPublishDateStartField().check(matches(withText(publishDateStartExpected)));
+        filterNewsPageSteps.getNewsFilterPublishDateEndField().check(matches(withText(publishDateEndExpected)));
+        //Включаем фильтрацию
+        //Проверяем, что в полях формы отображаются введенные данные, а не другие
+        filterNewsPageSteps.getNewsFilterCategoryField().check(matches(withText(categoryForFilter)));
+        filterNewsPageSteps.getNewsFilterPublishDateStartField().check(matches(withText(publishDateStartExpected)));
+        filterNewsPageSteps.getNewsFilterPublishDateEndField().check(matches(withText(publishDateEndExpected)));
+        //Включаем фильтрацию
         filterNewsPageSteps.filterNewsButtonClick();
-        //Проверка, что отображаются новости с категорией Объявление
+        //Проверка, что отображаются новости с категорией Профсоюз
         newsPageSteps.isNewsPage();
-        controlPanelSteps.scrollToElementInRecyclerList(newsTradeUnion1).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsTradeUnion2).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsTradeUnion3).check(matches(isDisplayed()));
-        //Проверка, что новости с категорией День рождения не отображаются
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsSalary1))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsSalary2))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsSalary3))));
-        //Удаляем созданные новости
-        newsPageSteps.openControlPanel();
-        controlPanelSteps.deleteItemNews(newsSalary1);
-        controlPanelSteps.deleteItemNews(newsSalary2);
-        controlPanelSteps.deleteItemNews(newsSalary3);
-        controlPanelSteps.deleteItemNews(newsTradeUnion1);
-        controlPanelSteps.deleteItemNews(newsTradeUnion2);
-        controlPanelSteps.deleteItemNews(newsTradeUnion3);
-
+        controlPanelSteps.scrollToElementInRecyclerList(forth).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(fifth).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(sixth).check(matches(isDisplayed()));
+        //Проверка, что новости с категорией Зарплата не отображаются
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(first))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(second))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(third))));
     }
 
     @Test
     @DisplayName("Фильтрация новостей по Категории Праздник")
     public void shouldFilterTheNewsWithCategoryHoliday() {
+        LocalDateTime beginningOfPeriod = today.minusDays(1);
+        LocalDateTime endOfPeriod = today.plusDays(369);
+        String first = namingHelper.getNewsHolidayName();
+        String second = namingHelper.getNewsHolidayName();
+        String third = namingHelper.getNewsHolidayName();
+        String forth = namingHelper.getNewsMassageName();
+        String fifth = namingHelper.getNewsMassageName();
+        String sixth = namingHelper.getNewsMassageName();
+        String categoryForFilter = "Праздник";
+        String publishDateStartExpected = TestUtils.getDateToString(beginningOfPeriod);
+        String publishDateEndExpected = TestUtils.getDateToString(endOfPeriod);
         //Создание новостей с категорией объявление для фильтрации
         newsPageSteps.openControlPanel();
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, newsHoliday1, newsHoliday1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, newsHoliday2, newsHoliday2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, newsHoliday3, newsHoliday3, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryMassage, newsMassage1, newsMassage1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryMassage, newsMassage2, newsMassage2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryMassage, newsMassage3, newsMassage3, 0, 0, 0);
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, first, first,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, second, second,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, third, third,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryMassage, forth, forth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryMassage, fifth, fifth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryMassage, sixth, sixth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
         //Переходим в раздел Новости
         controlPanelSteps.isControlPanel();
         mainPageSteps.openNewsPageThroughTheMainMenu();
@@ -274,80 +350,117 @@ public class FilterNewsPageTest extends BaseTest{
         //Открываем форму фильтра и заполняем её
         newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
-        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryHoliday, 0, -1, 0, 0, 0, 0);
+        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryHoliday,
+                beginningOfPeriod.getYear(), beginningOfPeriod.getMonthValue(), beginningOfPeriod.getDayOfMonth(),
+                endOfPeriod.getYear(), endOfPeriod.getMonthValue(), endOfPeriod.getDayOfMonth());
+        //Проверяем, что в полях формы отображаются введенные данные, а не другие
+        filterNewsPageSteps.getNewsFilterCategoryField().check(matches(withText(categoryForFilter)));
+        filterNewsPageSteps.getNewsFilterPublishDateStartField().check(matches(withText(publishDateStartExpected)));
+        filterNewsPageSteps.getNewsFilterPublishDateEndField().check(matches(withText(publishDateEndExpected)));
+        //Включаем фильтрацию
         filterNewsPageSteps.filterNewsButtonClick();
-        //Проверка, что отображаются новости с категорией Объявление
+        //Проверка, что отображаются новости с категорией Праздник
         newsPageSteps.isNewsPage();
-        controlPanelSteps.scrollToElementInRecyclerList(newsHoliday1).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsHoliday2).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsHoliday3).check(matches(isDisplayed()));
-        //Проверка, что новости с категорией День рождения не отображаются
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsMassage1))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsMassage2))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsMassage3))));
-        //Удаляем созданные новости
-        newsPageSteps.openControlPanel();
-        controlPanelSteps.deleteItemNews(newsHoliday1);
-        controlPanelSteps.deleteItemNews(newsHoliday2);
-        controlPanelSteps.deleteItemNews(newsHoliday3);
-        controlPanelSteps.deleteItemNews(newsMassage1);
-        controlPanelSteps.deleteItemNews(newsMassage2);
-        controlPanelSteps.deleteItemNews(newsMassage3);
-
+        controlPanelSteps.scrollToElementInRecyclerList(first).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(second).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(third).check(matches(isDisplayed()));
+        //Проверка, что новости с категорией Массаж не отображаются
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(forth))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(fifth))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(sixth))));
     }
 
 
     @Test
     @DisplayName("Фильтрация новостей по Категории Массаж")
     public void shouldFilterTheNewsWithCategoryMassage() {
+        LocalDateTime beginningOfPeriod = today.minusDays(1);
+        LocalDateTime endOfPeriod = today.plusDays(369);
+        String first = namingHelper.getNewsHolidayName();
+        String second = namingHelper.getNewsHolidayName();
+        String third = namingHelper.getNewsHolidayName();
+        String forth = namingHelper.getNewsMassageName();
+        String fifth = namingHelper.getNewsMassageName();
+        String sixth = namingHelper.getNewsMassageName();
+        String categoryForFilter = "Массаж";
+        String publishDateStartExpected = TestUtils.getDateToString(beginningOfPeriod);
+        String publishDateEndExpected = TestUtils.getDateToString(endOfPeriod);
         //Создание новостей с категорией объявление для фильтрации
         newsPageSteps.openControlPanel();
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, newsHoliday1, newsHoliday1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, newsHoliday2, newsHoliday2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, newsHoliday3, newsHoliday3, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryMassage, newsMassage1, newsMassage1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryMassage, newsMassage2, newsMassage2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryMassage, newsMassage3, newsMassage3, 0, 0, 0);
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, first, first,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, second, second,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, third, third,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryMassage, forth, forth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryMassage, fifth, fifth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryMassage, sixth, sixth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
         //Переходим в раздел Новости
         controlPanelSteps.isControlPanel();
         mainPageSteps.openNewsPageThroughTheMainMenu();
         newsPageSteps.isNewsPage();
         //Открываем форму фильтра и заполняем её
-       newsPageSteps.openFilterNews();
+        newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
-        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryMassage, 0, -1, 0, 0, 0, 0);
+        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryMassage,
+                beginningOfPeriod.getYear(), beginningOfPeriod.getMonthValue(), beginningOfPeriod.getDayOfMonth(),
+                endOfPeriod.getYear(), endOfPeriod.getMonthValue(), endOfPeriod.getDayOfMonth());
+        //Проверяем, что в полях формы отображаются введенные данные, а не другие
+        filterNewsPageSteps.getNewsFilterCategoryField().check(matches(withText(categoryForFilter)));
+        filterNewsPageSteps.getNewsFilterPublishDateStartField().check(matches(withText(publishDateStartExpected)));
+        filterNewsPageSteps.getNewsFilterPublishDateEndField().check(matches(withText(publishDateEndExpected)));
+        //Включаем фильтрацию
         filterNewsPageSteps.filterNewsButtonClick();
-        //Проверка, что отображаются новости с категорией Объявление
+        //Проверка, что отображаются новости с категорией Массаж
         newsPageSteps.isNewsPage();
-        controlPanelSteps.scrollToElementInRecyclerList(newsMassage1).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsMassage2).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsMassage3).check(matches(isDisplayed()));
-        //Проверка, что новости с категорией День рождения не отображаются
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsHoliday1))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsHoliday2))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsHoliday3))));
-        //Удаляем созданные новости
-        newsPageSteps.openControlPanel();
-        controlPanelSteps.deleteItemNews(newsHoliday1);
-        controlPanelSteps.deleteItemNews(newsHoliday2);
-        controlPanelSteps.deleteItemNews(newsHoliday3);
-        controlPanelSteps.deleteItemNews(newsMassage1);
-        controlPanelSteps.deleteItemNews(newsMassage2);
-        controlPanelSteps.deleteItemNews(newsMassage3);
+        controlPanelSteps.scrollToElementInRecyclerList(forth).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(fifth).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(sixth).check(matches(isDisplayed()));
+        //Проверка, что новости с категорией Праздник не отображаются
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(first))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(second))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(third))));
     }
 
 
     @Test
     @DisplayName("Фильтрация новостей по Категории Благодарность")
     public void shouldFilterTheNewsWithCategoryGratitude() {
+        LocalDateTime beginningOfPeriod = today.minusDays(1);
+        LocalDateTime endOfPeriod = today.plusDays(369);
+        String first = namingHelper.getNewsGratitudeName();
+        String second = namingHelper.getNewsGratitudeName();
+        String third = namingHelper.getNewsGratitudeName();
+        String forth = namingHelper.getNewsNeedHelpName();
+        String fifth = namingHelper.getNewsNeedHelpName();
+        String sixth = namingHelper.getNewsNeedHelpName();
+        String categoryForFilter = "Благодарность";
+        String publishDateStartExpected = TestUtils.getDateToString(beginningOfPeriod);
+        String publishDateEndExpected = TestUtils.getDateToString(endOfPeriod);
         //Создание новостей с категорией объявление для фильтрации
         newsPageSteps.openControlPanel();
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, newsGratitude1, newsGratitude1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, newsGratitude2, newsGratitude2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, newsGratitude3, newsGratitude3, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryNeedHelp, newsNeedHelp1, newsNeedHelp1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryNeedHelp, newsNeedHelp2, newsNeedHelp2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryNeedHelp, newsNeedHelp3, newsNeedHelp3, 0, 0, 0);
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, first, first,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, second, second,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, third, third,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryNeedHelp, forth, forth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryNeedHelp, fifth, fifth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryNeedHelp, sixth, sixth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
         //Переходим в раздел Новости
         controlPanelSteps.isControlPanel();
         mainPageSteps.openNewsPageThroughTheMainMenu();
@@ -355,40 +468,58 @@ public class FilterNewsPageTest extends BaseTest{
         //Открываем форму фильтра и заполняем её
         newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
-        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryGratitude, 0, -1, 0, 0, 0, 0);
+        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryGratitude,
+                beginningOfPeriod.getYear(), beginningOfPeriod.getMonthValue(), beginningOfPeriod.getDayOfMonth(),
+                endOfPeriod.getYear(), endOfPeriod.getMonthValue(), endOfPeriod.getDayOfMonth());
+        //Проверяем, что в полях формы отображаются введенные данные, а не другие
+        filterNewsPageSteps.getNewsFilterCategoryField().check(matches(withText(categoryForFilter)));
+        filterNewsPageSteps.getNewsFilterPublishDateStartField().check(matches(withText(publishDateStartExpected)));
+        filterNewsPageSteps.getNewsFilterPublishDateEndField().check(matches(withText(publishDateEndExpected)));
+        //Включаем фильтрацию
         filterNewsPageSteps.filterNewsButtonClick();
-        //Проверка, что отображаются новости с категорией Объявление
+        //Проверка, что отображаются новости с категорией Благодарность
         newsPageSteps.isNewsPage();
-        controlPanelSteps.scrollToElementInRecyclerList(newsGratitude1).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsGratitude2).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsGratitude3).check(matches(isDisplayed()));
-        //Проверка, что новости с категорией День рождения не отображаются
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsNeedHelp1))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsNeedHelp2))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsNeedHelp3))));
-        //Удаляем созданные новости
-        newsPageSteps.openControlPanel();
-        controlPanelSteps.deleteItemNews(newsGratitude1);
-        controlPanelSteps.deleteItemNews(newsGratitude2);
-        controlPanelSteps.deleteItemNews(newsGratitude3);
-        controlPanelSteps.deleteItemNews(newsNeedHelp1);
-        controlPanelSteps.deleteItemNews(newsNeedHelp2);
-        controlPanelSteps.deleteItemNews(newsNeedHelp3);
-
+        controlPanelSteps.scrollToElementInRecyclerList(first).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(second).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(third).check(matches(isDisplayed()));
+        //Проверка, что новости с категорией Нужна помощь не отображаются
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(forth))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(fifth))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(sixth))));
     }
 
 
     @Test
     @DisplayName("Фильтрация новостей по Категории Нужна помощь")
     public void shouldFilterTheNewsWithCategoryNeedHelp() {
+        LocalDateTime beginningOfPeriod = today.minusDays(1);
+        LocalDateTime endOfPeriod = today.plusDays(369);
+        String first = namingHelper.getNewsGratitudeName();
+        String second = namingHelper.getNewsGratitudeName();
+        String third = namingHelper.getNewsGratitudeName();
+        String forth = namingHelper.getNewsNeedHelpName();
+        String fifth = namingHelper.getNewsNeedHelpName();
+        String sixth = namingHelper.getNewsNeedHelpName();
+        String categoryForFilter = "Нужна помощь";
+        String publishDateStartExpected = TestUtils.getDateToString(beginningOfPeriod);
+        String publishDateEndExpected = TestUtils.getDateToString(endOfPeriod);
         //Создание новостей с категорией объявление для фильтрации
         newsPageSteps.openControlPanel();
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, newsGratitude1, newsGratitude1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, newsGratitude2, newsGratitude2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, newsGratitude3, newsGratitude3, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryNeedHelp, newsNeedHelp1, newsNeedHelp1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryNeedHelp, newsNeedHelp2, newsNeedHelp2, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryNeedHelp, newsNeedHelp3, newsNeedHelp3, 0, 0, 0);
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, first, first,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, second, second,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, third, third,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryNeedHelp, forth, forth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryNeedHelp, fifth, fifth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryNeedHelp, sixth, sixth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
         //Переходим в раздел Новости
         controlPanelSteps.isControlPanel();
         mainPageSteps.openNewsPageThroughTheMainMenu();
@@ -396,40 +527,58 @@ public class FilterNewsPageTest extends BaseTest{
         //Открываем форму фильтра и заполняем её
         newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
-        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryNeedHelp, 0, -1, 0, 0, 0, 0);
+        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryNeedHelp,
+                beginningOfPeriod.getYear(), beginningOfPeriod.getMonthValue(), beginningOfPeriod.getDayOfMonth(),
+                endOfPeriod.getYear(), endOfPeriod.getMonthValue(), endOfPeriod.getDayOfMonth());
+        //Проверяем, что в полях формы отображаются введенные данные, а не другие
+        filterNewsPageSteps.getNewsFilterCategoryField().check(matches(withText(categoryForFilter)));
+        filterNewsPageSteps.getNewsFilterPublishDateStartField().check(matches(withText(publishDateStartExpected)));
+        filterNewsPageSteps.getNewsFilterPublishDateEndField().check(matches(withText(publishDateEndExpected)));
+        //Включаем фильтрацию
         filterNewsPageSteps.filterNewsButtonClick();
-        //Проверка, что отображаются новости с категорией Объявление
+        //Проверка, что отображаются новости с категорией Нужна помощь
         newsPageSteps.isNewsPage();
-        controlPanelSteps.scrollToElementInRecyclerList(newsNeedHelp1).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsNeedHelp2).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsNeedHelp3).check(matches(isDisplayed()));
-        //Проверка, что новости с категорией День рождения не отображаются
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsGratitude1))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsGratitude2))));
-        controlPanelSteps.getNewsRecyclerList().check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(newsGratitude3))));
-        //Удаляем созданные новости
-        newsPageSteps.openControlPanel();
-        controlPanelSteps.deleteItemNews(newsGratitude1);
-        controlPanelSteps.deleteItemNews(newsGratitude2);
-        controlPanelSteps.deleteItemNews(newsGratitude3);
-        controlPanelSteps.deleteItemNews(newsNeedHelp1);
-        controlPanelSteps.deleteItemNews(newsNeedHelp2);
-        controlPanelSteps.deleteItemNews(newsNeedHelp3);
-
+        controlPanelSteps.scrollToElementInRecyclerList(forth).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(fifth).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(sixth).check(matches(isDisplayed()));
+        //Проверка, что новости с категорией Благодарность не отображаются
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(first))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(second))));
+        controlPanelSteps.getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(third))));
     }
 
 
     @Test
     @DisplayName("Отмена филтрации новостей")
     public void shouldNotFilterNewsByCategoryAnnouncement() {
+        LocalDateTime beginningOfPeriod = today.minusDays(1);
+        LocalDateTime endOfPeriod = today.plusDays(369);
+        String first = namingHelper.getNewsAnnouncementName();
+        String second = namingHelper.getNewsBirthdayName();
+        String third = namingHelper.getNewsHolidayName();
+        String forth = namingHelper.getNewsMassageName();
+        String fifth = namingHelper.getNewsGratitudeName();
+        String sixth = namingHelper.getNewsTradeUnionName();
+        String categoryForFilter = "Объявление";
+        String publishDateStartExpected = TestUtils.getDateToString(beginningOfPeriod);
+        String publishDateEndExpected = TestUtils.getDateToString(endOfPeriod);
         //Создание новостей с категорией объявление для фильтрации
         newsPageSteps.openControlPanel();
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement1, newsAnnouncement1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsBirthday1, newsBirthday1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsHoliday1, newsHoliday1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, newsMassage1, newsMassage1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, newsGratitude1, newsGratitude1, 0, 0, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, newsTradeUnion1, newsTradeUnion1, 0, 0, 0);
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, first, first,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryBirthday, second, second,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryHoliday, third, third,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryMassage, forth, forth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryGratitude, fifth, fifth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryTradeUnion, sixth, sixth,
+                DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth());
         //Переходим в раздел Новости
         controlPanelSteps.isControlPanel();
         mainPageSteps.openNewsPageThroughTheMainMenu();
@@ -437,38 +586,41 @@ public class FilterNewsPageTest extends BaseTest{
         //Открываем форму фильтра и заполняем её
         newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
-        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryAnnouncement, 0, -1, 0, 0, 0, 0);
-        filterNewsPageSteps.filterNewsButtonClick();
+        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryAnnouncement,
+                beginningOfPeriod.getYear(), beginningOfPeriod.getMonthValue(), beginningOfPeriod.getDayOfMonth(),
+                endOfPeriod.getYear(), endOfPeriod.getMonthValue(), endOfPeriod.getDayOfMonth());
+        //Проверяем, что в полях формы отображаются введенные данные, а не другие
+        filterNewsPageSteps.getNewsFilterCategoryField().check(matches(withText(categoryForFilter)));
+        filterNewsPageSteps.getNewsFilterPublishDateStartField().check(matches(withText(publishDateStartExpected)));
+        filterNewsPageSteps.getNewsFilterPublishDateEndField().check(matches(withText(publishDateEndExpected)));
+        //Отменяем фильтрацию
+        filterNewsPageSteps.cancelFilterNewsButtonClick();
         //Проверка, что фильтр не включился и отображаются все новости
         newsPageSteps.isNewsPage();
-        controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement1).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsBirthday1).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsHoliday1).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsMassage1).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsGratitude1).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsTradeUnion1).check(matches(isDisplayed()));
-        //Удаляем созданные новости
-        newsPageSteps.openControlPanel();
-        controlPanelSteps.deleteItemNews(newsAnnouncement1);
-        controlPanelSteps.deleteItemNews(newsBirthday1);
-        controlPanelSteps.deleteItemNews(newsHoliday1);
-        controlPanelSteps.deleteItemNews(newsMassage1);
-        controlPanelSteps.deleteItemNews(newsGratitude1);
-        controlPanelSteps.deleteItemNews(newsTradeUnion1);
-
+        controlPanelSteps.scrollToElementInRecyclerList(first).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(second).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(third).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(forth).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(fifth).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(sixth).check(matches(isDisplayed()));
     }
 
 
     @Test
     @DisplayName("Фильтрация новостей по несуществующей категории")
     public void shouldShowAMessageSelectACategoryFromTheList() {
+        LocalDateTime beginningOfPeriod = today.minusDays(1);
+        LocalDateTime endOfPeriod = today.plusDays(369);
+        String myCategoryTitle = namingHelper.getNewsMyCategoryName();
         //Открываем форму фильтра и заполняем её
         newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
-        controlPanelSteps.replaceNewsCategoryText(myCategory);
-        filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateStartField, 0, -1, 0);
+        controlPanelSteps.replaceNewsCategoryText(myCategoryTitle);
+        filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateStartField,
+                beginningOfPeriod.getYear(), beginningOfPeriod.getMonthValue(), beginningOfPeriod.getDayOfMonth());
         controlPanelSteps.okButtonClick();
-        filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateEndField, 0, 0, 0);
+        filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateEndField,
+                endOfPeriod.getYear(), endOfPeriod.getMonthValue(), endOfPeriod.getDayOfMonth());
         controlPanelSteps.okButtonClick();
         filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что появляется сообщение
@@ -479,9 +631,16 @@ public class FilterNewsPageTest extends BaseTest{
     @Test
     @DisplayName("Фильрация актуальных новостей за период из будущего")
     public void shouldShowATextThereIsNothingHere() {
+        LocalDateTime date = DataHelper.getValidDate().plusMonths(1);
+        LocalDateTime endOfPeriod = date.plusYears(1);
+        String titlePublicationDateInTheFuture = namingHelper.getNewsAnnouncementName();
+        String categoryForFilter = "Объявление";
+        String publishDateStartExpected = TestUtils.getDateToString(date);
+        String publishDateEndExpected = TestUtils.getDateToString(endOfPeriod);
         //Создаем новость с датой публикации в будущем
         newsPageSteps.openControlPanel();
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsPublicationDateInTheFuture, newsPublicationDateInTheFuture, 0, 1, 0);
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, titlePublicationDateInTheFuture, titlePublicationDateInTheFuture,
+                date.getYear(), date.getMonthValue(), date.getDayOfMonth());
         //Переходим в раздел Новости
         controlPanelSteps.isControlPanel();
         mainPageSteps.openNewsPageThroughTheMainMenu();
@@ -489,24 +648,38 @@ public class FilterNewsPageTest extends BaseTest{
         //Открываем форму фильтра и заполняем её
         newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
-        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryAnnouncement, 0, 0, 1, 1, 0, 1);
+        filterNewsPageSteps.fillingOutTheFilterNewsForm(controlPanelSteps.categoryAnnouncement,
+                date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
+                endOfPeriod.getYear(), endOfPeriod.getMonthValue(), endOfPeriod.getDayOfMonth());
+        //Проверяем, что в полях формы отображаются введенные данные, а не другие
+        filterNewsPageSteps.getNewsFilterCategoryField().check(matches(withText(categoryForFilter)));
+        filterNewsPageSteps.getNewsFilterPublishDateStartField().check(matches(withText(publishDateStartExpected)));
+        filterNewsPageSteps.getNewsFilterPublishDateEndField().check(matches(withText(publishDateEndExpected)));
+        //Включаем фильтрацию
         filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что отображается кнопка REFRESH, текст и картинка пустого списка новостей
         newsPageSteps.isEmptyNewsList();
-        //Удаляем созданные новости
-        newsPageSteps.openControlPanel();
-        controlPanelSteps.deleteItemNews(newsPublicationDateInTheFuture);
     }
 
 
     @Test
     @DisplayName("Фильтрация новостей без заданного периода")
     public void shouldShowAllActualNewsCategoryAnnouncement() {
-        //Создаем новость с датой публикации в будущем
+        LocalDateTime dateMonthAgo = DataHelper.getDateOneMonthAgo();
+        LocalDateTime dateTenDaysAgo = DataHelper.getDateTenDaysAgo();
+        LocalDateTime dateToday = DataHelper.getDateToday();
+        String first = namingHelper.getNewsAnnouncementName();
+        String second = namingHelper.getNewsAnnouncementName();
+        String third = namingHelper.getNewsAnnouncementName();
+
+        //Создаем новость
         newsPageSteps.openControlPanel();
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement1, newsAnnouncement1, 0, -1, 0);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement2, newsAnnouncement2, 0, 0, -10);
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, newsAnnouncement3, newsAnnouncement3, 0, 0, 0);
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, first, first,
+                dateMonthAgo.getYear(), dateMonthAgo.getMonthValue(), dateMonthAgo.getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, second, second,
+                dateTenDaysAgo.getYear(), dateTenDaysAgo.getMonthValue(), dateTenDaysAgo.getDayOfMonth());
+        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, third, third,
+                dateToday.getYear(), dateToday.getMonthValue(), dateToday.getDayOfMonth());
         //Переходим в раздел Новости
         controlPanelSteps.isControlPanel();
         mainPageSteps.openNewsPageThroughTheMainMenu();
@@ -518,24 +691,21 @@ public class FilterNewsPageTest extends BaseTest{
         filterNewsPageSteps.filterNewsButtonClick();
         //Проверка, что отображаются все актуальные новости категории Объявление
         newsPageSteps.isNewsPage();
-        controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement1).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement2).check(matches(isDisplayed()));
-        controlPanelSteps.scrollToElementInRecyclerList(newsAnnouncement3).check(matches(isDisplayed()));
-        //Удаляем созданные новости
-        newsPageSteps.openControlPanel();
-        controlPanelSteps.deleteItemNews(newsAnnouncement1);
-        controlPanelSteps.deleteItemNews(newsAnnouncement2);
-        controlPanelSteps.deleteItemNews(newsAnnouncement3);
+        controlPanelSteps.scrollToElementInRecyclerList(first).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(second).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(third).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Фильтрация новости с заданным периодом от и незаданным периодом до")
     public void shouldShowMessageWrongPeriodPublishDateEndField() {
+        LocalDateTime dateMonthAgo = DataHelper.getDateOneMonthAgo();
         //Открываем форму фильтра и заполняем её
         newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
-        filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateStartField, 0, -1, 0);
+        filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateStartField,
+                dateMonthAgo.getYear(), dateMonthAgo.getMonthValue(), dateMonthAgo.getDayOfMonth());
         controlPanelSteps.okButtonClick();
         filterNewsPageSteps.filterNewsButtonClick();
         //Проверка сообщения "Wrong period"
@@ -545,11 +715,13 @@ public class FilterNewsPageTest extends BaseTest{
     @Test
     @DisplayName("Фильтрация новости с заданным периодом до и незаданным периодом от")
     public void shouldShowMessageWrongPeriodWithEmptyPublishDateStartField() {
+        LocalDateTime dateToday = DataHelper.getDateToday();
         //Открываем форму фильтра и заполняем её
         newsPageSteps.openFilterNews();
         filterNewsPageSteps.isFilterNewsForm();
         controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
-        filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateEndField, 0, 0, 0);
+        filterNewsPageSteps.setDateToDatePicker(filterNewsPageSteps.newsItemPublishDateEndField,
+                dateToday.getYear(), dateToday.getMonthValue(), dateToday.getDayOfMonth());
         controlPanelSteps.okButtonClick();
         filterNewsPageSteps.filterNewsButtonClick();
         //Проверка сообщения "Wrong period"

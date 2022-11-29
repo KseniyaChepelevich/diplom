@@ -3,11 +3,16 @@ package ru.iteco.fmhandroid.ui;
 
 import static ru.iteco.fmhandroid.ui.data.DeviceHelper.executeBash;
 
+import android.os.RemoteException;
+
 import androidx.test.espresso.PerformException;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.uiautomator.UiDevice;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
 
@@ -16,6 +21,8 @@ import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 
 public class BaseTest {
+
+    private UiDevice device;
 
     @Rule
     public ActivityTestRule<AppActivity> activityTestRule =
@@ -38,6 +45,12 @@ public class BaseTest {
         executeBash("adb -s shell settings put global window_animation_scale 0.0");
         executeBash("adb -s shell settings put global animator_duration_scale 0.0");
     }
+
+    /*@BeforeClass
+    public void beforeEachTest() throws RemoteException {
+        disableAnimationOnEmulator();
+
+    }*/
 
 
 }

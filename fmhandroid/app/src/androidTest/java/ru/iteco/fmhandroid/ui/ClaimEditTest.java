@@ -12,21 +12,26 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.IsNot.not;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
+import android.os.RemoteException;
 import android.os.SystemClock;
 
 import androidx.test.espresso.PerformException;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.uiautomator.UiDevice;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
+import ru.iteco.fmhandroid.ui.data.NamingHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.ClaimsPageSteps;
@@ -35,25 +40,22 @@ import ru.iteco.fmhandroid.ui.steps.CreatingClaimsSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 
 @RunWith(AllureAndroidJUnit4.class)
-public class ClaimEditTest extends BaseTest{
+public class ClaimEditTest extends BaseTest {
+    private UiDevice device;
     private static AuthSteps authSteps = new AuthSteps();
     private static MainPageSteps mainPageSteps = new MainPageSteps();
     private static ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
     private static CreatingClaimsSteps creatingClaimsSteps = new CreatingClaimsSteps();
     private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
+    private static NamingHelper namingHelper = new NamingHelper();
 
-    Calendar date = Calendar.getInstance();
-
-    String titleForTheTestClaim = "Заголовок" + " " + DataHelper.generateTitleId();
-    String newTitle = "Новый" + " " + DataHelper.generateTitleId();
-    String commentForTheTestClaim = "Комментарий" + " " + DataHelper.generateTitleId();
-
-    @Rule
-    public ActivityTestRule<AppActivity> activityTestRule =
-            new ActivityTestRule<>(AppActivity.class);
+    LocalDateTime today = LocalDateTime.now();
 
     @Before
-    public void logoutCheck() {
+    public void logoutCheck() throws RemoteException {
+        device =
+                UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device.setOrientationNatural();
         try {
             authSteps.isAuthScreen();
         } catch (PerformException e) {
@@ -67,47 +69,35 @@ public class ClaimEditTest extends BaseTest{
     @Test
     @DisplayName("Редактирование заявки")
     public void shouldSaveClaimChanges() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH) + 1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-        int newDay = date.get(Calendar.DAY_OF_MONTH) + 1;
-        String dayExpected = TestUtils.getDateToString(newDay);
-        String monthExpected = TestUtils.getDateToString(month);
-        String planeDate = dayExpected + "." + monthExpected + "." + year;
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY);
-        int newHour = date.get(Calendar.HOUR_OF_DAY) + 1;
-        String hourExpected = TestUtils.getDateToString(newHour);
-        String minutesExpected = TestUtils.getDateToString(minutes);
-        String planeTime = hourExpected + ":" + minutesExpected;
+        LocalDateTime date = today.plusHours(1);
+        String planeDate = TestUtils.getDateToString(date);
+        String planeTime = TestUtils.getTimeToString(date);
+        String title = namingHelper.getClaimOpenName();
+        String newTitle = namingHelper.getClaimOpenName();
 
         //Создать заявку
-        creatingClaimsSteps.creatingAClaimWithStatusOpen(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
+        creatingClaimsSteps.creatingAClaimWithStatusOpen(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
+                today.getHour(), today.getMinute(), title, title);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        claimsPageSteps.openClaimCard(title);
         //Отредактировать заявку
-        claimsPageSteps.editClaim(year, month, newDay, newHour, minutes, newTitle, newTitle);
+        claimsPageSteps.editClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
+                date.getHour(), date.getMinute(), newTitle, newTitle);
         //Проверить что внесенные изменения сохранились
         claimsPageSteps.isClaimCard(newTitle, planeDate, planeTime, newTitle);
-
     }
 
     @Test
     @DisplayName("Смена статуса заявки на In progress")
     public void shouldChangeTheStatusOfTheClaimToInProgress() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH) + 1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY);
-
+        String title = namingHelper.getClaimOpenName();
         //Создать заявку
-        creatingClaimsSteps.creatingAClaimWithStatusOpen(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
+        creatingClaimsSteps.creatingAClaimWithStatusOpen(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
+                today.getHour(), today.getMinute(), title, title);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        claimsPageSteps.openClaimCard(title);
         //Изменить статус заявки
         claimsPageSteps.setStatusInProcess();
-        SystemClock.sleep(2000);
         //Проверить что внесенные изменения сохранились
         claimsPageSteps.getStatusLabel().check(matches(withText("In progress")));
     }
@@ -115,84 +105,59 @@ public class ClaimEditTest extends BaseTest{
     @Test
     @DisplayName("Смена статуса заявки с In progress на To execute")
     public void shouldChangeTheStatusOfTheClaimToInToExecute() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH) + 1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-
-
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY);
-
-        String hourExpected = TestUtils.getDateToString(hour);
-        String minutesExpected = TestUtils.getDateToString(minutes);
-        String planeTime = hourExpected + ":" + minutesExpected;
-        String commentForTheTestClaim = "Выполнено";
+        String title = namingHelper.getClaimInProgressName();
+        String comment = namingHelper.getComment();
 
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.creatingAClaim(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
+                today.getHour(), today.getMinute(), title, title);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        claimsPageSteps.openClaimCard(title);
         //Изменить статус заявки
         claimsPageSteps.setStatusExecute();
         claimsPageSteps.isStatusCommentDialog();
-        claimsPageSteps.replaceClaimStatusCommentText(commentForTheTestClaim);
+        claimsPageSteps.replaceClaimStatusCommentText(comment);
         controlPanelSteps.okButtonClick();
-        SystemClock.sleep(3000);
         //Проверить что статус изменился
         claimsPageSteps.getStatusLabel().check(matches(withText("Executed")));
         //Проверяем что у заявки появился комментарий
-        claimsPageSteps.getCommentDescriptionText().check(matches(withText(commentForTheTestClaim)));
-
+        claimsPageSteps.getCommentDescriptionText().check(matches(withText(comment)));
     }
 
     @Test
     @DisplayName("Сброс статуса заявки В работе ")
     public void shouldChangeTheStatusOfTheClaimToOpen() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH) + 1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY);
-
-        String hourExpected = TestUtils.getDateToString(hour);
-        String minutesExpected = TestUtils.getDateToString(minutes);
-        String commentForTheTestClaim = "Уже не нужно";
+        String title = namingHelper.getClaimInProgressName();
+        String comment = namingHelper.getComment();
 
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
+        creatingClaimsSteps.creatingAClaim(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
+                today.getHour(), today.getMinute(), title, title);
         SystemClock.sleep(3000);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        claimsPageSteps.openClaimCard(title);
         //Изменить статус заявки
         claimsPageSteps.setStatusOpen();
         claimsPageSteps.isStatusCommentDialog();
-        claimsPageSteps.replaceClaimStatusCommentText(commentForTheTestClaim);
+        claimsPageSteps.replaceClaimStatusCommentText(comment);
         controlPanelSteps.okButtonClick();
-        SystemClock.sleep(3000);
         //Проверить что статус изменился
         claimsPageSteps.getStatusLabel().check(matches(withText("Open")));
         //Проверяем что у заявки появился комментарий
-        claimsPageSteps.getCommentDescriptionText().check(matches(withText(commentForTheTestClaim)));
-
+        claimsPageSteps.getCommentDescriptionText().check(matches(withText(comment)));
     }
 
     @Test
     @DisplayName("Смена статуса заявки с Open на Canceled")
     public void shouldChangeTheStatusOfTheClaimToCanceled() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH) + 1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY);
-
+        String title = namingHelper.getClaimOpenName();
         //Создать заявку
-        creatingClaimsSteps.creatingAClaimWithStatusOpen(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
+        creatingClaimsSteps.creatingAClaimWithStatusOpen(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
+                today.getHour(), today.getMinute(), title, title);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        claimsPageSteps.openClaimCard(title);
         //Изменить статус заявки
         claimsPageSteps.setStatusCanceled();
-        SystemClock.sleep(2000);
         //Проверить что внесенные изменения сохранились
         claimsPageSteps.getStatusLabel().check(matches(withText("Canceled")));
     }
@@ -200,21 +165,14 @@ public class ClaimEditTest extends BaseTest{
     @Test
     @DisplayName("Работа кнопки назад в карточке заявки")
     public void shouldExitTheClaimCardByClickingTheButtonClose() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH) + 1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY);
-
+        String title = namingHelper.getClaimInProgressName();
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-        SystemClock.sleep(5000);
+        creatingClaimsSteps.creatingAClaim(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
+                today.getHour(), today.getMinute(), title, title);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
-        SystemClock.sleep(2000);
+        claimsPageSteps.openClaimCard(title);
         //Выйти из карточки заявки, кликнув кнопку Close
         claimsPageSteps.closeImButtonClick();
-        SystemClock.sleep(2000);
         //Проверить карточка заявки закрылась
         claimsPageSteps.isClaimsPage();
     }
@@ -223,42 +181,29 @@ public class ClaimEditTest extends BaseTest{
     @Test
     @DisplayName("Сброс статуса заявки В работе с другим исполнителем")
     public void shouldNotChangeTheStatusOfTheClaimIfExecutorSmirnov() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH) + 1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY);
-
+        String title = namingHelper.getClaimInProgressName();
         //Создать заявку
-        creatingClaimsSteps.creatingAClaimExecutorSmirnov(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-        SystemClock.sleep(5000);
+        creatingClaimsSteps.creatingAClaimExecutorSmirnov(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
+                today.getHour(), today.getMinute(), title, title);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        claimsPageSteps.openClaimCard(title);
         //Проверить, что невозможно изменить статус заявки
         TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
         TestUtils.waitView(claimsPageSteps.throwOffMenuItem).check(doesNotExist());
-
     }
 
     @Test
     @DisplayName("Редактирование заявки со статусом In progress")
     public void shouldShowMessageTheClaimCanBeEditedOnlyInTheOpenStatus() {
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH) + 1;
-        int day = date.get(Calendar.DAY_OF_MONTH);
-        int minutes = date.get(Calendar.MINUTE);
-        int hour = date.get(Calendar.HOUR_OF_DAY);
-
+        String title = namingHelper.getClaimInProgressName();
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(year, month, day, hour, minutes, titleForTheTestClaim, titleForTheTestClaim);
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.creatingAClaim(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
+                today.getHour(), today.getMinute(), title, title);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(titleForTheTestClaim);
+        claimsPageSteps.openClaimCard(title);
         //Тапнуть кнопку редактировать
         claimsPageSteps.editClaimButClick();
         //Проверить появление сообщения "The Claim can be edited only in the Open status."
         controlPanelSteps.checkToast("The Claim can be edited only in the Open status.", true);
     }
-
-
 }

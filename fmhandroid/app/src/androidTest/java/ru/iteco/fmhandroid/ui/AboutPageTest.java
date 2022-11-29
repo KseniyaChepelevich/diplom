@@ -1,13 +1,16 @@
 package ru.iteco.fmhandroid.ui;
 
 import android.content.Intent;
+import android.os.RemoteException;
 import android.os.SystemClock;
 
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.uiautomator.UiDevice;
 
 import io.qameta.allure.kotlin.junit4.DisplayName;
 
@@ -36,13 +39,17 @@ import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 @RunWith(AndroidJUnit4.class)
 
 public class AboutPageTest extends BaseTest{
+    private UiDevice device;
 
     private static AuthSteps authSteps = new AuthSteps();
     private static MainPageSteps mainPageSteps = new MainPageSteps();
     private static AboutPageSteps aboutPageSteps = new AboutPageSteps();
 
     @Before
-    public void logoutCheck() {
+    public void logoutCheck() throws RemoteException {
+        device =
+                UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device.setOrientationNatural();
         try {
             authSteps.isAuthScreen();
         } catch (PerformException e) {
