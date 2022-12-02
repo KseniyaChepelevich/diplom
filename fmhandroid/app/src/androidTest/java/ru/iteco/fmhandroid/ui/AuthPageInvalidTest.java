@@ -2,14 +2,12 @@ package ru.iteco.fmhandroid.ui;
 
 import androidx.test.espresso.PerformException;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.UiDevice;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,7 +21,7 @@ import android.os.RemoteException;
 
 @RunWith(AllureAndroidJUnit4.class)
 
-public class AuthPageInvalidTest extends BaseTest{
+public class AuthPageInvalidTest extends BaseTest {
     private UiDevice device;
 
     private static AuthSteps authSteps = new AuthSteps();

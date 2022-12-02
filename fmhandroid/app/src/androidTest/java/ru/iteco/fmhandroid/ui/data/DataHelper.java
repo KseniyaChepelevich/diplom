@@ -15,7 +15,7 @@ import androidx.test.espresso.ViewInteraction;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -73,7 +73,6 @@ public class DataHelper {
             }
             return false;
         }
-
     }
 
     public static class EspressoBaseTest {
@@ -89,14 +88,12 @@ public class DataHelper {
         return titleId;
     }
 
-
-
     public static LocalDateTime generateDate(int plusDays) {
         return LocalDateTime.now().plusDays(plusDays);
     }
 
     public static LocalDateTime getValidDate() {
-        int randomNumber = ThreadLocalRandom.current().nextInt(1,368);
+        int randomNumber = ThreadLocalRandom.current().nextInt(1, 368);
         LocalDateTime date = generateDate(randomNumber);
         return date;
     }
@@ -115,8 +112,6 @@ public class DataHelper {
         LocalDateTime date = generateDate(0);
         return date;
     }
-
-
 
 
 }

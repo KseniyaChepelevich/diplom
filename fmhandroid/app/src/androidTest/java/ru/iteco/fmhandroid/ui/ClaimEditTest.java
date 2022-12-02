@@ -1,15 +1,9 @@
 package ru.iteco.fmhandroid.ui;
 
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isNotClickable;
-import static androidx.test.espresso.matcher.ViewMatchers.isNotEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.core.IsNot.not;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 import android.os.RemoteException;
@@ -17,20 +11,16 @@ import android.os.SystemClock;
 
 import androidx.test.espresso.PerformException;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.UiDevice;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
-import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.NamingHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
@@ -40,6 +30,7 @@ import ru.iteco.fmhandroid.ui.steps.CreatingClaimsSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 
 @RunWith(AllureAndroidJUnit4.class)
+
 public class ClaimEditTest extends BaseTest {
     private UiDevice device;
     private static AuthSteps authSteps = new AuthSteps();

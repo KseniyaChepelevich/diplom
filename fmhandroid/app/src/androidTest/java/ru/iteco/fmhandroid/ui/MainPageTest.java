@@ -1,48 +1,31 @@
 package ru.iteco.fmhandroid.ui;
 
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.RemoteException;
-import android.os.SystemClock;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.PerformException;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.Until;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ru.iteco.fmhandroid.ui.data.CustomViewAssertion;
-import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.steps.*;
 
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressBack;
-import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
-//import static ru.iteco.fmhandroid.ui.ControlPanelTest.mainPageSteps;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertEquals;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 @RunWith(AllureAndroidJUnit4.class)
 
-public class MainPageTest extends BaseTest{
+public class MainPageTest extends BaseTest {
     private UiDevice device;
 
     private static AuthSteps authSteps = new AuthSteps();

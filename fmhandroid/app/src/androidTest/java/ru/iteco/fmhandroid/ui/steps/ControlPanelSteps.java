@@ -7,10 +7,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.PickerActions.setDate;
 import static androidx.test.espresso.contrib.PickerActions.setTime;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withChild;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -24,8 +22,7 @@ import static org.hamcrest.core.AllOf.allOf;
 
 import android.os.SystemClock;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
+
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -33,18 +30,15 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.RootMatchers;
-import androidx.test.uiautomator.BySelector;
-import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.UiObjectNotFoundException;
-import androidx.test.uiautomator.UiSelector;
 
-import org.hamcrest.Description;
+import androidx.test.uiautomator.UiDevice;
+
+
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
-import org.hamcrest.TypeSafeMatcher;
 
-import java.security.PublicKey;
-import java.util.Calendar;
+
+import java.time.LocalDateTime;
 
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
@@ -52,12 +46,10 @@ import ru.iteco.fmhandroid.ui.data.TestUtils;
 
 
 public class ControlPanelSteps {
-    Calendar date = Calendar.getInstance();
+    LocalDateTime today = LocalDateTime.now();
 
-    private UiDevice device;
 
     public Matcher<View> addNewsImBut = withId(R.id.add_news_image_view);
-    public Matcher<View> filterNewsBut = withId(R.id.filter_news_material_button);
     //Форма создания новости
     public Matcher<View> newsItemCategoryField = withId(R.id.news_item_category_text_auto_complete_text_view);
     public Matcher<View> newsItemTitleField = withId(R.id.news_item_title_text_input_edit_text);
@@ -107,14 +99,10 @@ public class ControlPanelSteps {
     public Matcher<View> descriptionTextInputEndIcon = allOf(withId(R.id.text_input_end_icon), withParent(withParent(withParent(withParent(withId(R.id.news_item_description_text_input_layout))))));
     public Matcher<View> messageChangesWonTBeSaved = withText("The changes won't be saved, do you really want to log out?");
 
-    public int newsItemTitleTextView=(R.id.news_item_title_text_view);
+    public int newsItemTitleTextView = (R.id.news_item_title_text_view);
 
     public ViewInteraction wrongСategoryToast(String text) {
         return onView(withText(text)).inRoot(new DataHelper.ToastMatcher());
-    }
-
-    public ViewInteraction getCategory(String text) {
-        return onView(withText("text")).inRoot((RootMatchers.isPlatformPopup()));
     }
 
     public void isControlPanel() {
@@ -147,14 +135,6 @@ public class ControlPanelSteps {
         Espresso.closeSoftKeyboard();
         SystemClock.sleep(3000);
         DataHelper.EspressoBaseTest.clickButton(nameCategory);
-    }
-
-
-
-    public void selectANewsCategoryFromTheList1(Matcher<View> nameCategory) {
-        TestUtils.waitView(newsItemCategoryField).perform(click());
-        Espresso.closeSoftKeyboard();
-        TestUtils.waitPopupView(nameCategory).perform(click());
     }
 
     public void setDateToDatePicker(int year, int month, int day) {
@@ -190,7 +170,7 @@ public class ControlPanelSteps {
         TestUtils.waitView(newsItemTitleField).perform(replaceText(title));
         setDateToDatePicker(year, month, day);
         TestUtils.waitView(okBut).perform(click());
-        setTimeToTimeField(date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE));
+        setTimeToTimeField(today.getHour(), today.getMinute());
         TestUtils.waitView(newsItemDescriptionField).perform(replaceText(description));
     }
 
@@ -210,29 +190,12 @@ public class ControlPanelSteps {
         return onView(allOf(withId(R.id.edit_news_item_image_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title))))))));
     }
 
-    public ViewInteraction getItemNewsPublicationDateElement(String title) {
-        return (onView(allOf(withId(R.id.news_item_publication_date_text_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title)))))))));
-    }
-
     public ViewInteraction getItemNewsButViewElement(String title) {
         return onView(allOf(withId(R.id.view_news_item_image_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title))))))));
     }
 
-    public ViewInteraction getItemNewsStatusElement(String title) {
-        return onView(allOf(withId(R.id.news_item_published_text_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title))))))));
-    }
-
     public ViewInteraction getItemNewsDescriptionElement(String title) {
         return onView(allOf(withId(R.id.news_item_description_text_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title))))))));
-    }
-
-    public ViewInteraction getItemNewsTitleElement(String title) {
-        return onView(allOf(withId(R.id.news_item_title_text_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title))))))));
-    }
-
-    public ViewInteraction getItemNewsCard(String title) {
-        return onView(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title)))));
-
     }
 
     public void deleteItemNews(String description) {
@@ -273,19 +236,12 @@ public class ControlPanelSteps {
         TestUtils.waitView(saveBut).perform(click());
     }
 
-    public void creatingTestNews1(Matcher<View> newsItemCategory, String title, String description, int plusYear, int plusMonth, int plusDay) {
-        openCreatingNewsForm();
-        selectANewsCategoryFromTheList1(newsItemCategory);
-        fillingOutTheFormCreatingNewsWithDateToday(date.get(Calendar.YEAR) + plusYear, date.get(Calendar.MONTH) + 1 + plusMonth, date.get(Calendar.DAY_OF_MONTH) + plusDay, title, description);
-        TestUtils.waitView(saveBut).perform(click());
-    }
-
     public void isDialogWindowMessageTryAgainLatter() {
         TestUtils.waitView(withText("Something went wrong. Try again later.")).check(matches(isDisplayed()));
         TestUtils.waitView(okBut).check(matches(isDisplayed()));
     }
 
-    public void openCreatingNewsForm(){
+    public void openCreatingNewsForm() {
         TestUtils.waitView(addNewsImBut).perform(click());
     }
 
@@ -329,7 +285,7 @@ public class ControlPanelSteps {
         return TestUtils.waitView(switcherNotActive);
     }
 
-    public ViewInteraction getNewsItemPublishDate () {
+    public ViewInteraction getNewsItemPublishDate() {
         return TestUtils.waitView(newsItemPublishDateField);
     }
 
@@ -348,8 +304,4 @@ public class ControlPanelSteps {
     public ViewInteraction getMessageAboutDelete() {
         return TestUtils.waitView(messageAboutDelete);
     }
-
-
-
-
 }

@@ -1,14 +1,5 @@
 package ru.iteco.fmhandroid.ui;
 
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.swipeDown;
-import static androidx.test.espresso.action.ViewActions.swipeUp;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.core.IsNot.not;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 import android.os.RemoteException;
@@ -16,36 +7,26 @@ import android.os.SystemClock;
 
 import androidx.test.espresso.PerformException;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.UiDevice;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Calendar;
-
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
-import ru.iteco.fmhandroid.R;
-import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.NamingHelper;
-import ru.iteco.fmhandroid.ui.data.TestUtils;
-import ru.iteco.fmhandroid.ui.data.ViewActions;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.ClaimsPageSteps;
 import ru.iteco.fmhandroid.ui.steps.ControlPanelSteps;
 import ru.iteco.fmhandroid.ui.steps.CreatingClaimsSteps;
 import ru.iteco.fmhandroid.ui.steps.FilterClaimsPageSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
-import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
+
 
 @RunWith(AllureAndroidJUnit4.class)
-public class FilterClaimsPageTest extends BaseTest{
+public class FilterClaimsPageTest extends BaseTest {
     private UiDevice device;
     private static AuthSteps authSteps = new AuthSteps();
     private static MainPageSteps mainPageSteps = new MainPageSteps();
@@ -120,22 +101,22 @@ public class FilterClaimsPageTest extends BaseTest{
         //Создать заявки для теста
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), fifthName, fifthName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), fifthName, fifthName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), sixthName, sixthName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), sixthName, sixthName);
 
         //Фильтруем заявки со статусом In progress
         filterClaimsPageSteps.filterClaims(false, true, false, false);
@@ -163,22 +144,22 @@ public class FilterClaimsPageTest extends BaseTest{
         //Создать заявки для теста
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), fifthName, fifthName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), fifthName, fifthName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), sixthName, sixthName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), sixthName, sixthName);
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(forthName);
         //Изменить статус заявки
@@ -233,22 +214,22 @@ public class FilterClaimsPageTest extends BaseTest{
         //Создать заявки для теста
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), fifthName, fifthName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), fifthName, fifthName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), sixthName, sixthName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), sixthName, sixthName);
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(firstName);
         //Изменить статус заявки
@@ -290,13 +271,13 @@ public class FilterClaimsPageTest extends BaseTest{
         //Создать заявки для теста
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(secondName);
@@ -325,13 +306,13 @@ public class FilterClaimsPageTest extends BaseTest{
         //Создать заявки для теста
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName,firstName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(secondName);
@@ -369,13 +350,13 @@ public class FilterClaimsPageTest extends BaseTest{
         //Создать заявки для теста
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(secondName);
@@ -405,13 +386,13 @@ public class FilterClaimsPageTest extends BaseTest{
         //Создать заявки для теста
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(secondName);
@@ -440,13 +421,13 @@ public class FilterClaimsPageTest extends BaseTest{
         //Создать заявки для теста
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(secondName);
@@ -484,13 +465,13 @@ public class FilterClaimsPageTest extends BaseTest{
         //Создать заявки для теста
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(secondName);
@@ -523,16 +504,16 @@ public class FilterClaimsPageTest extends BaseTest{
         //Создать заявки для теста
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(secondName);
@@ -572,16 +553,16 @@ public class FilterClaimsPageTest extends BaseTest{
         //Создать заявки для теста
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(secondName);
@@ -621,16 +602,16 @@ public class FilterClaimsPageTest extends BaseTest{
         //Создать заявки для теста
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
         creatingClaimsSteps.creatingAClaim
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
         creatingClaimsSteps.creatingAClaimWithStatusOpen
                 (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
+                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
 
         //Открыть карточку заявки со статусом
         claimsPageSteps.openClaimCard(secondName);

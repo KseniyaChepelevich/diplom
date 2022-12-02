@@ -4,13 +4,8 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.core.AllOf.allOf;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNot.not;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 import android.os.RemoteException;
@@ -19,25 +14,19 @@ import io.qameta.allure.kotlin.junit4.DisplayName;
 
 import androidx.test.espresso.PerformException;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
-import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
-import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.NamingHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
@@ -48,7 +37,7 @@ import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
 
 @RunWith(AllureAndroidJUnit4.class)
 
-public class ControlPanelTest extends BaseTest{
+public class ControlPanelTest extends BaseTest {
 
     private UiDevice device;
     private static AuthSteps authSteps = new AuthSteps();
@@ -90,7 +79,7 @@ public class ControlPanelTest extends BaseTest{
 
     @Test
     @DisplayName("Отмена удаления новости во вкладке Панель управления")
-    public void shouldNotRemoveTheNewsItem(){
+    public void shouldNotRemoveTheNewsItem() {
         String title = namingHelper.getNewsAnnouncementName();
         //Создаем новость для теста
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
@@ -109,7 +98,7 @@ public class ControlPanelTest extends BaseTest{
 
     @Test
     @DisplayName("Открытие Новости для редактирования")
-    public void shouldOpenTheNewsForEditing(){
+    public void shouldOpenTheNewsForEditing() {
         String title = namingHelper.getNewsAnnouncementName();
         //Создаем новость для теста
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
@@ -118,14 +107,12 @@ public class ControlPanelTest extends BaseTest{
         controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
         //Нажимаем на кнопку Редактировать в карточке новости
         controlPanelSteps.getItemNewsEditElement(title).perform(click());
-        //Проверяем, что октрылась наша новость
-        controlPanelSteps.isCardTestNews(title);
         pressBack();
     }
 
     @Test
     @DisplayName("Открытие и закрытие Новости для редактирования без внесения изменений")
-    public void shouldNotEditTheNews(){
+    public void shouldNotEditTheNews() {
         String title = namingHelper.getNewsAnnouncementName();
         //Создаем новость для теста
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
@@ -147,7 +134,7 @@ public class ControlPanelTest extends BaseTest{
 
     @Test
     @DisplayName("Открытие и сохранение Новости для редактирования без внесения изменений")
-    public void shouldKeepTheNewsUnchanged(){
+    public void shouldKeepTheNewsUnchanged() {
         String title = namingHelper.getNewsAnnouncementName();
         //Создаем новость для теста
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
@@ -166,7 +153,7 @@ public class ControlPanelTest extends BaseTest{
 
     @Test
     @DisplayName("Выключение Активного статуса у Новости")
-    public void shouldTurnOffActiveStatus(){
+    public void shouldTurnOffActiveStatus() {
         String title = namingHelper.getNewsAnnouncementName();
         //Создаем новость для теста
         controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
@@ -202,7 +189,7 @@ public class ControlPanelTest extends BaseTest{
         controlPanelSteps.getItemNewsEditElement(title).perform(click());
         //Проверяем, что октрылась наща новость
         controlPanelSteps.isCardTestNews(title);
-       //Редактируем дату публикации
+        //Редактируем дату публикации
         controlPanelSteps.setDateToDatePicker(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
         controlPanelSteps.okButtonClick();
         //Проверяем, что в поле Дата публикации отображается новая дата
@@ -233,8 +220,8 @@ public class ControlPanelTest extends BaseTest{
         controlPanelSteps.saveNewsButtonClick();
         //Проверяем, что наша новость есть в списке, что она имеет новое описание
         controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
-        controlPanelSteps.getItemNewsButViewElement(title).perform(click());
-        controlPanelSteps.getItemNewsDescriptionElement(newDescription).check(matches(isDisplayed()));
+        controlPanelSteps.getItemNewsEditElement(title).perform(click());
+        controlPanelSteps.getNewsItemDescription().check(matches(withText(newDescription)));
     }
 
     @Test
@@ -285,6 +272,8 @@ public class ControlPanelTest extends BaseTest{
         controlPanelSteps.saveNewsButtonClick();
         //Проверяем что наша новость с новым заголовком отображается в списке
         controlPanelSteps.scrollToElementInRecyclerList(newTitle).check(matches(isDisplayed()));
+        controlPanelSteps.getItemNewsEditElement(title).perform(click());
+        controlPanelSteps.getNewsItemTitle().check(matches(withText(newTitle)));
     }
 
     //Тест работает нестабильно. В режиме дебага все проходит. Падает при попытке сменить категорию

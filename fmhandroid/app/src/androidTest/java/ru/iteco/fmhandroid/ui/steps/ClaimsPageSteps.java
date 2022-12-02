@@ -16,7 +16,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
 
 import android.view.View;
 
@@ -84,7 +83,7 @@ public class ClaimsPageSteps {
     public Matcher<View> claimsListCard1 = TestUtils.withRecyclerView(R.id.claim_list_recycler_view)
             .atPositionOnView(1, R.id.claim_list_card);
 
-    public int commentDescriptionTextView= R.id.comment_description_text_view;
+    public int commentDescriptionTextView = R.id.comment_description_text_view;
 
     public ViewInteraction getItemClaimCompatImView(String title) {
         return TestUtils.waitView(allOf(compatImageView, hasSibling(withText(title))));
@@ -153,17 +152,6 @@ public class ClaimsPageSteps {
         getItemClaimCompatImView(title).perform(click());
     }
 
-    public ViewInteraction getClaimItemTitleTextView(int position) {
-        return onView(AllOf.allOf(withId(R.id.description_material_text_view),
-                TestUtils.childAtPosition(TestUtils.childAtPosition(AllOf.allOf(withId(R.id.claim_list_card),
-                        TestUtils.childAtPosition(withId(R.id.claim_list_recycler_view), position)), 0), 2)));
-    }
-
-    public ViewInteraction getClaimItemPlaneDateTextView(int position) {
-        return onView(AllOf.allOf(withId(R.id.plan_date_material_text_view),
-                TestUtils.childAtPosition(TestUtils.childAtPosition(AllOf.allOf(withId(R.id.claim_list_card),
-                        TestUtils.childAtPosition(withId(R.id.claim_list_recycler_view), position)), 0), 8)));
-    }
 
     public ViewInteraction getClaimItemDescription() {
         return TestUtils.waitView(claimsItemDescription);
@@ -181,9 +169,7 @@ public class ClaimsPageSteps {
     public void setStatusCanceled() {
         TestUtils.waitView(statusProcessingImBut).perform(click());
         TestUtils.waitView(cancelMenuItem).perform(click());
-
     }
-
 
     public void closeImButtonClick() {
         TestUtils.waitView(closeImBut).perform(click());
@@ -224,7 +210,7 @@ public class ClaimsPageSteps {
         controlPanelSteps.saveNewsButtonClick();
     }
 
-    public ViewInteraction getLabelError () {
+    public ViewInteraction getLabelError() {
         return TestUtils.waitView(labelError);
     }
 
@@ -259,9 +245,5 @@ public class ClaimsPageSteps {
     public void editClaimButClick() {
         TestUtils.waitView(editClaimBut).perform(click());
     }
-
-
-
-
 
 }
