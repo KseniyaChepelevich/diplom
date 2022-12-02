@@ -22,10 +22,12 @@ public class FilterClaimsPageSteps {
     }
 
     public void checkClaimIsExist(String title) {
-        TestUtils.waitView(claimsPageSteps.claimRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsExist(R.id.description_material_text_view, withText(title))));
+        TestUtils.waitView(claimsPageSteps.claimRecyclerList)
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsExist(R.id.description_material_text_view, withText(title))));
     }
 
     public void checkClaimIsNotExist(String title) {
-        TestUtils.waitView(claimsPageSteps.claimRecyclerList).check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.description_material_text_view, withText(title))));
+        TestUtils.waitView(claimsPageSteps.claimRecyclerList)
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.description_material_text_view, withText(title))));
     }
 }

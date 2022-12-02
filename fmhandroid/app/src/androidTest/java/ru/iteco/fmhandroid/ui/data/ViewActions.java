@@ -1,11 +1,9 @@
 package ru.iteco.fmhandroid.ui.data;
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 
 import static org.hamcrest.core.Is.isA;
 
-import android.os.SystemClock;
 import android.view.View;
 import android.widget.Checkable;
 

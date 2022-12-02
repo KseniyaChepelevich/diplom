@@ -41,11 +41,8 @@ public class MainPageSteps {
     public Matcher<View> allNewsCardsBlockConstraintLayout = withId(R.id.all_news_cards_block_constraint_layout);
     public Matcher<View> claimsExpandMaterialBut = allOf(withId(R.id.expand_material_button), withParent(withParent(withId(R.id.container_list_claim_include_on_fragment_main))));
     public Matcher<View> allClaimsCardsBlockConstraintLayout = withId(R.id.all_claims_cards_block_constraint_layout);
-    public Matcher<View> claimListRecyclerView = ViewMatchers.withId(R.id.claim_list_recycler_view);
     public Matcher<View> scrollView = withClassName(endsWith("ScrollView"));
     public Matcher<View> addNewClaimBut = withId(R.id.add_new_claim_material_button);
-    public Matcher<View> claimsListCard4 = TestUtils.withRecyclerView(R.id.claim_list_recycler_view)
-            .atPositionOnView(4, R.id.claim_list_card);
 
     public void isMainPage() {
         TestUtils.waitView(newsBlockHeader).check(matches(isDisplayed()));
@@ -90,15 +87,19 @@ public class MainPageSteps {
         TestUtils.waitView(ourMissionImBut).perform(click());
     }
 
-    public void clickAllNewsBut() {TestUtils.waitView(allNewsBut).perform(click());}
+    public void clickAllNewsBut() {
+        TestUtils.waitView(allNewsBut).perform(click());
+    }
 
-    public void clickAllClaimsBut() {TestUtils.waitView(allClaimsBut).perform(click());}
+    public void clickAllClaimsBut() {
+        TestUtils.waitView(allClaimsBut).perform(click());
+    }
 
     public void newsExpandMaterialButtonClick() {
         TestUtils.waitView(newsExpandMaterialBut).perform(click());
     }
 
-    public void claimsExpandMaterialButtonClick(){
+    public void claimsExpandMaterialButtonClick() {
         TestUtils.waitView(claimsExpandMaterialBut).perform(click());
     }
 

@@ -1,12 +1,9 @@
 package ru.iteco.fmhandroid.ui.data;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.fail;
 
 import android.content.res.Resources;
 import android.view.View;
-import android.widget.TextView;
+
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.matcher.BoundedMatcher;
@@ -15,7 +12,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import ru.iteco.fmhandroid.R;
 
 public class CustomRecyclerViewActions {
 
@@ -106,7 +102,6 @@ public class CustomRecyclerViewActions {
         }
 
         ;
-
 
         public static BoundedMatcher<View, RecyclerView> matchChildViewIsExist(int targetViewId, Matcher<View> itemMatcher) {
             return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {

@@ -19,10 +19,6 @@ import org.hamcrest.Matcher;
 
 public class NewsPageSteps {
     private static MainPageSteps mainPageSteps = new MainPageSteps();
-
-    public Matcher<View> newsItemMaterialCardView1 = TestUtils.withRecyclerView(R.id.news_list_recycler_view)
-            .atPositionOnView(1, R.id.news_item_material_card_view);
-    public Matcher<View> newsItemDescriptionTextView1 = TestUtils.withRecyclerView(R.id.news_list_recycler_view).atPositionOnView(1, R.id.news_item_description_text_view);
     public Matcher<View> filterNewsMaterialBut = withId(R.id.filter_news_material_button);
     public Matcher<View> editNewsMaterialBut = withId(R.id.edit_news_material_button);
 
@@ -58,8 +54,6 @@ public class NewsPageSteps {
     public void openControlPanel() {
         TestUtils.waitView(editNewsMaterialBut).perform(click());
     }
-
-
 
 
 }

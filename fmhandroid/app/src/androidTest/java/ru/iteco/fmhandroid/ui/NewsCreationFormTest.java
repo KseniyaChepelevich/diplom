@@ -1,50 +1,40 @@
 package ru.iteco.fmhandroid.ui;
 
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.core.AllOf.allOf;
-import static org.hamcrest.core.IsNot.not;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 import android.os.RemoteException;
 
 import androidx.test.espresso.PerformException;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
-import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.NamingHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.ControlPanelSteps;
-import ru.iteco.fmhandroid.ui.steps.FilterNewsPageSteps;
 import ru.iteco.fmhandroid.ui.steps.MainPageSteps;
 import ru.iteco.fmhandroid.ui.steps.NewsPageSteps;
 
 @RunWith(AllureAndroidJUnit4.class)
 
-public class NewsCreationFormTest extends BaseTest{
+public class NewsCreationFormTest extends BaseTest {
     private UiDevice device;
 
     private static AuthSteps authSteps = new AuthSteps();
@@ -416,7 +406,7 @@ public class NewsCreationFormTest extends BaseTest{
         authSteps.turnOnAirplaneMode();
         //Пытаемся сохранить новость
         controlPanelSteps.saveNewsButtonClick();
-       //Проверяем, что отображается сообщение
+        //Проверяем, что отображается сообщение
         controlPanelSteps.checkToast("Saving failed. Try again later.", true);
         //Отключаем режим в самолете
         authSteps.turnOffAirplaneMode();

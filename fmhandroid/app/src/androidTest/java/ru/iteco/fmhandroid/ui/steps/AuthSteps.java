@@ -40,7 +40,7 @@ public class AuthSteps {
         return onView(withText(id)).inRoot(new DataHelper.ToastMatcher());
     }
 
-    public void signBtnClick(){
+    public void signBtnClick() {
         TestUtils.waitView(signBtn).perform(click());
     }
 
@@ -79,7 +79,6 @@ public class AuthSteps {
         TestUtils.waitView(passField).perform(replaceText(invalidInfo.getPass()));
         TestUtils.waitView(signBtn).check(matches(isClickable()));
         TestUtils.waitView(signBtn).perform(click());
-
     }
 
     public void authWithEmptyFields() {
@@ -88,7 +87,6 @@ public class AuthSteps {
         TestUtils.waitView(passField).perform(replaceText(""));
         TestUtils.waitView(signBtn).check(matches(isClickable()));
         TestUtils.waitView(signBtn).perform(click());
-
     }
 
     public void checkToast(int id, boolean visible) {
@@ -116,5 +114,4 @@ public class AuthSteps {
         device.pressBack();
         device.pressBack();
     }
-
 }

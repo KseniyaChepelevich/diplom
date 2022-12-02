@@ -1,39 +1,25 @@
 package ru.iteco.fmhandroid.ui;
 
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNot.not;
-
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 import android.os.RemoteException;
-import android.os.SystemClock;
 
 import androidx.test.espresso.PerformException;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.UiDevice;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
-import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
-import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.NamingHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
@@ -162,7 +148,8 @@ public class ClaimsPageTest extends BaseTest {
     public void shouldEditTheComment() {
         String title = namingHelper.getClaimInProgressName();
         String comment = namingHelper.getComment();
-        String newComment = namingHelper.getComment();;
+        String newComment = namingHelper.getComment();
+        ;
 
         //Создать заявку
         creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),

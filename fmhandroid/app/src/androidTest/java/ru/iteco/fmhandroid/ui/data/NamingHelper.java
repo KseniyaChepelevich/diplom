@@ -3,8 +3,6 @@ package ru.iteco.fmhandroid.ui.data;
 import java.util.UUID;
 
 public class NamingHelper {
-
-
     public static String generateTitleId() {
         String titleId = UUID.randomUUID().toString();
         return titleId;
@@ -69,22 +67,18 @@ public class NamingHelper {
     public String getClaimTitleWithASpace() {
         return " Заголовок" + " " + generateTitleId();
     }
+
     public String getClaimTitle50Characters() {
         return "Заголовок" + " " + DataHelper.generateTitleId() + " " + "50з";
     }
+
     public String getClaimTitle49Characters() {
         return "Заголовок" + " " + DataHelper.generateTitleId() + " " + "49";
     }
+
     public String getClaimTitle51Characters() {
         return "Заголовок" + " " + DataHelper.generateTitleId() + " " + "51зн";
     }
-
-
-
-
-
-
-
 
 
 }

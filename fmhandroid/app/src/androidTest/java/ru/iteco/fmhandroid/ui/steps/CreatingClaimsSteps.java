@@ -1,16 +1,15 @@
 package ru.iteco.fmhandroid.ui.steps;
 
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.pressKey;
+
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.PickerActions.setDate;
-import static androidx.test.espresso.contrib.PickerActions.setTime;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 
 import static org.hamcrest.core.AllOf.allOf;
 
@@ -18,7 +17,7 @@ import android.os.SystemClock;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.contrib.RecyclerViewActions;
+
 
 import org.hamcrest.Matchers;
 
@@ -29,7 +28,6 @@ import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 
 public class CreatingClaimsSteps {
-    Calendar date = Calendar.getInstance();
     private static ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
     private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
 
@@ -56,8 +54,6 @@ public class CreatingClaimsSteps {
         controlPanelSteps.setTimeToTimePicker(hour, minute);
         controlPanelSteps.okButtonClick();
     }
-
-
 
     public void openClaimTimePicker() {
         TestUtils.waitView(claimsPageSteps.timeClaimField).perform(click());
@@ -104,7 +100,7 @@ public class CreatingClaimsSteps {
         TestUtils.waitView(Matchers.allOf(withId(R.id.text_input_end_icon), withParent(withParent(withParent(withParent(withId(R.id.description_text_input_layout))))))).check(matches(isDisplayed()));
     }
 
-    public ViewInteraction getClaimTime () {
+    public ViewInteraction getClaimTime() {
         return TestUtils.waitView(claimsPageSteps.timeClaimField);
     }
 
