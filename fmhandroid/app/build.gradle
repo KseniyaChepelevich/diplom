@@ -106,10 +106,6 @@ dependencies {
     androidTestImplementation "androidx.test:core-ktx:$test_core_version"
     androidTestImplementation "androidx.test.ext:junit-ktx:$test_junit_version"
     androidTestImplementation "androidx.test:runner:$test_core_version"
-    testImplementation 'io.rest-assured:rest-assured:4.3.0'
-    //testImplementation 'com.github.javafaker:javafaker:1.0.2'
-    //testImplementation 'io.rest-assured:json-schema-validator:4.3.1'
-    //androidTestImplementation 'com.github.blocoio:faker:1.2.9'
 
     // UiAutomator Testing
     def uiautomator_version = "2.2.0"
@@ -118,21 +114,27 @@ dependencies {
     androidTestImplementation "org.hamcrest:hamcrest-integration:$hamcrest_version"
 
      //Espresso Testing
-    testImplementation "junit:junit:4.13.2"
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4-alpha07'
-    androidTestImplementation 'androidx.test:rules:1.4.1-alpha07'
-    androidTestImplementation "androidx.test:runner:1.4.0"
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0-alpha07'
-    implementation "androidx.test.espresso:espresso-idling-resource:3.4.0"
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.4.0'
-    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
+    def junit_version = "4.13.2"
+    def test_ext_junit_version = "1.1.4-alpha07"
+    def test_rules_version = "1.4.1-alpha07"
+    def test_runner_version = "1.4.0"
+    def test_espresso_espresso_core_version = "3.5.0-alpha07"
+    def test_espresso_espresso_idling_resource = "3.4.0"
+    def test_espresso_espresso_intents = "3.4.0"
+
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "androidx.test.ext:junit:$test_ext_junit_version"
+    androidTestImplementation "androidx.test:rules:$test_rules_version"
+    androidTestImplementation "androidx.test:runner:$test_runner_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$test_espresso_espresso_core_version"
+    implementation "androidx.test.espresso:espresso-idling-resource:$test_espresso_espresso_idling_resource"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$test_espresso_espresso_intents"
 
     //Allure
-    androidTestImplementation "io.qameta.allure:allure-kotlin-android:2.4.0"
-    androidTestImplementation "io.qameta.allure:allure-kotlin-model:2.4.0"
-    androidTestImplementation "io.qameta.allure:allure-kotlin-commons:2.4.0"
-    androidTestImplementation "io.qameta.allure:allure-kotlin-junit4:2.4.0"
-
-
+    def allure_version = "2.4.0"
+    androidTestImplementation "io.qameta.allure:allure-kotlin-android:$allure_version"
+    androidTestImplementation "io.qameta.allure:allure-kotlin-model:$allure_version"
+    androidTestImplementation "io.qameta.allure:allure-kotlin-commons:$allure_version"
+    androidTestImplementation "io.qameta.allure:allure-kotlin-junit4:$allure_version"
 
 }
