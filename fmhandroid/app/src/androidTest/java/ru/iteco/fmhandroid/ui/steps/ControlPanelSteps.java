@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.AllOf.allOf;
 
-import android.os.SystemClock;
+
 import android.view.View;
 
 import android.widget.DatePicker;
@@ -31,8 +31,6 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.RootMatchers;
 
-import androidx.test.uiautomator.UiDevice;
-
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -41,12 +39,14 @@ import org.hamcrest.Matchers;
 import java.time.LocalDateTime;
 
 import ru.iteco.fmhandroid.R;
+import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 
 
 public class ControlPanelSteps {
-    LocalDateTime today = LocalDateTime.now();
+
+    NewsPageSteps newsPageSteps = new NewsPageSteps();
 
 
     public Matcher<View> addNewsImBut = withId(R.id.add_news_image_view);
@@ -60,15 +60,7 @@ public class ControlPanelSteps {
     public Matcher<View> switcherNotActive = withText("Not active");
     public Matcher<View> saveBut = withId(R.id.save_button);
     public Matcher<View> cancelBut = withId(R.id.cancel_button);
-    //Категории новостей
-    public ViewInteraction categoryAnnouncement = onView(withText("Объявление")).inRoot((RootMatchers.isPlatformPopup()));
-    public ViewInteraction categoryBirthday = onView(withText("День рождения")).inRoot((RootMatchers.isPlatformPopup()));
-    public ViewInteraction categorySalary = onView(withText("Зарплата")).inRoot((RootMatchers.isPlatformPopup()));
-    public ViewInteraction categoryTradeUnion = onView(withText("Профсоюз")).inRoot((RootMatchers.isPlatformPopup()));
-    public ViewInteraction categoryMassage = onView(withText("Массаж")).inRoot((RootMatchers.isPlatformPopup()));
-    public ViewInteraction categoryGratitude = onView(withText("Благодарность")).inRoot((RootMatchers.isPlatformPopup()));
-    public ViewInteraction categoryNeedHelp = onView(withText("Нужна помощь")).inRoot((RootMatchers.isPlatformPopup()));
-    public ViewInteraction categoryHoliday = onView(withText("Праздник")).inRoot((RootMatchers.isPlatformPopup()));
+
     //Календарь и часы
     public Matcher<View> datePicker = isAssignableFrom(DatePicker.class);
     public Matcher<View> okBut = withId(android.R.id.button1);
@@ -121,26 +113,25 @@ public class ControlPanelSteps {
         TestUtils.waitView(switcherActive).check(matches(isDisplayed()));
     }
 
-    public void isCardTestNews(String title) {
+    public void isCardTestNews(String title, String description) {
         TestUtils.waitView(newsItemCategoryField).check(matches(withText("Объявление")));
         TestUtils.waitView(newsItemTitleField).check(matches(withText(title)));
-        TestUtils.waitView(newsItemDescriptionField).check(matches(withText(title)));
+        TestUtils.waitView(newsItemDescriptionField).check(matches(withText(description)));
         TestUtils.waitView(saveBut).check(matches(isDisplayed()));
         TestUtils.waitView(cancelBut).check(matches(isDisplayed()));
         TestUtils.waitView(switcherActive).check(matches(isDisplayed()));
     }
 
-    public void selectANewsCategoryFromTheList(ViewInteraction nameCategory) {
+    public void selectANewsCategoryFromTheList(String nameCategory) {
         TestUtils.waitView(newsItemCategoryField).perform(click());
         Espresso.closeSoftKeyboard();
-        SystemClock.sleep(3000);
-        DataHelper.EspressoBaseTest.clickButton(nameCategory);
+        onView(withText(nameCategory)).inRoot((RootMatchers.isPlatformPopup())).check(matches(isDisplayed())).perform(click());
     }
 
-    public void setDateToDatePicker(int year, int month, int day) {
+    public void setDateToDatePicker(LocalDateTime date) {
         TestUtils.waitView(newsItemPublishDateField).perform(click());
         TestUtils.waitView(datePicker).check(matches(isDisplayed()));
-        TestUtils.waitView(datePicker).perform(setDate(year, month, day));
+        TestUtils.waitView(datePicker).perform(setDate(date.getYear(), date.getMonthValue(), date.getDayOfMonth()));
     }
 
     public void setTimeToTimePicker(int hour, int minute) {
@@ -160,18 +151,18 @@ public class ControlPanelSteps {
         TestUtils.waitView(newsItemPublishTimeField).perform(click());
     }
 
-    public void setTimeToTimeField(int hour, int minute) {
+    public void setTimeToTimeField(LocalDateTime date) {
         TestUtils.waitView(newsItemPublishTimeField).perform(click());
-        setTimeToTimePicker(hour, minute);
+        setTimeToTimePicker(date.getHour(), date.getMinute());
         okButtonClick();
     }
 
-    public void fillingOutTheFormCreatingNewsWithDateToday(int year, int month, int day, String title, String description) {
-        TestUtils.waitView(newsItemTitleField).perform(replaceText(title));
-        setDateToDatePicker(year, month, day);
+    public void fillingOutTheFormCreatingNewsWithDateToday(DataHelper.CreateNews news) {
+        TestUtils.waitView(newsItemTitleField).perform(replaceText(news.getNewsName()));
+        setDateToDatePicker(news.getDueDate());
         TestUtils.waitView(okBut).perform(click());
-        setTimeToTimeField(today.getHour(), today.getMinute());
-        TestUtils.waitView(newsItemDescriptionField).perform(replaceText(description));
+        setTimeToTimeField(news.getDueDate());
+        TestUtils.waitView(newsItemDescriptionField).perform(replaceText(news.getNewsDescription()));
     }
 
     public void replaceNewsTitleText(String title) {
@@ -198,15 +189,15 @@ public class ControlPanelSteps {
         return onView(allOf(withId(R.id.news_item_description_text_view), withParent(withParent(allOf(withId(R.id.news_item_material_card_view), withChild(withChild(withText(title))))))));
     }
 
-    public void deleteItemNews(String description) {
-        scrollToElementInRecyclerList(description);
-        getItemNewsDeleteElement(description).check(matches(isDisplayed())).perform(click());
+    public void deleteItemNews(String title) {
+        scrollToElementInRecyclerList(title);
+        getItemNewsDeleteElement(title).check(matches(isDisplayed())).perform(click());
         TestUtils.waitView(messageAboutDelete).check(matches(isDisplayed()));
         TestUtils.waitView(okBut).perform(click());
     }
 
     public ViewInteraction scrollToElementInRecyclerList(String description) {
-        return TestUtils.waitView(newsRecyclerList).check(matches(isDisplayed()))
+        return TestUtils.waitView(newsRecyclerList)
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(allOf(
                         hasDescendant(withText(description)))));
@@ -229,13 +220,6 @@ public class ControlPanelSteps {
         TestUtils.waitView(descriptionTextInputEndIcon).check(matches(isDisplayed()));
     }
 
-    public void creatingTestNews(ViewInteraction newsItemCategory, String title, String description, int year, int month, int day) {
-        TestUtils.waitView(addNewsImBut).perform(click());
-        selectANewsCategoryFromTheList(newsItemCategory);
-        fillingOutTheFormCreatingNewsWithDateToday(year, month, day, title, description);
-        TestUtils.waitView(saveBut).perform(click());
-    }
-
     public void isDialogWindowMessageTryAgainLatter() {
         TestUtils.waitView(withText("Something went wrong. Try again later.")).check(matches(isDisplayed()));
         TestUtils.waitView(okBut).check(matches(isDisplayed()));
@@ -249,7 +233,7 @@ public class ControlPanelSteps {
         return TestUtils.waitView(newsItemTitleField);
     }
 
-    public void saveNewsButtonClick() {
+    public void saveButtonClick() {
         TestUtils.waitView(saveBut).perform(click());
     }
 
@@ -303,5 +287,38 @@ public class ControlPanelSteps {
 
     public ViewInteraction getMessageAboutDelete() {
         return TestUtils.waitView(messageAboutDelete);
+    }
+
+    public void creatingNews(DataHelper.CreateNews news) {
+        TestUtils.waitView(addNewsImBut).perform(click());
+        selectANewsCategoryFromTheList(news.getNewsCategory());
+        fillingOutTheFormCreatingNewsWithDateToday(news);
+        TestUtils.waitView(saveBut).perform(click());
+    }
+
+    public void createNews(DataHelper.CreateNews... array) {
+        newsPageSteps.openControlPanel();
+        for (DataHelper.CreateNews news : array) {
+            creatingNews(news);
+        }
+    }
+
+    public void checkNewsIsPresent(DataHelper.CreateNews news) {
+        scrollToElementInRecyclerList(news.getNewsName()).check(matches(isDisplayed()));
+    }
+
+    public void checkNewsDoesNotPresent(DataHelper.CreateNews news) {
+        getNewsRecyclerList()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher
+                        .matchChildViewIsNotExist(newsItemTitleTextView, withText(news.getNewsName()))));
+    }
+
+    public void openNewsDescription(DataHelper.CreateNews news) {
+        getItemNewsButViewElement(news.getNewsName()).perform(click());
+    }
+
+    public void openNewsCard(DataHelper.CreateNews news) {
+        checkNewsIsPresent(news);
+        getItemNewsEditElement(news.getNewsName()).perform(click());
     }
 }

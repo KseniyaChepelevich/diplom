@@ -7,21 +7,22 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 import android.os.RemoteException;
-import android.os.SystemClock;
 
 import androidx.test.espresso.PerformException;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.UiDevice;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
-import ru.iteco.fmhandroid.ui.data.NamingHelper;
+import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.ClaimsPageSteps;
@@ -38,7 +39,7 @@ public class ClaimEditTest extends BaseTest {
     private static ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
     private static CreatingClaimsSteps creatingClaimsSteps = new CreatingClaimsSteps();
     private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
-    private static NamingHelper namingHelper = new NamingHelper();
+
 
     LocalDateTime today = LocalDateTime.now();
 
@@ -60,33 +61,33 @@ public class ClaimEditTest extends BaseTest {
     @Test
     @DisplayName("Редактирование заявки")
     public void shouldSaveClaimChanges() {
-        LocalDateTime date = today.plusHours(1);
-        String planeDate = TestUtils.getDateToString(date);
-        String planeTime = TestUtils.getTimeToString(date);
-        String title = namingHelper.getClaimOpenName();
-        String newTitle = namingHelper.getClaimOpenName();
+        DataHelper.CreateClaim openClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(today).build();
+        DataHelper.CreateClaim newOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(today.plus(1, ChronoUnit.HOURS)).build();
+        String planeDate = TestUtils.getDateToString(newOpenClaim.dueDate);
+        String planeTime = TestUtils.getTimeToString(newOpenClaim.dueDate);
 
         //Создать заявку
-        creatingClaimsSteps.creatingAClaimWithStatusOpen(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                today.getHour(), today.getMinute(), title, title);
+        creatingClaimsSteps.createClaim(openClaim);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(openClaim);
         //Отредактировать заявку
-        claimsPageSteps.editClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
-                date.getHour(), date.getMinute(), newTitle, newTitle);
+        claimsPageSteps.editClaim(newOpenClaim);
         //Проверить что внесенные изменения сохранились
-        claimsPageSteps.isClaimCard(newTitle, planeDate, planeTime, newTitle);
+        claimsPageSteps.isClaimCard(newOpenClaim);
     }
 
     @Test
     @DisplayName("Смена статуса заявки на In progress")
     public void shouldChangeTheStatusOfTheClaimToInProgress() {
-        String title = namingHelper.getClaimOpenName();
+        DataHelper.CreateClaim openClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(today).build();
+
         //Создать заявку
-        creatingClaimsSteps.creatingAClaimWithStatusOpen(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                today.getHour(), today.getMinute(), title, title);
+        creatingClaimsSteps.createClaim(openClaim);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(openClaim);
         //Изменить статус заявки
         claimsPageSteps.setStatusInProcess();
         //Проверить что внесенные изменения сохранились
@@ -96,14 +97,14 @@ public class ClaimEditTest extends BaseTest {
     @Test
     @DisplayName("Смена статуса заявки с In progress на To execute")
     public void shouldChangeTheStatusOfTheClaimToInToExecute() {
-        String title = namingHelper.getClaimInProgressName();
-        String comment = namingHelper.getComment();
+        DataHelper.CreateClaim inProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(today).withExecutor(DataHelper.getExecutorIvanov()).build();
+        String comment = DataHelper.getComment();
 
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                today.getHour(), today.getMinute(), title, title);
+        creatingClaimsSteps.createClaim(inProgressClaim);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(inProgressClaim);
         //Изменить статус заявки
         claimsPageSteps.setStatusExecute();
         claimsPageSteps.isStatusCommentDialog();
@@ -112,21 +113,21 @@ public class ClaimEditTest extends BaseTest {
         //Проверить что статус изменился
         claimsPageSteps.getStatusLabel().check(matches(withText("Executed")));
         //Проверяем что у заявки появился комментарий
-        claimsPageSteps.getCommentDescriptionText().check(matches(withText(comment)));
+        claimsPageSteps.checkCommentIsPresent(comment);
     }
 
     @Test
     @DisplayName("Сброс статуса заявки В работе ")
     public void shouldChangeTheStatusOfTheClaimToOpen() {
-        String title = namingHelper.getClaimInProgressName();
-        String comment = namingHelper.getComment();
+        DataHelper.CreateClaim inProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(today).withExecutor(DataHelper.getExecutorIvanov()).build();
+        String comment = DataHelper.getComment();
 
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                today.getHour(), today.getMinute(), title, title);
-        SystemClock.sleep(3000);
+        creatingClaimsSteps.createClaim(inProgressClaim);
+
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(inProgressClaim);
         //Изменить статус заявки
         claimsPageSteps.setStatusOpen();
         claimsPageSteps.isStatusCommentDialog();
@@ -135,18 +136,19 @@ public class ClaimEditTest extends BaseTest {
         //Проверить что статус изменился
         claimsPageSteps.getStatusLabel().check(matches(withText("Open")));
         //Проверяем что у заявки появился комментарий
-        claimsPageSteps.getCommentDescriptionText().check(matches(withText(comment)));
+        claimsPageSteps.checkCommentIsPresent(comment);
     }
 
     @Test
     @DisplayName("Смена статуса заявки с Open на Canceled")
     public void shouldChangeTheStatusOfTheClaimToCanceled() {
-        String title = namingHelper.getClaimOpenName();
+        DataHelper.CreateClaim openClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(today).build();
+
         //Создать заявку
-        creatingClaimsSteps.creatingAClaimWithStatusOpen(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                today.getHour(), today.getMinute(), title, title);
+        creatingClaimsSteps.createClaim(openClaim);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(openClaim);
         //Изменить статус заявки
         claimsPageSteps.setStatusCanceled();
         //Проверить что внесенные изменения сохранились
@@ -156,28 +158,30 @@ public class ClaimEditTest extends BaseTest {
     @Test
     @DisplayName("Работа кнопки назад в карточке заявки")
     public void shouldExitTheClaimCardByClickingTheButtonClose() {
-        String title = namingHelper.getClaimInProgressName();
+        DataHelper.CreateClaim inProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(today).withExecutor(DataHelper.getExecutorIvanov()).build();
+
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                today.getHour(), today.getMinute(), title, title);
+        creatingClaimsSteps.createClaim(inProgressClaim);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(inProgressClaim);
         //Выйти из карточки заявки, кликнув кнопку Close
         claimsPageSteps.closeImButtonClick();
         //Проверить карточка заявки закрылась
         claimsPageSteps.isClaimsPage();
     }
 
-    //Не удается подобрать проверку
+    @Ignore //Не удается подобрать проверку
     @Test
     @DisplayName("Сброс статуса заявки В работе с другим исполнителем")
     public void shouldNotChangeTheStatusOfTheClaimIfExecutorSmirnov() {
-        String title = namingHelper.getClaimInProgressName();
+        DataHelper.CreateClaim inProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(today).withExecutor(DataHelper.getExecutorSmirnov()).build();
+        String title = DataHelper.getTitle();
         //Создать заявку
-        creatingClaimsSteps.creatingAClaimExecutorSmirnov(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                today.getHour(), today.getMinute(), title, title);
+        creatingClaimsSteps.createClaim(inProgressClaim);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(inProgressClaim);
         //Проверить, что невозможно изменить статус заявки
         TestUtils.waitView(claimsPageSteps.statusProcessingImBut).perform(click());
         TestUtils.waitView(claimsPageSteps.throwOffMenuItem).check(doesNotExist());
@@ -186,12 +190,13 @@ public class ClaimEditTest extends BaseTest {
     @Test
     @DisplayName("Редактирование заявки со статусом In progress")
     public void shouldShowMessageTheClaimCanBeEditedOnlyInTheOpenStatus() {
-        String title = namingHelper.getClaimInProgressName();
+        DataHelper.CreateClaim inProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(today).withExecutor(DataHelper.getExecutorIvanov()).build();
+
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                today.getHour(), today.getMinute(), title, title);
+        creatingClaimsSteps.createClaim(inProgressClaim);
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(inProgressClaim);
         //Тапнуть кнопку редактировать
         claimsPageSteps.editClaimButClick();
         //Проверить появление сообщения "The Claim can be edited only in the Open status."

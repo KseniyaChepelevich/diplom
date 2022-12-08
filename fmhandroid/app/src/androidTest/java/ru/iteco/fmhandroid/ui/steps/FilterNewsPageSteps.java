@@ -14,6 +14,7 @@ import androidx.test.espresso.ViewInteraction;
 
 import org.hamcrest.Matcher;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 import ru.iteco.fmhandroid.R;
@@ -45,20 +46,20 @@ public class FilterNewsPageSteps {
         TestUtils.waitView(filterNewsInactiveCheckBox).check(matches(isDisplayed()));
     }
 
-    public void fillingOutTheFilterNewsForm(ViewInteraction nameCategory, int plusYearStart, int plusMonthStart, int plusDayStart, int plusYearEnd, int plusMonthEnd, int plusDayEnd) {
+    public void fillingOutTheFilterNewsForm(String nameCategory, LocalDateTime startDate, LocalDateTime endDate) {
         controlPanelSteps.selectANewsCategoryFromTheList(nameCategory);
 
-        setDateToDatePicker(newsItemPublishDateStartField, plusYearStart, plusMonthStart, plusDayStart);
+        setDateToDatePicker(newsItemPublishDateStartField, startDate);
         TestUtils.waitView(controlPanelSteps.okBut).perform(click());
 
-        setDateToDatePicker(newsItemPublishDateEndField, plusYearEnd, plusMonthEnd, plusDayEnd);
+        setDateToDatePicker(newsItemPublishDateEndField, endDate);
         TestUtils.waitView(controlPanelSteps.okBut).perform(click());
     }
 
-    public void setDateToDatePicker(Matcher<View> nameDatePicker, int plusYear, int plusMonth, int plusDay) {
+    public void setDateToDatePicker(Matcher<View> nameDatePicker, LocalDateTime date) {
         TestUtils.waitView(nameDatePicker).perform(click());
         TestUtils.waitView(controlPanelSteps.datePicker).check(matches(isDisplayed()));
-        TestUtils.waitView(controlPanelSteps.datePicker).perform(setDate(date.get(Calendar.YEAR) + plusYear, date.get(Calendar.MONTH) + 1 + plusMonth, date.get(Calendar.DAY_OF_MONTH) + plusDay));
+        TestUtils.waitView(controlPanelSteps.datePicker).perform(setDate(date.getYear(), date.getMonthValue(), date.getDayOfMonth()));
     }
 
     public void isMessageWrongPeriod() {

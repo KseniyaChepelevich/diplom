@@ -20,12 +20,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
-import ru.iteco.fmhandroid.ui.data.NamingHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.ControlPanelSteps;
@@ -41,7 +41,7 @@ public class NewsCreationFormTest extends BaseTest {
     private static MainPageSteps mainPageSteps = new MainPageSteps();
     private static NewsPageSteps newsPageSteps = new NewsPageSteps();
     private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
-    private static NamingHelper namingHelper = new NamingHelper();
+
 
     LocalDateTime today = LocalDateTime.now();
 
@@ -49,6 +49,7 @@ public class NewsCreationFormTest extends BaseTest {
     public void logoutCheck() throws RemoteException {
         device =
                 UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+
         try {
             authSteps.isAuthScreen();
         } catch (PerformException e) {
@@ -71,148 +72,169 @@ public class NewsCreationFormTest extends BaseTest {
     @DisplayName("Автоподставление в поле Title из поля Category")
     public void shouldSubstituteInTheTitleFieldTheValueOfTheCategoryField() {
         String categoryAnnouncement = "Объявление";
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
+        controlPanelSteps.selectANewsCategoryFromTheList(categoryAnnouncement);
         controlPanelSteps.getNewsItemTitle().check(matches(withText(categoryAnnouncement)));
     }
 
     @Test
     @DisplayName("Создание Новости с категорией Объявление")
     public void shouldCreateANewsItemWithCategoryAnnouncement() {
-        String titleAnnouncement = namingHelper.getNewsAnnouncementName();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                titleAnnouncement, titleAnnouncement);
-        controlPanelSteps.saveNewsButtonClick();
+        DataHelper.CreateNews announcementNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
+        String categoryAnnouncement = "Объявление";
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categoryAnnouncement);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(announcementNews);
+        controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Объявление"
-        controlPanelSteps.scrollToElementInRecyclerList(titleAnnouncement).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(announcementNews.getNewsName()).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Создание Новости с категорией День рождения")
     public void shouldCreateANewsItemWithCategoryBirthday() {
-        String titleBirthday = namingHelper.getNewsBirthdayName();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryBirthday);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                titleBirthday, titleBirthday);
-        controlPanelSteps.saveNewsButtonClick();
+        DataHelper.CreateNews birthdayNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryBirthday()).withDueDate(today).build();
+        String categoryBirthday = "День рождения";
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categoryBirthday);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(birthdayNews);
+        controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость День рождения"
-        controlPanelSteps.scrollToElementInRecyclerList(titleBirthday).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(birthdayNews.getNewsName()).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Создание Новости с категорией Зарплата")
     public void shouldCreateANewsItemWithCategorySalary() {
-        String titleSalary = namingHelper.getNewsSalaryName();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                titleSalary, titleSalary);
-        controlPanelSteps.saveNewsButtonClick();
+        DataHelper.CreateNews salaryNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategorySalary()).withDueDate(today).build();
+        String categorySalary = "Зарплата";
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(salaryNews);
+        controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Зарплата"
-        controlPanelSteps.scrollToElementInRecyclerList(titleSalary).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(salaryNews.getNewsName()).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Создание Новости с категорией Профсоюз")
     public void shouldCreateANewsItemWithCategoryTradeUnion() {
-        String titleTradeUnion = namingHelper.getNewsTradeUnionName();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryTradeUnion);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                titleTradeUnion, titleTradeUnion);
-        controlPanelSteps.saveNewsButtonClick();
+        DataHelper.CreateNews tradeUnionNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryTradeUnion()).withDueDate(today).build();
+        String categoryTradeUnion = "Профсоюз";
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categoryTradeUnion);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(tradeUnionNews);
+        controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Профсоюз"
-        controlPanelSteps.scrollToElementInRecyclerList(titleTradeUnion).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(tradeUnionNews.getNewsName()).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Создание Новости с категорией Праздник")
     public void shouldCreateANewsItemWithCategoryHoliday() {
-        String titleHoliday = namingHelper.getNewsHolidayName();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryHoliday);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                titleHoliday, titleHoliday);
-        controlPanelSteps.saveNewsButtonClick();
+        DataHelper.CreateNews holidayNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryHoliday()).withDueDate(today).build();
+        String categoryHoliday = "Праздник";
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categoryHoliday);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(holidayNews);
+        controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Праздник"
-        controlPanelSteps.scrollToElementInRecyclerList(titleHoliday).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(holidayNews.getNewsName()).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Создание Новости с категорией Благодарность")
     public void shouldCreateANewsItemWithCategoryGratitude() {
-        String titleGratitude = namingHelper.getNewsGratitudeName();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryGratitude);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                titleGratitude, titleGratitude);
-        controlPanelSteps.saveNewsButtonClick();
+        DataHelper.CreateNews gratitudeNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryGratitude()).withDueDate(today).build();
+        String categoryGratitude = "Благодарность";
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categoryGratitude);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(gratitudeNews);
+        controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Благодарность"
-        controlPanelSteps.scrollToElementInRecyclerList(titleGratitude).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(gratitudeNews.getNewsName()).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Создание Новости с категорией Массаж")
     public void shouldCreateANewsItemWithCategoryMassage() {
-        String titleMassage = namingHelper.getNewsMassageName();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryMassage);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                titleMassage, titleMassage);
-        controlPanelSteps.saveNewsButtonClick();
+        DataHelper.CreateNews massageNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryMassage()).withDueDate(today).build();
+        String categoryMassage = "Массаж";
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categoryMassage);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(massageNews);
+        controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Массаж"
-        controlPanelSteps.scrollToElementInRecyclerList(titleMassage).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(massageNews.getNewsName()).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Создание Новости с категорией Нужна помощь")
     public void shouldCreateANewsItemWithCategoryNeedHelp() {
-        String titleNeedHelp = namingHelper.getNewsNeedHelpName();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryNeedHelp);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                titleNeedHelp, titleNeedHelp);
-        controlPanelSteps.saveNewsButtonClick();
+        DataHelper.CreateNews needHelpNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryNeedHelp()).withDueDate(today).build();
+        String categoryNeedHelp = "Нужна помощь";
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categoryNeedHelp);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(needHelpNews);
+        controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Массаж"
-        controlPanelSteps.scrollToElementInRecyclerList(titleNeedHelp).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(needHelpNews.getNewsName()).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Отмена создания новости")
     public void shouldNotCreateNews() {
-        String titleNeedHelp = namingHelper.getNewsNeedHelpName();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryNeedHelp);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                titleNeedHelp, titleNeedHelp);
+        DataHelper.CreateNews needHelpNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryNeedHelp()).withDueDate(today).build();
+        String categoryNeedHelp = "Нужна помощь";
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categoryNeedHelp);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(needHelpNews);
         controlPanelSteps.cancelButtonClick();
         controlPanelSteps.getMessageChangesWonTBeSaved().check(matches(isDisplayed()));
         controlPanelSteps.okButtonClick();
         //Проверить отсутствие в списке новостей новости с заголовком "Новость не должна сохраниться"
         controlPanelSteps.getNewsRecyclerList()
-                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(titleNeedHelp))));
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher
+                        .matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(needHelpNews.getNewsName()))));
     }
 
     @Test
     @DisplayName("Создание новости с категорией не из списка")
     public void shouldShowAWrongMessageWithTextSelectACategoryFromTheList() {
+        DataHelper.CreateNews needHelpNews = DataHelper.newsWithRandomNameAndDescription()
+                .withDueDate(today).build();
         String MyCategory = "Тест";
-        String title = namingHelper.getNewsMyCategoryName();
 
         controlPanelSteps.replaceNewsCategoryText(MyCategory);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                title, title);
-        controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(needHelpNews);
+        controlPanelSteps.saveButtonClick();
         controlPanelSteps.checkToast("Wrong category selected. Select a category from the list.", true);
     }
 
     @Test
     @DisplayName("Сохранение пустой формы новости")
     public void shouldNotSaveEmptyNews() {
-        controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.saveButtonClick();
         controlPanelSteps.isWrongEmptyFormNews();
     }
 
     @Test
     @DisplayName("Создание Новости со статусом Не активна")
     public void shouldToggleTurnOffSwitchActive() {
-        String title = namingHelper.getNewsMassageName();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryMassage);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                title, title);
+        DataHelper.CreateNews massageNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryMassage()).withDueDate(today).build();
+        String categoryMassage = "Массаж";
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categoryMassage);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(massageNews);
         controlPanelSteps.switchNewsStatus();
         controlPanelSteps.getSwitcherNoteActive().check(matches(isDisplayed()));
     }
@@ -220,46 +242,50 @@ public class NewsCreationFormTest extends BaseTest {
     @Test
     @DisplayName("Создание Новости с датой публикации завтра")
     public void shouldCreateANewsItemWithPublishDateTomorrow() {
-        LocalDateTime date = today.plusDays(1);
-        String dateExpected = TestUtils.getDateToString(date);
-        String title = namingHelper.getNewsSalaryName();
+        DataHelper.CreateNews salaryNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategorySalary()).withDueDate(today.plus(1, ChronoUnit.DAYS)).build();
+        String categorySalary = "Зарплата";
 
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
-                title, title);
+        String dateExpected = TestUtils.getDateToString(salaryNews.getDueDate());
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(salaryNews);
         //Проверка, что выбранная дата отображается
         controlPanelSteps.getNewsItemPublishDate().check(matches(withText(dateExpected)));
-        controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Зарплата"
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(salaryNews.getNewsName()).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Создание Новости с датой публикации через месяц")
     public void shouldCreateANewsItemWithPublicationDateInAMonth() {
-        LocalDateTime date = today.plusMonths(1);
-        String dateExpected = TestUtils.getDateToString(date);
-        String title = namingHelper.getNewsSalaryName();
+        DataHelper.CreateNews salaryNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategorySalary()).withDueDate(today.plus(1, ChronoUnit.MONTHS)).build();
+        String categorySalary = "Зарплата";
 
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
-                title, title);
+        String dateExpected = TestUtils.getDateToString(salaryNews.getDueDate());
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(salaryNews);
 
         controlPanelSteps.getNewsItemPublishDate().check(matches(withText(dateExpected)));
-        controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Зарплата"
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(salaryNews.getNewsName()).check(matches(isDisplayed()));
     }
 
     @Ignore//При ручном тестировании этот кейс проходит без ошибки
     @Test
     @DisplayName("Создание Новости с датой публикации вчера")
     public void shouldNotCreateANewsItemWithPublicationDateYesterday() {
-        LocalDateTime date = today.minusDays(1);
+        DataHelper.CreateNews salaryNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategorySalary()).withDueDate(today.minus(1, ChronoUnit.DAYS)).build();
+        String categorySalary = "Зарплата";
         String dateExpected = TestUtils.getDateToString(today);
 
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
-        controlPanelSteps.setDateToDatePicker(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+        controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
+        controlPanelSteps.setDateToDatePicker(salaryNews.getDueDate());
         controlPanelSteps.okButtonClick();
         //Проверяем, что в поле Дата отображается сегодняшняя дата
         controlPanelSteps.getNewsItemPublishDate().check(matches(withText(dateExpected)));
@@ -269,11 +295,13 @@ public class NewsCreationFormTest extends BaseTest {
     @Test
     @DisplayName("Создание Новости с датой публикации год назад")
     public void shouldNotCreateANewsItemWithPublicationDateOneYearAgo() {
-        LocalDateTime date = today.minusYears(1);
+        DataHelper.CreateNews salaryNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategorySalary()).withDueDate(today.minus(1, ChronoUnit.YEARS)).build();
+        String categorySalary = "Зарплата";
         String dateExpected = TestUtils.getDateToString(today);
 
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
-        controlPanelSteps.setDateToDatePicker(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+        controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
+        controlPanelSteps.setDateToDatePicker(salaryNews.getDueDate());
         controlPanelSteps.okButtonClick();
         controlPanelSteps.getNewsItemPublishDate().check(matches(withText(dateExpected)));
     }
@@ -281,45 +309,42 @@ public class NewsCreationFormTest extends BaseTest {
     @Test
     @DisplayName("Создание Новости с датой публикации час назад")
     public void shouldCreateANewsItemWithPublicationTimeHourAgo() {
-        LocalDateTime date = today.minusHours(1);
-        String timeExpected = TestUtils.getTimeToString(date);
-        String title = namingHelper.getNewsSalaryName();
+        DataHelper.CreateNews salaryNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategorySalary()).withDueDate(today.minus(1, ChronoUnit.HOURS)).build();
+        String categorySalary = "Зарплата";
+        String timeExpected = TestUtils.getTimeToString(salaryNews.getDueDate());
 
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
-        controlPanelSteps.replaceNewsTitleText(title);
-        controlPanelSteps.setDateToDatePicker(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
-        controlPanelSteps.okButtonClick();
-        controlPanelSteps.setTimeToTimeField(date.getHour(), date.getMinute());
+        controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(salaryNews);
+
         //Проверка,что выбранное время отображается
         controlPanelSteps.getNewsItemPublishTime().check(matches(withText(timeExpected)));
-        //Ввод описания
-        controlPanelSteps.replaceNewsDescriptionText(title);
+
         //Сохраняем
-        controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(salaryNews.getNewsName()).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Создание Новости с датой публикации через час")
     public void shouldCreateANewsItemWithPublicationTimeInOneHour() {
-        LocalDateTime date = today.plusHours(1);
-        String timeExpected = TestUtils.getTimeToString(date);
-        String title = namingHelper.getNewsSalaryName();
+        DataHelper.CreateNews salaryNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategorySalary()).withDueDate(today.plus(1, ChronoUnit.HOURS)).build();
+        String categorySalary = "Зарплата";
 
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categorySalary);
-        controlPanelSteps.replaceNewsTitleText(title);
-        controlPanelSteps.setDateToDatePicker(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
-        controlPanelSteps.okButtonClick();
-        controlPanelSteps.setTimeToTimeField(date.getHour(), date.getMinute());
+        String timeExpected = TestUtils.getTimeToString(salaryNews.getDueDate());
+
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(salaryNews);
         //Проверка,что выбранное время отображается
         controlPanelSteps.getNewsItemPublishTime().check(matches(withText(timeExpected)));
-        //Ввод описания
-        controlPanelSteps.replaceNewsDescriptionText(title);
+
         //Сохраняем
-        controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(salaryNews.getNewsName()).check(matches(isDisplayed()));
     }
 
 
@@ -353,9 +378,7 @@ public class NewsCreationFormTest extends BaseTest {
     @Test
     @DisplayName("Отмена ввода даты в Форме для создания Новости")
     public void shouldNotSetDate() {
-        LocalDateTime date = today.plusYears(1);
-
-        controlPanelSteps.setDateToDatePicker(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+        controlPanelSteps.setDateToDatePicker(today.plus(1, ChronoUnit.HOURS));
         controlPanelSteps.cancelDeleteButtonClick();
         controlPanelSteps.getNewsItemPublishDate().check(matches(withText("")));
     }
@@ -372,12 +395,14 @@ public class NewsCreationFormTest extends BaseTest {
     @Test
     @DisplayName("Небуквенные и нецифровые знаки в поле Заголовок при создании новости")
     public void shouldShowWarningMessageNewsTitleFieldIsIncorrect() {
-        String nonLetterTitle = ";&&" + " " + DataHelper.generateTitleId();
-        String description = namingHelper.getNewsAnnouncementName();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                nonLetterTitle, description);
-        controlPanelSteps.saveNewsButtonClick();
+        String nonLetterTitle = ";&&";
+        DataHelper.CreateNews announcementNews = DataHelper.news().withName(nonLetterTitle).withDescription(DataHelper.getDescription())
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
+        String categoryAnnouncement = "Объявление";
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categoryAnnouncement);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(announcementNews);
+        controlPanelSteps.saveButtonClick();
         //Проверка, что отображается сообщение
         controlPanelSteps.checkToast("The field must not contain \";&&\" characters.", true);
     }
@@ -385,12 +410,14 @@ public class NewsCreationFormTest extends BaseTest {
     @Test
     @DisplayName("Небуквенные и нецифровые знаки в поле Описание при создании новости")
     public void shouldShowWarningMessageNewsDescriptionFieldIsIncorrect() {
-        String nonLetterDescription = ";&&" + " " + DataHelper.generateTitleId();
-        String title = namingHelper.getNewsAnnouncementName();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                title, nonLetterDescription);
-        controlPanelSteps.saveNewsButtonClick();
+        String nonLetterDescription = ";&&";
+        DataHelper.CreateNews announcementNews = DataHelper.news().withName(DataHelper.getTitle()).withDescription(nonLetterDescription)
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
+        String categoryAnnouncement = "Объявление";
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categoryAnnouncement);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(announcementNews);
+        controlPanelSteps.saveButtonClick();
         //Проверка, что отображается сообщение
         controlPanelSteps.checkToast("The field must not contain \";&&\" characters.", true);
     }
@@ -398,14 +425,16 @@ public class NewsCreationFormTest extends BaseTest {
     @Test
     @DisplayName("Разрыв соединения во время создания новости")
     public void shouldShowWarningMessageWhenTheConnectionIsBrokenDuringTheCreationOfTheNews() throws UiObjectNotFoundException {
-        String title = namingHelper.getNewsAnnouncementName();
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                title, title);
+        DataHelper.CreateNews salaryNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategorySalary()).withDueDate(today).build();
+        String categorySalary = "Зарплата";
+
+        controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(salaryNews);
         //Включаем режим В самолете
         authSteps.turnOnAirplaneMode();
         //Пытаемся сохранить новость
-        controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.saveButtonClick();
         //Проверяем, что отображается сообщение
         controlPanelSteps.checkToast("Saving failed. Try again later.", true);
         //Отключаем режим в самолете
@@ -415,17 +444,18 @@ public class NewsCreationFormTest extends BaseTest {
     @Test
     @DisplayName("Поворот экрана при создании новости")
     public void shouldSaveDataInTheNewsCreationFormOnScreenRotation() throws UiObjectNotFoundException, RemoteException {
-        String dateExpected = TestUtils.getDateToString(today);
-        String title = namingHelper.getNewsAnnouncementName();
+        DataHelper.CreateNews salaryNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategorySalary()).withDueDate(today).build();
+        String categorySalary = "Зарплата";
+        String dateExpected = TestUtils.getDateToString(salaryNews.getDueDate());
 
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryAnnouncement);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
-                title, title);
+        controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(salaryNews);
         device.setOrientationLeft();
         //Проверяем, что введенные данные сохранились
-        controlPanelSteps.getNewsItemTitle().check(matches(withText(title)));
+        controlPanelSteps.getNewsItemTitle().check(matches(withText(salaryNews.getNewsName())));
         controlPanelSteps.getNewsItemPublishDate().check(matches(withText(dateExpected)));
-        controlPanelSteps.getNewsItemDescription().check(matches(withText(title)));
+        controlPanelSteps.getNewsItemDescription().check(matches(withText(salaryNews.getNewsDescription())));
     }
 
 

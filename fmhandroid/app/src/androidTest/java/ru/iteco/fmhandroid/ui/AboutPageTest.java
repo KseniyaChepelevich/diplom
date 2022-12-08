@@ -6,15 +6,18 @@ import android.os.SystemClock;
 
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.UiDevice;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
+
 import io.qameta.allure.kotlin.junit4.DisplayName;
 
 import org.junit.Before;
+
 import org.junit.Test;
+
 import org.junit.runner.RunWith;
 
 import ru.iteco.fmhandroid.ui.steps.AboutPageSteps;
@@ -37,6 +40,7 @@ public class AboutPageTest extends BaseTest {
     private static AuthSteps authSteps = new AuthSteps();
     private static MainPageSteps mainPageSteps = new MainPageSteps();
     private static AboutPageSteps aboutPageSteps = new AboutPageSteps();
+
 
     @Before
     public void logoutCheck() throws RemoteException {

@@ -20,14 +20,15 @@ import androidx.test.uiautomator.UiSelector;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
-import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
-import ru.iteco.fmhandroid.ui.data.NamingHelper;
+import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.ControlPanelSteps;
@@ -45,7 +46,7 @@ public class ControlPanelTest extends BaseTest {
     private static NewsPageSteps newsPageSteps = new NewsPageSteps();
     private static FilterNewsPageSteps filterNewsPageSteps = new FilterNewsPageSteps();
     private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
-    private static NamingHelper namingHelper = new NamingHelper();
+
 
     LocalDateTime today = LocalDateTime.now();
 
@@ -80,174 +81,169 @@ public class ControlPanelTest extends BaseTest {
     @Test
     @DisplayName("Отмена удаления новости во вкладке Панель управления")
     public void shouldNotRemoveTheNewsItem() {
-        String title = namingHelper.getNewsAnnouncementName();
+        DataHelper.CreateNews announcementNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
+
         //Создаем новость для теста
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
-                today.getYear(), today.getMonthValue(), today.getDayOfMonth());
+        controlPanelSteps.creatingNews(announcementNews);
         //Находим нашу новость
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.scrollToElementInRecyclerList(announcementNews.getNewsName()).check(matches(isDisplayed()));
         //Нажимаем на кнопку удалить в карточке новости
-        controlPanelSteps.getItemNewsDeleteElement(title).perform(click());
+        controlPanelSteps.getItemNewsDeleteElement(announcementNews.getNewsName()).perform(click());
         //Отображается сообщение об удалении
         controlPanelSteps.getMessageAboutDelete().check(matches(isDisplayed()));
         //Отменяем удаление
         controlPanelSteps.cancelDeleteButtonClick();
         //Проверяем, что наша новость осталась в списке
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.checkNewsIsPresent(announcementNews);
     }
 
     @Test
     @DisplayName("Открытие Новости для редактирования")
     public void shouldOpenTheNewsForEditing() {
-        String title = namingHelper.getNewsAnnouncementName();
+        DataHelper.CreateNews announcementNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
+
         //Создаем новость для теста
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
-                today.getYear(), today.getMonthValue(), today.getDayOfMonth());
-        //Находим нашу новость
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.creatingNews(announcementNews);
+
         //Нажимаем на кнопку Редактировать в карточке новости
-        controlPanelSteps.getItemNewsEditElement(title).perform(click());
+        controlPanelSteps.openNewsCard(announcementNews);
+        controlPanelSteps.isCardTestNews(announcementNews.getNewsName(), announcementNews.getNewsDescription());
         pressBack();
     }
 
     @Test
     @DisplayName("Открытие и закрытие Новости для редактирования без внесения изменений")
     public void shouldNotEditTheNews() {
-        String title = namingHelper.getNewsAnnouncementName();
+        DataHelper.CreateNews announcementNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
+
         //Создаем новость для теста
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
-                today.getYear(), today.getMonthValue(), today.getDayOfMonth());
-        //Находим нашу новость
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.creatingNews(announcementNews);
         //Нажимаем на кнопку Редактировать в карточке новости
-        controlPanelSteps.getItemNewsEditElement(title).perform(click());
+        controlPanelSteps.openNewsCard(announcementNews);
         //Проверяем, что октрылась наща новость
-        controlPanelSteps.isCardTestNews(title);
+        controlPanelSteps.isCardTestNews(announcementNews.getNewsName(), announcementNews.getNewsDescription());
         //Отменяем редактирование новости
         controlPanelSteps.cancelButtonClick();
         //Отображается сообщение, что изменения не будут сохранены
         controlPanelSteps.getMessageChangesWonTBeSaved().check(matches(isDisplayed()));
         controlPanelSteps.okButtonClick();
         //Проверяем, что наша новость есть в списке
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.checkNewsIsPresent(announcementNews);
     }
 
     @Test
     @DisplayName("Открытие и сохранение Новости для редактирования без внесения изменений")
     public void shouldKeepTheNewsUnchanged() {
-        String title = namingHelper.getNewsAnnouncementName();
+        DataHelper.CreateNews announcementNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
+
         //Создаем новость для теста
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
-                today.getYear(), today.getMonthValue(), today.getDayOfMonth());
-        //Находим нашу новость
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
-        //Открываем новость для редактирования
-        controlPanelSteps.getItemNewsEditElement(title).perform(click());
+        controlPanelSteps.creatingNews(announcementNews);
+        //Нажимаем на кнопку Редактировать в карточке новости
+        controlPanelSteps.openNewsCard(announcementNews);
         //Проверяем, что октрылась наща новость
-        controlPanelSteps.isCardTestNews(title);
+        controlPanelSteps.isCardTestNews(announcementNews.getNewsName(), announcementNews.getNewsDescription());
         //Сохраняем новость без изменений
-        controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.saveButtonClick();
         //Проверяем, что наша новость есть в списке
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.checkNewsIsPresent(announcementNews);
     }
 
     @Test
     @DisplayName("Выключение Активного статуса у Новости")
     public void shouldTurnOffActiveStatus() {
-        String title = namingHelper.getNewsAnnouncementName();
+        DataHelper.CreateNews announcementNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
+
         //Создаем новость для теста
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
-                today.getYear(), today.getMonthValue(), today.getDayOfMonth());
-        //Находим нашу новость
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.creatingNews(announcementNews);
         //Открываем новость для редактирования
-        controlPanelSteps.getItemNewsEditElement(title).perform(click());
+        controlPanelSteps.openNewsCard(announcementNews);
         //Проверяем, что октрылась наща новость
-        controlPanelSteps.isCardTestNews(title);
+        controlPanelSteps.isCardTestNews(announcementNews.getNewsName(), announcementNews.getNewsDescription());
         //Переключаем статус новости из Active в NotActive
         controlPanelSteps.switchNewsStatus();
         controlPanelSteps.getSwitcherNoteActive().check(matches(isDisplayed()));
         //Сохраняем
-        controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.saveButtonClick();
         //Проверяем, что наша новость отображается в списке
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.checkNewsIsPresent(announcementNews);
     }
 
     @Test
     @DisplayName("Редактирование даты публикации")
     public void shouldChangeThePublicationDate() {
-        LocalDateTime date = today.plusDays(1);
-        String dateExpected = TestUtils.getDateToString(date);
-        String title = namingHelper.getNewsAnnouncementName();
+        String dateExpected = TestUtils.getDateToString(today.plus(1, ChronoUnit.DAYS));
+
+        DataHelper.CreateNews announcementNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
 
         //Создаем новость для теста
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
-                today.getYear(), today.getMonthValue(), today.getDayOfMonth());
-        //Находим нашу новость
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.creatingNews(announcementNews);
         //Открываем новость для редактирования
-        controlPanelSteps.getItemNewsEditElement(title).perform(click());
+        controlPanelSteps.openNewsCard(announcementNews);
         //Проверяем, что октрылась наща новость
-        controlPanelSteps.isCardTestNews(title);
+        controlPanelSteps.isCardTestNews(announcementNews.getNewsName(), announcementNews.getNewsDescription());
         //Редактируем дату публикации
-        controlPanelSteps.setDateToDatePicker(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+        controlPanelSteps.setDateToDatePicker(today.plus(1, ChronoUnit.DAYS));
         controlPanelSteps.okButtonClick();
         //Проверяем, что в поле Дата публикации отображается новая дата
         controlPanelSteps.getNewsItemPublishDate().check(matches(withText(dateExpected)));
         //Сохраняем изменения
-        controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.saveButtonClick();
         //Проверяем, что наша новость есть в списке
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.checkNewsIsPresent(announcementNews);
     }
 
     @Test
     @DisplayName("Редактирование описания Новости")
     public void shouldChangeTheDescription() {
-        String title = namingHelper.getNewsAnnouncementName();
-        String newDescription = title + " проверка";
+        DataHelper.CreateNews announcementNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
+        String newDescription = announcementNews.getNewsDescription() + " проверка";
+
         //Создаем новость для теста
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
-                today.getYear(), today.getMonthValue(), today.getDayOfMonth());
-        //Находим нашу новость
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        controlPanelSteps.creatingNews(announcementNews);
         //Открываем новость для редактирования
-        controlPanelSteps.getItemNewsEditElement(title).perform(click());
+        controlPanelSteps.openNewsCard(announcementNews);
         //Проверяем, что октрылась наша новость
-        controlPanelSteps.isCardTestNews(title);
+        controlPanelSteps.isCardTestNews(announcementNews.getNewsName(), announcementNews.getNewsDescription());
         //Редактируем описание новости
         controlPanelSteps.getNewsItemDescription().perform(replaceText(newDescription));
         //Сохраняем изменения
-        controlPanelSteps.saveNewsButtonClick();
-        //Проверяем, что наша новость есть в списке, что она имеет новое описание
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
-        controlPanelSteps.getItemNewsEditElement(title).perform(click());
+        controlPanelSteps.saveButtonClick();
+        //Проверяем, что наша новость есть в списке
+        controlPanelSteps.checkNewsIsPresent(announcementNews);
+        //Разворачиваем карточку новости и проверяем, что она имеет новое Описание
+        controlPanelSteps.openNewsCard(announcementNews);
         controlPanelSteps.getNewsItemDescription().check(matches(withText(newDescription)));
     }
 
     @Test
     @DisplayName("Редактирование времени публикации Новости")
     public void shouldChangeThePublicationTime() {
-        LocalDateTime date = today.plusHours(1);
-        String timeExpected = TestUtils.getTimeToString(date);
-        String title = namingHelper.getNewsAnnouncementName();
+        String timeExpected = TestUtils.getTimeToString(today.plus(1, ChronoUnit.HOURS));
+
+        DataHelper.CreateNews announcementNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
 
         //Создаем новость для теста
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
-                today.getYear(), today.getMonthValue(), today.getDayOfMonth());
-        //Находим нашу новость
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
-        //Открываем ее для редактирования
-        controlPanelSteps.getItemNewsEditElement(title).perform(click());
-        //Проверяем, что открылась наша новость
-        controlPanelSteps.isCardTestNews(title);
-        //Редактируем время публикации
-        controlPanelSteps.setTimeToTimeField(date.getHour(), date.getMinute());
-        //Сохраняем изменения
-        controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.creatingNews(announcementNews);
 
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        //Открываем новость для редактирования
+        controlPanelSteps.openNewsCard(announcementNews);
+        //Проверяем, что открылась наша новость
+        controlPanelSteps.isCardTestNews(announcementNews.getNewsName(), announcementNews.getNewsDescription());
+        //Редактируем время публикации
+        controlPanelSteps.setTimeToTimeField(today.plus(1, ChronoUnit.HOURS));
+        //Сохраняем изменения
+        controlPanelSteps.saveButtonClick();
+
         //Открываем новость для проверки сохранилось ли измененное время публикации
-        controlPanelSteps.getItemNewsEditElement(title).perform(click());
+        controlPanelSteps.openNewsCard(announcementNews);
         controlPanelSteps.getNewsItemPublishTime().check(matches(withText(timeExpected)));
 
         pressBack();
@@ -256,48 +252,49 @@ public class ControlPanelTest extends BaseTest {
     @Test
     @DisplayName("Редактирование заголовка Новости")
     public void shouldChangeNewsTitle() {
-        String title = namingHelper.getNewsAnnouncementName();
-        String newTitle = title + " проверка";
-        //Создаем новость
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
-                today.getYear(), today.getMonthValue(), today.getDayOfMonth());
-        //Находим нашу новость
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
-        //Открываем ее для редактирования
-        controlPanelSteps.getItemNewsEditElement(title).perform(click());
-        controlPanelSteps.isCardTestNews(title);
+        DataHelper.CreateNews announcementNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
+
+        String newTitle = announcementNews.getNewsName() + " проверка";
+
+        //Создаем новость для теста
+        controlPanelSteps.creatingNews(announcementNews);
+        //Открываем новость для редактирования
+        controlPanelSteps.openNewsCard(announcementNews);
+        controlPanelSteps.isCardTestNews(announcementNews.getNewsName(), announcementNews.getNewsDescription());
         //Редактируем заголовок
         controlPanelSteps.getNewsItemTitle().perform(replaceText(newTitle));
         //Сохраняем измененную новость
-        controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.saveButtonClick();
         //Проверяем что наша новость с новым заголовком отображается в списке
         controlPanelSteps.scrollToElementInRecyclerList(newTitle).check(matches(isDisplayed()));
-        controlPanelSteps.getItemNewsEditElement(title).perform(click());
+        controlPanelSteps.getItemNewsEditElement(newTitle).perform(click());
         controlPanelSteps.getNewsItemTitle().check(matches(withText(newTitle)));
     }
 
+    @Ignore
     //Тест работает нестабильно. В режиме дебага все проходит. Падает при попытке сменить категорию
     @Test
     @DisplayName("Редактирование Категории Новости")
     public void shouldChangeNewsCategory() {
-        String title = namingHelper.getNewsAnnouncementName();
-        String newCategory = "День рождения";
-        //Создаем новость
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
-                today.getYear(), today.getMonthValue(), today.getDayOfMonth());
-        //Находим нашу новость
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
-        //Открываем ее для редактирования
-        controlPanelSteps.getItemNewsEditElement(title).perform(click());
-        controlPanelSteps.isCardTestNews(title);
+        DataHelper.CreateNews changeCategoryNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
+        DataHelper.CreateNews newChangeCategoryNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryBirthday()).withDueDate(today).build();
+
+        //Создаем новость для теста
+        controlPanelSteps.creatingNews(changeCategoryNews);
+        //Открываем новость для редактирования
+        controlPanelSteps.openNewsCard(changeCategoryNews);
+        controlPanelSteps.isCardTestNews(changeCategoryNews.getNewsName(), changeCategoryNews.getNewsDescription());
         //Меняем категорию
-        controlPanelSteps.selectANewsCategoryFromTheList(controlPanelSteps.categoryBirthday);
+        controlPanelSteps.selectANewsCategoryFromTheList(DataHelper.getCategoryBirthday());
         //Сохраняем изменения
-        controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.saveButtonClick();
         //Проверяем что наша новость с новой категорией есть в списке
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
-        controlPanelSteps.getItemNewsEditElement(title).perform(click());
-        controlPanelSteps.getNewsItemCategory().check(matches(withText(newCategory)));
+        controlPanelSteps.checkNewsIsPresent(newChangeCategoryNews);
+        controlPanelSteps.openNewsCard(changeCategoryNews);
+        controlPanelSteps.getNewsItemCategory().check(matches(withText(DataHelper.getCategoryBirthday())));
 
         pressBack();
     }
@@ -305,31 +302,32 @@ public class ControlPanelTest extends BaseTest {
     @Test
     @DisplayName("Просмотр описания новости из вкладки Панель управления раздела Новости")
     public void shouldOpenNewsDescription() {
-        String title = namingHelper.getNewsAnnouncementName();
-        //Создаем новость
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
-                today.getYear(), today.getMonthValue(), today.getDayOfMonth());
-        //Находим нашу новость в списке
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        DataHelper.CreateNews announcementNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
+
+        //Создаем новость для теста
+        controlPanelSteps.creatingNews(announcementNews);
+        //Находим нашу новость
+        controlPanelSteps.checkNewsIsPresent(announcementNews);
         //Разворачиваем карточку новости и проверяем, что отображается описание
-        controlPanelSteps.getItemNewsButViewElement(title).perform(click());
-        controlPanelSteps.getItemNewsDescriptionElement(title).check(matches(isDisplayed()));
+        controlPanelSteps.openNewsDescription(announcementNews);
+        controlPanelSteps.getItemNewsDescriptionElement(announcementNews.getNewsDescription()).check(matches(isDisplayed()));
     }
 
     @Test
     @DisplayName("Удаление новости во вкладке Панель управления")
     public void shouldDeleteNewsItem() {
-        String title = namingHelper.getNewsAnnouncementName();
-        //Создаем новость
-        controlPanelSteps.creatingTestNews(controlPanelSteps.categoryAnnouncement, title, title,
-                today.getYear(), today.getMonthValue(), today.getDayOfMonth());
-        //Находим новость в списке
-        controlPanelSteps.scrollToElementInRecyclerList(title).check(matches(isDisplayed()));
+        DataHelper.CreateNews announcementNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
+
+        //Создаем новость для теста
+        controlPanelSteps.creatingNews(announcementNews);
+        //Находим нашу новость
+        controlPanelSteps.checkNewsIsPresent(announcementNews);
         //Удаляем новость
-        controlPanelSteps.deleteItemNews(title);
+        controlPanelSteps.deleteItemNews(announcementNews.getNewsName());
         //Проверяем, что новость удалилась
-        controlPanelSteps.getNewsRecyclerList()
-                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(controlPanelSteps.newsItemTitleTextView, withText(title))));
+        controlPanelSteps.checkNewsDoesNotPresent(announcementNews);
     }
 
     @Test

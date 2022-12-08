@@ -1,7 +1,6 @@
 package ru.iteco.fmhandroid.ui;
 
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
@@ -19,9 +18,7 @@ import java.time.LocalDateTime;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
-import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
-import ru.iteco.fmhandroid.ui.data.NamingHelper;
-import ru.iteco.fmhandroid.ui.data.TestUtils;
+import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.ClaimsPageSteps;
 import ru.iteco.fmhandroid.ui.steps.ControlPanelSteps;
@@ -37,7 +34,7 @@ public class ClaimsPageTest extends BaseTest {
     private static ClaimsPageSteps claimsPageSteps = new ClaimsPageSteps();
     private static CreatingClaimsSteps creatingClaimsSteps = new CreatingClaimsSteps();
     private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
-    private static NamingHelper namingHelper = new NamingHelper();
+
 
     LocalDateTime date = LocalDateTime.now();
 
@@ -73,51 +70,47 @@ public class ClaimsPageTest extends BaseTest {
     @Test
     @DisplayName("Окрытие Заявки с помощью кнопки со стрелкой")
     public void shouldOpenTheClaimCard() {
-        String title = namingHelper.getClaimInProgressName();
-        String planeDate = TestUtils.getDateToString(date);
-        String planeTime = TestUtils.getTimeToString(date);
+        DataHelper.CreateClaim inProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(date).withExecutor(DataHelper.getExecutorIvanov()).build();
 
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
-                date.getHour(), date.getMinute(), title, title);
+        creatingClaimsSteps.createClaim(inProgressClaim);
+
         //Открыть карточку заявки
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(inProgressClaim);
         //Проверить, что отображается карточка созданной заявки
-        claimsPageSteps.isClaimCard(title, planeDate, planeTime, title);
+        claimsPageSteps.isClaimCard(inProgressClaim);
     }
 
     @Test
     @DisplayName("Добавление комментария к заявке")
     public void shouldAddACommentToTheClaim() {
-        String title = namingHelper.getClaimInProgressName();
-        String comment = namingHelper.getComment();
+        DataHelper.CreateClaim inProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(date).withExecutor(DataHelper.getExecutorIvanov()).build();
+        String comment = DataHelper.getComment();
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
-                date.getHour(), date.getMinute(), title, title);
+        creatingClaimsSteps.createClaim(inProgressClaim);
         //Открываем заявку для редактирования
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(inProgressClaim);
         //Добавить комментарий
-        claimsPageSteps.openCreatingCommentForm();
-        claimsPageSteps.isCommentForm();
-        claimsPageSteps.replaceCommentTextInputText(comment);
-        controlPanelSteps.saveNewsButtonClick();
+        claimsPageSteps.addComment(comment);
+        controlPanelSteps.saveButtonClick();
         //Проверить что комментарий сохранился
-        claimsPageSteps.getCommentDescriptionText().check(matches(withText(comment)));
+        claimsPageSteps.checkCommentIsPresent(comment);
     }
 
     @Test
     @DisplayName("Добавление пустого комментария")
     public void shouldShowMessageFieldCannotBeEmpty() {
-        String title = namingHelper.getClaimInProgressName();
+        DataHelper.CreateClaim inProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(date).withExecutor(DataHelper.getExecutorIvanov()).build();
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
-                date.getHour(), date.getMinute(), title, title);
+        creatingClaimsSteps.createClaim(inProgressClaim);
         //Открываем заявку для редактирования
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(inProgressClaim);
         //Добавить пустой комментарий
-        claimsPageSteps.openCreatingCommentForm();
-        claimsPageSteps.isCommentForm();
-        controlPanelSteps.saveNewsButtonClick();
+        claimsPageSteps.addComment("");
+        controlPanelSteps.saveButtonClick();
         //Проверить что отображается сообщение
         controlPanelSteps.checkToast("The field cannot be empty.", true);
     }
@@ -125,42 +118,35 @@ public class ClaimsPageTest extends BaseTest {
     @Test
     @DisplayName("Отмена добавления комментария")
     public void shouldNotSaveCommentWhenCancelButtonIsClicked() {
-        String title = namingHelper.getClaimInProgressName();
-        String comment = namingHelper.getComment();
+        DataHelper.CreateClaim inProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(date).withExecutor(DataHelper.getExecutorIvanov()).build();
+        String comment = DataHelper.getComment();
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
-                date.getHour(), date.getMinute(), title, title);
+        creatingClaimsSteps.createClaim(inProgressClaim);
         //Открываем заявку для редактирования
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(inProgressClaim);
         //Добавить комментарий
-        claimsPageSteps.openCreatingCommentForm();
-        claimsPageSteps.isCommentForm();
-        claimsPageSteps.replaceCommentTextInputText(comment);
+        claimsPageSteps.addComment(comment);
         controlPanelSteps.cancelButtonClick();
         //Проверить что комментарий не сохранился
-        claimsPageSteps.getClaimCommentsListRecyclerView()
-                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher
-                        .matchChildViewIsNotExist(claimsPageSteps.commentDescriptionTextView, withText(comment))));
+        claimsPageSteps.checkCommentDoesNotPresent(comment);
     }
 
     @Test
     @DisplayName("Редактирование комментария")
     public void shouldEditTheComment() {
-        String title = namingHelper.getClaimInProgressName();
-        String comment = namingHelper.getComment();
-        String newComment = namingHelper.getComment();
-        ;
+        DataHelper.CreateClaim inProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(date).withExecutor(DataHelper.getExecutorIvanov()).build();
+        String comment = DataHelper.getComment();
+        String newComment = DataHelper.getComment();
 
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
-                date.getHour(), date.getMinute(), title, title);
+        creatingClaimsSteps.createClaim(inProgressClaim);
         //Открываем заявку для редактирования
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(inProgressClaim);
         //Добавить комментарий
-        claimsPageSteps.openCreatingCommentForm();
-        claimsPageSteps.isCommentForm();
-        claimsPageSteps.replaceCommentTextInputText(comment);
-        controlPanelSteps.saveNewsButtonClick();
+        claimsPageSteps.addComment(comment);
+        controlPanelSteps.saveButtonClick();
         //Редактируем комменарий
         claimsPageSteps.editComment(newComment);
         //Проверяем,что сохранился новый комментарий
@@ -170,35 +156,33 @@ public class ClaimsPageTest extends BaseTest {
     @Test
     @DisplayName("Небуквенные и нецифровые знаки в поле Комментарий при редактировании заявки")
     public void shouldShowWarningMessageClaimCommentFieldIsIncorrect() {
-        String title = namingHelper.getClaimInProgressName();
+        DataHelper.CreateClaim inProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(date).withExecutor(DataHelper.getExecutorIvanov()).build();
         String nonLetterComment = ";&&";
 
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
-                date.getHour(), date.getMinute(), title, title);
+        creatingClaimsSteps.createClaim(inProgressClaim);
         //Открываем заявку для редактирования
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(inProgressClaim);
         //Добавить комментарий
-        claimsPageSteps.openCreatingCommentForm();
-        claimsPageSteps.isCommentForm();
-        claimsPageSteps.replaceCommentTextInputText(nonLetterComment);
-        controlPanelSteps.saveNewsButtonClick();
+        claimsPageSteps.addComment(nonLetterComment);
+        controlPanelSteps.saveButtonClick();
         controlPanelSteps.checkToast("The field must not contain \";&&\" characters.", true);
     }
 
     @Test
     @DisplayName("Отображение только что закрытой заявки на экране в списке заявок")
     public void shouldFindOnTheScreenJustClosedClaim() {
-        String title = namingHelper.getClaimInProgressName();
+        DataHelper.CreateClaim inProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(date).withExecutor(DataHelper.getExecutorIvanov()).build();
         //Создать заявку
-        creatingClaimsSteps.creatingAClaim(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
-                date.getHour(), date.getMinute(), title, title);
+        creatingClaimsSteps.createClaim(inProgressClaim);
         //Находим заявку в списке и отркываем ее
-        claimsPageSteps.openClaimCard(title);
+        claimsPageSteps.openClaimCard(inProgressClaim);
         //Закрываем заявку
         claimsPageSteps.closeImButtonClick();
         //Проверяем, что только-что закрытая заявка видна на экране
-        claimsPageSteps.getItemClaimCompatImView(title).check(matches(isDisplayed()));
+        claimsPageSteps.checkClaimIsPresentOnScreen(inProgressClaim);
     }
 
 }

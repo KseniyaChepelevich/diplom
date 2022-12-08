@@ -19,7 +19,6 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.AllOf.allOf;
 
-import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.hamcrest.Matcher;
 

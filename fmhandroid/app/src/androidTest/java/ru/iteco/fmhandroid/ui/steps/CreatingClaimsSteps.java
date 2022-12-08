@@ -1,5 +1,6 @@
 package ru.iteco.fmhandroid.ui.steps;
 
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -9,19 +10,21 @@ import static androidx.test.espresso.contrib.PickerActions.setDate;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
 import static org.hamcrest.core.AllOf.allOf;
 
-import android.os.SystemClock;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.matcher.RootMatchers;
 
 
 import org.hamcrest.Matchers;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
+
 
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
@@ -34,24 +37,25 @@ public class CreatingClaimsSteps {
     public void replaceTextClaimExecutor(String nameExecutor) {
         TestUtils.waitView(claimsPageSteps.executorClaimField).check(matches(isDisplayed())).perform(click(), replaceText(nameExecutor));
         Espresso.closeSoftKeyboard();
-
     }
 
     public void selectAClaimExecutorFromTheList(ViewInteraction nameExecutor) {
         TestUtils.waitView(claimsPageSteps.executorClaimField).perform(click());
         Espresso.closeSoftKeyboard();
-        DataHelper.EspressoBaseTest.clickButton(nameExecutor);
+        nameExecutor.perform(click());
     }
 
-    public void setDateToDatePicker(int year, int month, int day) {
+
+    public void setDateToDatePicker(LocalDateTime dueDate) {
         TestUtils.waitView(claimsPageSteps.dateClaimField).perform(click());
         TestUtils.waitView(controlPanelSteps.datePicker).check(matches(isDisplayed()));
-        TestUtils.waitView(controlPanelSteps.datePicker).perform(setDate(year, month, day));
+        TestUtils.waitView(controlPanelSteps.datePicker).perform(setDate(dueDate.getYear(), dueDate.getMonthValue(), dueDate.getDayOfMonth()));
     }
 
-    public void setTimeToTimeField(int hour, int minute) {
+
+    public void setTimeToTimeField(LocalDateTime dueDate) {
         TestUtils.waitView(claimsPageSteps.timeClaimField).perform(click());
-        controlPanelSteps.setTimeToTimePicker(hour, minute);
+        controlPanelSteps.setTimeToTimePicker(dueDate.getHour(), dueDate.getMinute());
         controlPanelSteps.okButtonClick();
     }
 
@@ -59,33 +63,13 @@ public class CreatingClaimsSteps {
         TestUtils.waitView(claimsPageSteps.timeClaimField).perform(click());
     }
 
-    public void fillingOutTheFormCreatingClaimWithDateToday(int year, int month, int day, int hour, int minute, String title, String description) {
-        replaceTitleClaimText(title);
-        setDateToDatePicker(year, month, day);
+
+    public void fillingOutTheFormCreatingClaim(DataHelper.CreateClaim createClaim) {
+        replaceTitleClaimText(createClaim.getClaimName());
+        setDateToDatePicker(createClaim.getDueDate());
         controlPanelSteps.okButtonClick();
-        setTimeToTimeField(hour, minute);
-        TestUtils.waitView(claimsPageSteps.descriptionClaimField).perform(replaceText(description));
-    }
-
-    public void creatingAClaim(int year, int month, int day, int hour, int minutes, String title, String description) {
-        TestUtils.waitView(claimsPageSteps.addNewClaimBut).perform(click());
-        selectAClaimExecutorFromTheList(claimsPageSteps.executorIvanov);
-        fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, title, description);
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
-    }
-
-    public void creatingAClaimExecutorSmirnov(int year, int month, int day, int hour, int minutes, String title, String description) {
-        TestUtils.waitView(claimsPageSteps.addNewClaimBut).perform(click());
-        selectAClaimExecutorFromTheList(claimsPageSteps.executorSmirnov);
-        fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, title, description);
-        controlPanelSteps.saveNewsButtonClick();
-    }
-
-    public void creatingAClaimWithStatusOpen(int year, int month, int day, int hour, int minutes, String title, String description) {
-        TestUtils.waitView(claimsPageSteps.addNewClaimBut).perform(click());
-        fillingOutTheFormCreatingClaimWithDateToday(year, month, day, hour, minutes, title, description);
-        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
-        SystemClock.sleep(3000);
+        setTimeToTimeField(createClaim.getDueDate());
+        TestUtils.waitView(claimsPageSteps.descriptionClaimField).perform(replaceText(createClaim.getClaimDescription()));
     }
 
     public void isFillEmptyFieldsMessage() {
@@ -110,6 +94,42 @@ public class CreatingClaimsSteps {
 
     public void replaceTitleClaimText(String title) {
         TestUtils.waitView(claimsPageSteps.titleClaimField).perform(replaceText(title));
+    }
+
+    public void createClaim(DataHelper.CreateClaim claim) {
+
+        TestUtils.waitView(claimsPageSteps.addNewClaimBut).perform(click());
+        if (claim.getClaimStatus() != "Open") {
+            selectAClaimExecutorFromTheList(onView(withText(claim.getExecutorName())).inRoot((RootMatchers.isPlatformPopup())));
+        }
+        fillingOutTheFormCreatingClaim(claim);
+        TestUtils.waitView(controlPanelSteps.saveBut).perform(click());
+        if (claim.getClaimStatus() == "Executed") {
+            //Открыть карточку заявки со статусом
+            claimsPageSteps.openClaimCard(claim);
+            //Изменить статус заявки
+            claimsPageSteps.setStatusExecute();
+            claimsPageSteps.isStatusCommentDialog();
+            claimsPageSteps.replaceClaimStatusCommentText(DataHelper.getComment());
+            controlPanelSteps.okButtonClick();
+            claimsPageSteps.closeImButtonClick();
+        }
+        if (claim.getClaimStatus() == "Canceled") {
+            claimsPageSteps.openClaimCard(claim);
+            //Изменить статус заявки
+            claimsPageSteps.setStatusOpen();
+            claimsPageSteps.isStatusCommentDialog();
+            claimsPageSteps.replaceClaimStatusCommentText(DataHelper.getComment());
+            controlPanelSteps.okButtonClick();
+            claimsPageSteps.setStatusCanceled();
+            claimsPageSteps.closeImButtonClick();
+        }
+    }
+
+    public void createClaims(DataHelper.CreateClaim... array) {
+        for (DataHelper.CreateClaim claim : array) {
+            createClaim(claim);
+        }
     }
 
 }

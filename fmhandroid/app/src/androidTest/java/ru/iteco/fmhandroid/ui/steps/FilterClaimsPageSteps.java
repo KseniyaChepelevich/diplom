@@ -1,11 +1,7 @@
 package ru.iteco.fmhandroid.ui.steps;
 
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import ru.iteco.fmhandroid.R;
-import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 import ru.iteco.fmhandroid.ui.data.ViewActions;
 
@@ -21,13 +17,4 @@ public class FilterClaimsPageSteps {
         TestUtils.waitView(claimsPageSteps.claimListFilterOkBut).perform(click());
     }
 
-    public void checkClaimIsExist(String title) {
-        TestUtils.waitView(claimsPageSteps.claimRecyclerList)
-                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsExist(R.id.description_material_text_view, withText(title))));
-    }
-
-    public void checkClaimIsNotExist(String title) {
-        TestUtils.waitView(claimsPageSteps.claimRecyclerList)
-                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher.matchChildViewIsNotExist(R.id.description_material_text_view, withText(title))));
-    }
 }

@@ -1,9 +1,11 @@
 package ru.iteco.fmhandroid.ui.steps;
 
 import ru.iteco.fmhandroid.R;
+import ru.iteco.fmhandroid.ui.data.CustomRecyclerViewActions;
+import ru.iteco.fmhandroid.ui.data.DataHelper;
 import ru.iteco.fmhandroid.ui.data.TestUtils;
 
-import static androidx.test.espresso.Espresso.onView;
+
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -21,7 +23,7 @@ import android.view.View;
 
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.espresso.matcher.RootMatchers;
+
 
 import org.hamcrest.Matcher;
 import org.hamcrest.core.AllOf;
@@ -52,9 +54,6 @@ public class ClaimsPageSteps {
     public Matcher<View> claimFilterCancelBut = withId(R.id.claim_filter_cancel_material_button);
     public Matcher<View> addNewClaimBut = withId(R.id.add_new_claim_material_button);
     public Matcher<View> labelError = withText("Enter a valid time");
-
-    public ViewInteraction executorIvanov = onView(withText("Иванов Данил Данилович")).inRoot((RootMatchers.isPlatformPopup()));
-    public ViewInteraction executorSmirnov = onView(withText("Смирнов Петр Петрович")).inRoot((RootMatchers.isPlatformPopup()));
 
     public Matcher<View> claimRecyclerList = withId(R.id.claim_list_recycler_view);
     public Matcher<View> statusLabelText = withId(R.id.status_label_text_view);
@@ -138,18 +137,26 @@ public class ClaimsPageSteps {
         return TestUtils.waitView(AllOf.allOf(withId(R.id.executor_name_material_text_view), hasSibling(withText(title))));
     }
 
-    public void isClaimCard(String title, String planeDate, String planeTime, String description) {
-        TestUtils.waitView(titleTextView).check(matches(withText(title)));
+    public void isClaimCard(DataHelper.CreateClaim claim) {
+        TestUtils.waitView(titleTextView).check(matches(withText(claim.getClaimName())));
 
-        TestUtils.waitView(planeDateTextView).check(matches(withText(planeDate)));
-        TestUtils.waitView(planeTimeTextView).check(matches(withText(planeTime)));
+        TestUtils.waitView(planeDateTextView).check(matches(withText(TestUtils.getDateToString(claim.getDueDate()))));
+        TestUtils.waitView(planeTimeTextView).check(matches(withText(TestUtils.getTimeToString(claim.getDueDate()))));
         TestUtils.waitView(statusIconImView).check(matches(isDisplayed()));
-        TestUtils.waitView(descriptionTextView).check(matches(withText(description)));
+        TestUtils.waitView(descriptionTextView).check(matches(withText(claim.getClaimDescription())));
     }
 
-    public void openClaimCard(String title) {
-        scrollToElementInRecyclerList(title);
-        getItemClaimCompatImView(title).perform(click());
+    public void isClaimForm() {
+        TestUtils.waitView(titleTextView).check(matches(isDisplayed()));
+        TestUtils.waitView(planeDateTextView).check(matches(isDisplayed()));
+        TestUtils.waitView(planeTimeTextView).check(matches(isDisplayed()));
+        TestUtils.waitView(statusIconImView).check(matches(isDisplayed()));
+        TestUtils.waitView(descriptionTextView).check(matches(isDisplayed()));
+    }
+
+    public void openClaimCard(DataHelper.CreateClaim claim) {
+        scrollToElementInRecyclerList(claim.getClaimName());
+        getItemClaimCompatImView(claim.getClaimName()).perform(click());
     }
 
 
@@ -203,11 +210,17 @@ public class ClaimsPageSteps {
         return TestUtils.waitView(claimCommentsListRecyclerView);
     }
 
+    public void addComment(String comment) {
+        openCreatingCommentForm();
+        isCommentForm();
+        replaceCommentTextInputText(comment);
+    }
+
     public void editComment(String newComment) {
         TestUtils.waitView(editCommentImBut).perform(click());
         isCommentForm();
         replaceCommentTextInputText(newComment);
-        controlPanelSteps.saveNewsButtonClick();
+        controlPanelSteps.saveButtonClick();
     }
 
     public ViewInteraction getLabelError() {
@@ -222,10 +235,10 @@ public class ClaimsPageSteps {
         return TestUtils.waitView(descriptionClaimField);
     }
 
-    public void editClaim(int year, int month, int newDay, int newHour, int minutes, String newTitle, String newDescription) {
+    public void editClaim(DataHelper.CreateClaim claim) {
         editClaimButClick();
-        creatingClaimsSteps.fillingOutTheFormCreatingClaimWithDateToday(year, month, newDay, newHour, minutes, newTitle, newDescription);
-        controlPanelSteps.saveNewsButtonClick();
+        creatingClaimsSteps.fillingOutTheFormCreatingClaim(claim);
+        controlPanelSteps.saveButtonClick();
     }
 
     public void setStatusInProcess() {
@@ -246,4 +259,33 @@ public class ClaimsPageSteps {
         TestUtils.waitView(editClaimBut).perform(click());
     }
 
+    public void checkClaimIsPresent(DataHelper.CreateClaim claim) {
+        TestUtils.waitView(claimRecyclerList)
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher
+                        .matchChildViewIsExist(R.id.description_material_text_view, withText(claim.getClaimName()))));
+
+    }
+
+    public void checkClaimDoesNotPresent(DataHelper.CreateClaim claim) {
+        TestUtils.waitView(claimRecyclerList)
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher
+                        .matchChildViewIsNotExist(R.id.description_material_text_view, withText(claim.getClaimName()))));
+    }
+
+    public void checkCommentDoesNotPresent(String comment) {
+        getClaimCommentsListRecyclerView()
+                .check(matches(CustomRecyclerViewActions.RecyclerViewMatcher
+                        .matchChildViewIsNotExist(commentDescriptionTextView, withText(comment))));
+    }
+
+    public void checkCommentIsPresent(String comment) {
+        getCommentDescriptionText().check(matches(withText(comment)));
+    }
+
+    public void checkClaimIsPresentOnScreen(DataHelper.CreateClaim claim) {
+        getItemClaimCompatImView(claim.getClaimName()).check(matches(isDisplayed()));
+    }
+
 }
+
+

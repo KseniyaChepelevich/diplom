@@ -3,7 +3,6 @@ package ru.iteco.fmhandroid.ui;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.authInfo;
 
 import android.os.RemoteException;
-import android.os.SystemClock;
 
 import androidx.test.espresso.PerformException;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -16,7 +15,6 @@ import org.junit.runner.RunWith;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.ui.data.DataHelper;
-import ru.iteco.fmhandroid.ui.data.NamingHelper;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
 import ru.iteco.fmhandroid.ui.steps.ClaimsPageSteps;
 import ru.iteco.fmhandroid.ui.steps.ControlPanelSteps;
@@ -34,7 +32,7 @@ public class FilterClaimsPageTest extends BaseTest {
     private static CreatingClaimsSteps creatingClaimsSteps = new CreatingClaimsSteps();
     private static ControlPanelSteps controlPanelSteps = new ControlPanelSteps();
     private static FilterClaimsPageSteps filterClaimsPageSteps = new FilterClaimsPageSteps();
-    private static NamingHelper namingHelper = new NamingHelper();
+
 
     @Before
     public void logoutCheck() throws RemoteException {
@@ -54,591 +52,363 @@ public class FilterClaimsPageTest extends BaseTest {
     @Test
     @DisplayName("Фильтрация заявок со статусом Открыта")
     public void shouldFilterClaimsWithStatusOpen() {
-        String firstName = namingHelper.getClaimOpenName();
-        String secondName = namingHelper.getClaimOpenName();
-        String thirdName = namingHelper.getClaimOpenName();
-        String forthName = namingHelper.getClaimInProgressName();
-        String fifthName = namingHelper.getClaimInProgressName();
-        String sixthName = namingHelper.getClaimInProgressName();
+        DataHelper.CreateClaim firstOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim secondOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim thirdOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim forthInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim fifthInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim sixthInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+
         //Создать заявки для теста
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen(DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen(DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
-        creatingClaimsSteps.creatingAClaim(DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
-        creatingClaimsSteps.creatingAClaim(DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), fifthName, fifthName);
-        creatingClaimsSteps.creatingAClaim(DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), sixthName, sixthName);
+        creatingClaimsSteps.createClaims(firstOpenClaim, secondOpenClaim, thirdOpenClaim, forthInProgressClaim, fifthInProgressClaim, sixthInProgressClaim);
 
         //Фильтруем заявки со статусом Open
         filterClaimsPageSteps.filterClaims(true, false, false, false);
 
         //Проверяем, что отфильтровались только заявки со статусом Open
         //Поиск элементов в RecyclerView работает нестабильно
-        filterClaimsPageSteps.checkClaimIsExist(firstName);
-        filterClaimsPageSteps.checkClaimIsExist(secondName);
-        filterClaimsPageSteps.checkClaimIsExist(thirdName);
+        claimsPageSteps.checkClaimIsPresent(firstOpenClaim);
+        claimsPageSteps.checkClaimIsPresent(secondOpenClaim);
+        claimsPageSteps.checkClaimIsPresent(thirdOpenClaim);
+
         //Проверяем, что заявки со статусом In progress не отображаются
-        filterClaimsPageSteps.checkClaimIsNotExist(forthName);
-        filterClaimsPageSteps.checkClaimIsNotExist(fifthName);
-        filterClaimsPageSteps.checkClaimIsNotExist(sixthName);
+        claimsPageSteps.checkClaimDoesNotPresent(forthInProgressClaim);
+        claimsPageSteps.checkClaimDoesNotPresent(fifthInProgressClaim);
+        claimsPageSteps.checkClaimDoesNotPresent(sixthInProgressClaim);
     }
 
     @Test
     @DisplayName("Фильтрация заявок со статусом В работе")
     public void shouldFilterClaimsWithStatusInProgress() {
-        String firstName = namingHelper.getClaimOpenName();
-        String secondName = namingHelper.getClaimOpenName();
-        String thirdName = namingHelper.getClaimOpenName();
-        String forthName = namingHelper.getClaimInProgressName();
-        String fifthName = namingHelper.getClaimInProgressName();
-        String sixthName = namingHelper.getClaimInProgressName();
+        DataHelper.CreateClaim firstOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim secondOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim thirdOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim forthInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim fifthInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim sixthInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
         //Создать заявки для теста
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), fifthName, fifthName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), sixthName, sixthName);
+        creatingClaimsSteps.createClaims(firstOpenClaim, secondOpenClaim, thirdOpenClaim, forthInProgressClaim, fifthInProgressClaim, sixthInProgressClaim);
 
         //Фильтруем заявки со статусом In progress
         filterClaimsPageSteps.filterClaims(false, true, false, false);
 
         //Проверяем, что отфильтровались только заявки со статусом In progress
         //Поиск элементов в RecyclerView работает нестабильно
-        filterClaimsPageSteps.checkClaimIsExist(forthName);
-        filterClaimsPageSteps.checkClaimIsExist(fifthName);
-        filterClaimsPageSteps.checkClaimIsExist(sixthName);
+        claimsPageSteps.checkClaimIsPresent(forthInProgressClaim);
+        claimsPageSteps.checkClaimIsPresent(fifthInProgressClaim);
+        claimsPageSteps.checkClaimIsPresent(sixthInProgressClaim);
+
         //Проверяем, что заявки со статусом Open не отображаются
-        filterClaimsPageSteps.checkClaimIsNotExist(firstName);
-        filterClaimsPageSteps.checkClaimIsNotExist(secondName);
-        filterClaimsPageSteps.checkClaimIsNotExist(thirdName);
+        claimsPageSteps.checkClaimDoesNotPresent(firstOpenClaim);
+        claimsPageSteps.checkClaimDoesNotPresent(secondOpenClaim);
+        claimsPageSteps.checkClaimDoesNotPresent(thirdOpenClaim);
     }
 
     @Test
     @DisplayName("Фильтрация заявок со статусом Выполнена")
     public void shouldFilterClaimsWithStatusExecuted() {
-        String firstName = namingHelper.getClaimOpenName();
-        String secondName = namingHelper.getClaimOpenName();
-        String thirdName = namingHelper.getClaimOpenName();
-        String forthName = namingHelper.getClaimExecutedName();
-        String fifthName = namingHelper.getClaimExecutedName();
-        String sixthName = namingHelper.getClaimExecutedName();
+        DataHelper.CreateClaim firstOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim secondOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim thirdOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim forthExecutedClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.EXECUTED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim fifthExecutedClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.EXECUTED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim sixthExecutedClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.EXECUTED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+
         //Создать заявки для теста
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), fifthName, fifthName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), sixthName, sixthName);
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(forthName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusExecute();
-        claimsPageSteps.isStatusCommentDialog();
-        claimsPageSteps.replaceClaimStatusCommentText(namingHelper.getComment());
-        controlPanelSteps.okButtonClick();
-        claimsPageSteps.closeImButtonClick();
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(fifthName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusExecute();
-        claimsPageSteps.isStatusCommentDialog();
-        claimsPageSteps.replaceClaimStatusCommentText(namingHelper.getComment());
-        controlPanelSteps.okButtonClick();
-        claimsPageSteps.closeImButtonClick();
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(sixthName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusExecute();
-        claimsPageSteps.isStatusCommentDialog();
-        claimsPageSteps.replaceClaimStatusCommentText(namingHelper.getComment());
-        controlPanelSteps.okButtonClick();
-        claimsPageSteps.closeImButtonClick();
+        creatingClaimsSteps.createClaims(firstOpenClaim, secondOpenClaim, thirdOpenClaim, forthExecutedClaim, fifthExecutedClaim, sixthExecutedClaim);
 
         //Фильтруем заявки со статусом Executed
         filterClaimsPageSteps.filterClaims(false, false, true, false);
 
         //Проверяем, что отфильтровались только заявки со статусом Executed
         //Поиск элементов в RecyclerView работает нестабильно
-        filterClaimsPageSteps.checkClaimIsExist(forthName);
-        filterClaimsPageSteps.checkClaimIsExist(fifthName);
-        filterClaimsPageSteps.checkClaimIsExist(sixthName);
+        claimsPageSteps.checkClaimIsPresent(forthExecutedClaim);
+        claimsPageSteps.checkClaimIsPresent(fifthExecutedClaim);
+        claimsPageSteps.checkClaimIsPresent(sixthExecutedClaim);
 
         //Проверяем, что заявки со статусом Open не отображаются
-        filterClaimsPageSteps.checkClaimIsNotExist(firstName);
-        filterClaimsPageSteps.checkClaimIsNotExist(secondName);
-        filterClaimsPageSteps.checkClaimIsNotExist(thirdName);
+        claimsPageSteps.checkClaimDoesNotPresent(firstOpenClaim);
+        claimsPageSteps.checkClaimDoesNotPresent(secondOpenClaim);
+        claimsPageSteps.checkClaimDoesNotPresent(thirdOpenClaim);
     }
 
     @Test
     @DisplayName("Фильтрация заявок со статусом Отменена")
     public void shouldFilterClaimsWithStatusCanceled() {
-        String firstName = namingHelper.getClaimCanceledName();
-        String secondName = namingHelper.getClaimCanceledName();
-        String thirdName = namingHelper.getClaimCanceledName();
-        String forthName = namingHelper.getClaimInProgressName();
-        String fifthName = namingHelper.getClaimInProgressName();
-        String sixthName = namingHelper.getClaimInProgressName();
+        DataHelper.CreateClaim firstCanceledClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.CANCELED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim secondCanceledClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.CANCELED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim thirdCanceledClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.CANCELED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim forthInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim fifthInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim sixthInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+
         //Создать заявки для теста
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), fifthName, fifthName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), sixthName, sixthName);
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(firstName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusCanceled();
-        claimsPageSteps.closeImButtonClick();
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(secondName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusCanceled();
-        claimsPageSteps.closeImButtonClick();
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(thirdName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusCanceled();
-        claimsPageSteps.closeImButtonClick();
+        creatingClaimsSteps.createClaims(firstCanceledClaim, secondCanceledClaim, thirdCanceledClaim, forthInProgressClaim, fifthInProgressClaim, sixthInProgressClaim);
 
         //Фильтруем заявки со статусом Canceled
         filterClaimsPageSteps.filterClaims(false, false, false, true);
 
         //Проверяем, что отфильтровались только заявки со статусом Canceled
         //Поиск элементов в RecyclerView работает нестабильно
-        filterClaimsPageSteps.checkClaimIsExist(firstName);
-        filterClaimsPageSteps.checkClaimIsExist(secondName);
-        filterClaimsPageSteps.checkClaimIsExist(thirdName);
+        claimsPageSteps.checkClaimIsPresent(firstCanceledClaim);
+        claimsPageSteps.checkClaimIsPresent(secondCanceledClaim);
+        claimsPageSteps.checkClaimIsPresent(thirdCanceledClaim);
         //Проверяем, что заявки со статусом In progress не отображаются
-        filterClaimsPageSteps.checkClaimIsNotExist(forthName);
-        filterClaimsPageSteps.checkClaimIsNotExist(fifthName);
-        filterClaimsPageSteps.checkClaimIsNotExist(sixthName);
+        claimsPageSteps.checkClaimDoesNotPresent(forthInProgressClaim);
+        claimsPageSteps.checkClaimDoesNotPresent(fifthInProgressClaim);
+        claimsPageSteps.checkClaimDoesNotPresent(sixthInProgressClaim);
     }
 
     @Test
     @DisplayName("Фильтрация заявок со статусом Открыта и В работе")
     public void shouldFilterClaimsWithStatusOpenAndInProgress() {
-        String firstName = namingHelper.getClaimOpenName();
-        String secondName = namingHelper.getClaimCanceledName();
-        String thirdName = namingHelper.getClaimInProgressName();
+        DataHelper.CreateClaim firstOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim secondCanceledClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.CANCELED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim thirdInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
         //Создать заявки для теста
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(secondName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusCanceled();
-        claimsPageSteps.closeImButtonClick();
+        creatingClaimsSteps.createClaims(firstOpenClaim, secondCanceledClaim, thirdInProgressClaim);
 
         //Фильтруем заявки со статусом Open и In progress
         filterClaimsPageSteps.filterClaims(true, true, false, false);
 
         //Проверяем, что отфильтровались только заявки со статусом Open и In progress
         //Поиск элементов в RecyclerView работает нестабильно
-        filterClaimsPageSteps.checkClaimIsExist(firstName);
-        filterClaimsPageSteps.checkClaimIsExist(thirdName);
+        claimsPageSteps.checkClaimIsPresent(firstOpenClaim);
+        claimsPageSteps.checkClaimIsPresent(thirdInProgressClaim);
 
         //Проверяем, что заявки со статусом Canceled не отображаются
-        filterClaimsPageSteps.checkClaimIsNotExist(secondName);
+        claimsPageSteps.checkClaimDoesNotPresent(thirdInProgressClaim);
     }
 
     @Test
     @DisplayName("Фильтрация заявок со статусом Выполнена и Отменена")
     public void shouldFilterClaimsWithStatusExecutedAndCanceled() {
-        String firstName = namingHelper.getClaimOpenName();
-        String secondName = namingHelper.getClaimExecutedName();
-        String thirdName = namingHelper.getClaimCanceledName();
+        DataHelper.CreateClaim firstOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim secondExecutedClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.EXECUTED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim thirdCanceledClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.CANCELED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+
         //Создать заявки для теста
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(secondName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusExecute();
-        claimsPageSteps.isStatusCommentDialog();
-        claimsPageSteps.replaceClaimStatusCommentText(namingHelper.getComment());
-        controlPanelSteps.okButtonClick();
-        claimsPageSteps.closeImButtonClick();
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(thirdName);
-        //Изменить статус заявки
-        claimsPageSteps.closeImButtonClick();
+        creatingClaimsSteps.createClaims(firstOpenClaim, secondExecutedClaim, thirdCanceledClaim);
 
         //Фильтруем заявки со статусом Canceled и Executed
         filterClaimsPageSteps.filterClaims(false, false, true, true);
-        SystemClock.sleep(5000);
 
         //Проверяем, что отфильтровались только заявки со статусом Canceled и Executed
         //Поиск элементов в RecyclerView работает нестабильно
-        filterClaimsPageSteps.checkClaimIsExist(secondName);
-        filterClaimsPageSteps.checkClaimIsExist(thirdName);
+        claimsPageSteps.checkClaimIsPresent(secondExecutedClaim);
+        claimsPageSteps.checkClaimIsPresent(thirdCanceledClaim);
 
         //Проверяем, что заявки со статусом Open не отображаются
-        filterClaimsPageSteps.checkClaimIsNotExist(firstName);
+        claimsPageSteps.checkClaimDoesNotPresent(firstOpenClaim);
     }
 
     @Test
     @DisplayName("Фильтрация заявок со статусом В работе и Отменена")
     public void shouldFilterClaimsWithStatusOpenAndInProgressAndCanceled() {
-        String firstName = namingHelper.getClaimOpenName();
-        String secondName = namingHelper.getClaimCanceledName();
-        String thirdName = namingHelper.getClaimInProgressName();
-        //Создать заявки для теста
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
+        DataHelper.CreateClaim firstOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim secondCanceledClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.CANCELED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim thirdInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
 
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(secondName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusCanceled();
-        claimsPageSteps.closeImButtonClick();
+        //Создать заявки для теста
+        creatingClaimsSteps.createClaims(firstOpenClaim, secondCanceledClaim, thirdInProgressClaim);
 
         //Фильтруем заявки со статусом In progress и Canceled
         filterClaimsPageSteps.filterClaims(false, true, false, true);
 
         //Проверяем, что отфильтровались только заявки со статусом In progress и Canceled
         //Поиск элементов в RecyclerView работает нестабильно
-        filterClaimsPageSteps.checkClaimIsExist(secondName);
-        filterClaimsPageSteps.checkClaimIsExist(thirdName);
+        claimsPageSteps.checkClaimIsPresent(secondCanceledClaim);
+        claimsPageSteps.checkClaimIsPresent(thirdInProgressClaim);
 
         //Проверяем, что заявки со статусом Open не отображаются
-        filterClaimsPageSteps.checkClaimIsNotExist(firstName);
-
+        claimsPageSteps.checkClaimDoesNotPresent(firstOpenClaim);
     }
 
     @Test
     @DisplayName("Фильтрация заявок со статусом Открыта и Отменена")
     public void shouldFilterClaimsWithStatusOpenAndOpenAndCanceled() {
-        String firstName = namingHelper.getClaimOpenName();
-        String secondName = namingHelper.getClaimCanceledName();
-        String thirdName = namingHelper.getClaimInProgressName();
+        DataHelper.CreateClaim firstOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim secondCanceledClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.CANCELED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim thirdInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
         //Создать заявки для теста
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(secondName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusCanceled();
-        claimsPageSteps.closeImButtonClick();
+        creatingClaimsSteps.createClaims(firstOpenClaim, secondCanceledClaim, thirdInProgressClaim);
 
         //Фильтруем заявки со статусом Open и Canceled
         filterClaimsPageSteps.filterClaims(false, true, false, true);
 
         //Проверяем, что отфильтровались только заявки со статусом Open и Canceled
         //Поиск элементов в RecyclerView работает нестабильно
-        filterClaimsPageSteps.checkClaimIsExist(firstName);
-        filterClaimsPageSteps.checkClaimIsExist(secondName);
+        claimsPageSteps.checkClaimIsPresent(firstOpenClaim);
+        claimsPageSteps.checkClaimIsPresent(secondCanceledClaim);
 
         //Проверяем, что заявки со статусом In progress не отображаются
-        filterClaimsPageSteps.checkClaimIsNotExist(thirdName);
+        claimsPageSteps.checkClaimDoesNotPresent(thirdInProgressClaim);
     }
 
     @Test
     @DisplayName("Фильтрация заявок со статусом Открыта и Выполнена")
     public void shouldFilterClaimsWithStatusOpenAndExecuted() {
-        String firstName = namingHelper.getClaimOpenName();
-        String secondName = namingHelper.getClaimExecutedName();
-        String thirdName = namingHelper.getClaimCanceledName();
+        DataHelper.CreateClaim firstOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim secondExecutedClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.EXECUTED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim thirdCanceledClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.CANCELED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+
         //Создать заявки для теста
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(secondName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusExecute();
-        claimsPageSteps.isStatusCommentDialog();
-        claimsPageSteps.replaceClaimStatusCommentText(namingHelper.getComment());
-        controlPanelSteps.okButtonClick();
-        claimsPageSteps.closeImButtonClick();
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(thirdName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusCanceled();
-        claimsPageSteps.closeImButtonClick();
+        creatingClaimsSteps.createClaims(firstOpenClaim, secondExecutedClaim, thirdCanceledClaim);
 
         //Фильтруем заявки со статусом Open и Executed
         filterClaimsPageSteps.filterClaims(true, false, true, false);
 
         //Проверяем, что отфильтровались только заявки со статусом Open и Executed
         //Поиск элементов в RecyclerView работает нестабильно
-        filterClaimsPageSteps.checkClaimIsExist(firstName);
-        filterClaimsPageSteps.checkClaimIsExist(secondName);
+        claimsPageSteps.checkClaimIsPresent(firstOpenClaim);
+        claimsPageSteps.checkClaimIsPresent(secondExecutedClaim);
 
         //Проверяем, что заявки со статусом Canceled не отображаются
-        filterClaimsPageSteps.checkClaimIsNotExist(thirdName);
+        claimsPageSteps.checkClaimDoesNotPresent(thirdCanceledClaim);
     }
 
     @Test
     @DisplayName("Фильтрация заявок со статусом В работе и Выполнена")
     public void shouldFilterClaimsWithStatusInProgressAndExecuted() {
-        String firstName = namingHelper.getClaimOpenName();
-        String secondName = namingHelper.getClaimExecutedName();
-        String thirdName = namingHelper.getClaimInProgressName();
+        DataHelper.CreateClaim firstOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim secondExecutedClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.EXECUTED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim thirdInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
         //Создать заявки для теста
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(secondName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusExecute();
-        claimsPageSteps.isStatusCommentDialog();
-        claimsPageSteps.replaceClaimStatusCommentText(namingHelper.getComment());
-        controlPanelSteps.okButtonClick();
-        claimsPageSteps.closeImButtonClick();
+        creatingClaimsSteps.createClaims(firstOpenClaim, secondExecutedClaim, thirdInProgressClaim);
 
         //Фильтруем заявки со статусом In progress, Executed
         filterClaimsPageSteps.filterClaims(false, true, true, false);
 
         //Проверяем, что отфильтровались только заявки со статусом In progress, Executed
         //Поиск элементов в RecyclerView работает нестабильно
-        filterClaimsPageSteps.checkClaimIsExist(secondName);
-        filterClaimsPageSteps.checkClaimIsExist(thirdName);
+        claimsPageSteps.checkClaimIsPresent(secondExecutedClaim);
+        claimsPageSteps.checkClaimIsPresent(thirdInProgressClaim);
 
         //Проверяем, что заявки со статусом Open не отображаются
-        filterClaimsPageSteps.checkClaimIsNotExist(firstName);
+        claimsPageSteps.checkClaimDoesNotPresent(firstOpenClaim);
     }
 
     @Test
     @DisplayName("Фильтрация заявок со статусом В работе, Открыта и Выполнена")
     public void shouldFilterClaimsWithStatusInProgressOpenAndExecuted() {
-        String firstName = namingHelper.getClaimOpenName();
-        String secondName = namingHelper.getClaimExecutedName();
-        String thirdName = namingHelper.getClaimInProgressName();
-        String forthName = namingHelper.getClaimCanceledName();
+        DataHelper.CreateClaim firstOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim secondExecutedClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.EXECUTED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim thirdInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim forthCanceledClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.CANCELED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
         //Создать заявки для теста
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(secondName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusExecute();
-        claimsPageSteps.isStatusCommentDialog();
-        claimsPageSteps.replaceClaimStatusCommentText(namingHelper.getComment());
-        controlPanelSteps.okButtonClick();
-        claimsPageSteps.closeImButtonClick();
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(forthName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusCanceled();
-        claimsPageSteps.closeImButtonClick();
+        creatingClaimsSteps.createClaims(firstOpenClaim, secondExecutedClaim, thirdInProgressClaim, forthCanceledClaim);
 
         //Фильтруем заявки со статусом In progress, Open, Executed
         filterClaimsPageSteps.filterClaims(true, true, true, false);
 
         //Проверяем, что отфильтровались только заявки со статусом In progress, Open, Executed
         //Поиск элементов в RecyclerView работает нестабильно
-        filterClaimsPageSteps.checkClaimIsExist(firstName);
-        filterClaimsPageSteps.checkClaimIsExist(secondName);
-        filterClaimsPageSteps.checkClaimIsNotExist(thirdName);
+        claimsPageSteps.checkClaimIsPresent(firstOpenClaim);
+        claimsPageSteps.checkClaimIsPresent(secondExecutedClaim);
+        claimsPageSteps.checkClaimIsPresent(thirdInProgressClaim);
 
         //Проверяем, что заявки со статусом Canceled не отображаются
-        filterClaimsPageSteps.checkClaimIsNotExist(forthName);
+        claimsPageSteps.checkClaimDoesNotPresent(forthCanceledClaim);
     }
 
     @Test
     @DisplayName("Фильтрация заявок со статусом Отменена, Открыта и Выполнена")
     public void shouldFilterClaimsWithStatusCanceledOpenAndExecuted() {
-        String firstName = namingHelper.getClaimOpenName();
-        String secondName = namingHelper.getClaimExecutedName();
-        String thirdName = namingHelper.getClaimInProgressName();
-        String forthName = namingHelper.getClaimCanceledName();
+        DataHelper.CreateClaim firstOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim secondExecutedClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.EXECUTED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim thirdInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim forthCanceledClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.CANCELED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
         //Создать заявки для теста
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(secondName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusExecute();
-        claimsPageSteps.isStatusCommentDialog();
-        claimsPageSteps.replaceClaimStatusCommentText(namingHelper.getComment());
-        controlPanelSteps.okButtonClick();
-        claimsPageSteps.closeImButtonClick();
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(forthName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusCanceled();
-        claimsPageSteps.closeImButtonClick();
+        creatingClaimsSteps.createClaims(firstOpenClaim, secondExecutedClaim, thirdInProgressClaim, forthCanceledClaim);
 
         //Фильтруем заявки со статусом Open, Executed, Canceled
         filterClaimsPageSteps.filterClaims(true, false, true, true);
 
         //Проверяем, что отфильтровались только заявки со статусом Open, Executed, Canceled
         //Поиск элементов в RecyclerView работает нестабильно
-        filterClaimsPageSteps.checkClaimIsExist(firstName);
-        filterClaimsPageSteps.checkClaimIsExist(secondName);
-        filterClaimsPageSteps.checkClaimIsNotExist(forthName);
+        claimsPageSteps.checkClaimIsPresent(firstOpenClaim);
+        claimsPageSteps.checkClaimIsPresent(secondExecutedClaim);
+        claimsPageSteps.checkClaimIsPresent(forthCanceledClaim);
 
         //Проверяем, что заявки со статусом In progress не отображаются
-        filterClaimsPageSteps.checkClaimIsNotExist(thirdName);
+        claimsPageSteps.checkClaimDoesNotPresent(thirdInProgressClaim);
     }
 
     @Test
     @DisplayName("Фильтрация заявок со статусом В работе, Выполнена и Отменена")
     public void shouldFilterClaimsWithStatusInProgressExecutedAndCanceled() {
-        String firstName = namingHelper.getClaimOpenName();
-        String secondName = namingHelper.getClaimExecutedName();
-        String thirdName = namingHelper.getClaimInProgressName();
-        String forthName = namingHelper.getClaimCanceledName();
+        DataHelper.CreateClaim firstOpenClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.OPEN).withDueDate(DataHelper.getValidDate()).build();
+        DataHelper.CreateClaim secondExecutedClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.EXECUTED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim thirdInProgressClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.INPROGRESS).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
+        DataHelper.CreateClaim forthCanceledClaim = DataHelper.claimWithRandomNameAndDescription()
+                .withStatus(DataHelper.ClaimStatus.CANCELED).withDueDate(DataHelper.getValidDate()).withExecutor(DataHelper.getExecutorIvanov()).build();
         //Создать заявки для теста
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), firstName, firstName);
-        creatingClaimsSteps.creatingAClaim
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), secondName, secondName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), thirdName, thirdName);
-        creatingClaimsSteps.creatingAClaimWithStatusOpen
-                (DataHelper.getValidDate().getYear(), DataHelper.getValidDate().getMonthValue(), DataHelper.getValidDate().getDayOfMonth(),
-                        DataHelper.getValidDate().getHour(), DataHelper.getValidDate().getMinute(), forthName, forthName);
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(secondName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusExecute();
-        claimsPageSteps.isStatusCommentDialog();
-        claimsPageSteps.replaceClaimStatusCommentText(namingHelper.getComment());
-        controlPanelSteps.okButtonClick();
-        claimsPageSteps.closeImButtonClick();
-
-        //Открыть карточку заявки со статусом
-        claimsPageSteps.openClaimCard(forthName);
-        //Изменить статус заявки
-        claimsPageSteps.setStatusCanceled();
-        claimsPageSteps.closeImButtonClick();
+        creatingClaimsSteps.createClaims(firstOpenClaim, secondExecutedClaim, thirdInProgressClaim, forthCanceledClaim);
 
         //Фильтруем заявки со статусом In progress Executed, Canceled
         filterClaimsPageSteps.filterClaims(false, true, true, true);
 
         //Проверяем, что отфильтровались только заявки со статусом In progress Executed, Canceled
         //Поиск элементов в RecyclerView работает нестабильно
-        filterClaimsPageSteps.checkClaimIsExist(secondName);
-        filterClaimsPageSteps.checkClaimIsExist(thirdName);
-        filterClaimsPageSteps.checkClaimIsNotExist(forthName);
+        claimsPageSteps.checkClaimIsPresent(secondExecutedClaim);
+        claimsPageSteps.checkClaimIsPresent(thirdInProgressClaim);
+        claimsPageSteps.checkClaimIsPresent(forthCanceledClaim);
 
         //Проверяем, что заявки со статусом Open не отображаются
-        filterClaimsPageSteps.checkClaimIsNotExist(firstName);
+        claimsPageSteps.checkClaimDoesNotPresent(firstOpenClaim);
     }
 
     @Test
