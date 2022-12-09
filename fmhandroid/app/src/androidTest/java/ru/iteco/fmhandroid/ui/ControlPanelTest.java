@@ -340,13 +340,18 @@ public class ControlPanelTest extends BaseTest {
     @Test
     @DisplayName("Разрыв соединения в разделе Control panel")
     public void shouldShowDialogWindowSomethingWrong() throws UiObjectNotFoundException {
+        DataHelper.CreateNews announcementNews = DataHelper.newsWithRandomNameAndDescription()
+                .withCategory(DataHelper.getCategoryAnnouncement()).withDueDate(today).build();
+        //Нажимаем кнопку добавить новость
+        controlPanelSteps.openCreatingNewsForm();
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(announcementNews);
         //Включаем режим В самолете
         device.openQuickSettings();
         device.findObject(new UiSelector().description("Airplane mode")).click();
         device.pressBack();
         device.pressBack();
-        //Нажимаем кнопку добавить новость
-        controlPanelSteps.openCreatingNewsForm();
+        //Сохраняем Новость
+        controlPanelSteps.saveButtonClick();
         //Проверяем, что отображается сообщение
         controlPanelSteps.isDialogWindowMessageTryAgainLatter();
         //Отключаем режим в самолете

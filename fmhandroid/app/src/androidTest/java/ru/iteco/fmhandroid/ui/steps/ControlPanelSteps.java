@@ -157,7 +157,7 @@ public class ControlPanelSteps {
         okButtonClick();
     }
 
-    public void fillingOutTheFormCreatingNewsWithDateToday(DataHelper.CreateNews news) {
+    public void fillingOutTheFormCreatingNewsWithDate(DataHelper.CreateNews news) {
         TestUtils.waitView(newsItemTitleField).perform(replaceText(news.getNewsName()));
         setDateToDatePicker(news.getDueDate());
         TestUtils.waitView(okBut).perform(click());
@@ -292,7 +292,7 @@ public class ControlPanelSteps {
     public void creatingNews(DataHelper.CreateNews news) {
         TestUtils.waitView(addNewsImBut).perform(click());
         selectANewsCategoryFromTheList(news.getNewsCategory());
-        fillingOutTheFormCreatingNewsWithDateToday(news);
+        fillingOutTheFormCreatingNewsWithDate(news);
         TestUtils.waitView(saveBut).perform(click());
     }
 

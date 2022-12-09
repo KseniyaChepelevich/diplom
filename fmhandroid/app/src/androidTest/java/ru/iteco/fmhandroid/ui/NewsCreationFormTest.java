@@ -84,7 +84,7 @@ public class NewsCreationFormTest extends BaseTest {
         String categoryAnnouncement = "Объявление";
 
         controlPanelSteps.selectANewsCategoryFromTheList(categoryAnnouncement);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(announcementNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(announcementNews);
         controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Объявление"
         controlPanelSteps.scrollToElementInRecyclerList(announcementNews.getNewsName()).check(matches(isDisplayed()));
@@ -98,7 +98,7 @@ public class NewsCreationFormTest extends BaseTest {
         String categoryBirthday = "День рождения";
 
         controlPanelSteps.selectANewsCategoryFromTheList(categoryBirthday);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(birthdayNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(birthdayNews);
         controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость День рождения"
         controlPanelSteps.scrollToElementInRecyclerList(birthdayNews.getNewsName()).check(matches(isDisplayed()));
@@ -112,7 +112,7 @@ public class NewsCreationFormTest extends BaseTest {
         String categorySalary = "Зарплата";
 
         controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(salaryNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(salaryNews);
         controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Зарплата"
         controlPanelSteps.scrollToElementInRecyclerList(salaryNews.getNewsName()).check(matches(isDisplayed()));
@@ -126,7 +126,7 @@ public class NewsCreationFormTest extends BaseTest {
         String categoryTradeUnion = "Профсоюз";
 
         controlPanelSteps.selectANewsCategoryFromTheList(categoryTradeUnion);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(tradeUnionNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(tradeUnionNews);
         controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Профсоюз"
         controlPanelSteps.scrollToElementInRecyclerList(tradeUnionNews.getNewsName()).check(matches(isDisplayed()));
@@ -140,7 +140,7 @@ public class NewsCreationFormTest extends BaseTest {
         String categoryHoliday = "Праздник";
 
         controlPanelSteps.selectANewsCategoryFromTheList(categoryHoliday);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(holidayNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(holidayNews);
         controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Праздник"
         controlPanelSteps.scrollToElementInRecyclerList(holidayNews.getNewsName()).check(matches(isDisplayed()));
@@ -154,7 +154,7 @@ public class NewsCreationFormTest extends BaseTest {
         String categoryGratitude = "Благодарность";
 
         controlPanelSteps.selectANewsCategoryFromTheList(categoryGratitude);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(gratitudeNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(gratitudeNews);
         controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Благодарность"
         controlPanelSteps.scrollToElementInRecyclerList(gratitudeNews.getNewsName()).check(matches(isDisplayed()));
@@ -168,7 +168,7 @@ public class NewsCreationFormTest extends BaseTest {
         String categoryMassage = "Массаж";
 
         controlPanelSteps.selectANewsCategoryFromTheList(categoryMassage);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(massageNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(massageNews);
         controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Массаж"
         controlPanelSteps.scrollToElementInRecyclerList(massageNews.getNewsName()).check(matches(isDisplayed()));
@@ -182,7 +182,7 @@ public class NewsCreationFormTest extends BaseTest {
         String categoryNeedHelp = "Нужна помощь";
 
         controlPanelSteps.selectANewsCategoryFromTheList(categoryNeedHelp);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(needHelpNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(needHelpNews);
         controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком "Тест новость Массаж"
         controlPanelSteps.scrollToElementInRecyclerList(needHelpNews.getNewsName()).check(matches(isDisplayed()));
@@ -196,7 +196,7 @@ public class NewsCreationFormTest extends BaseTest {
         String categoryNeedHelp = "Нужна помощь";
 
         controlPanelSteps.selectANewsCategoryFromTheList(categoryNeedHelp);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(needHelpNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(needHelpNews);
         controlPanelSteps.cancelButtonClick();
         controlPanelSteps.getMessageChangesWonTBeSaved().check(matches(isDisplayed()));
         controlPanelSteps.okButtonClick();
@@ -214,7 +214,7 @@ public class NewsCreationFormTest extends BaseTest {
         String MyCategory = "Тест";
 
         controlPanelSteps.replaceNewsCategoryText(MyCategory);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(needHelpNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(needHelpNews);
         controlPanelSteps.saveButtonClick();
         controlPanelSteps.checkToast("Wrong category selected. Select a category from the list.", true);
     }
@@ -234,7 +234,7 @@ public class NewsCreationFormTest extends BaseTest {
         String categoryMassage = "Массаж";
 
         controlPanelSteps.selectANewsCategoryFromTheList(categoryMassage);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(massageNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(massageNews);
         controlPanelSteps.switchNewsStatus();
         controlPanelSteps.getSwitcherNoteActive().check(matches(isDisplayed()));
     }
@@ -249,7 +249,7 @@ public class NewsCreationFormTest extends BaseTest {
         String dateExpected = TestUtils.getDateToString(salaryNews.getDueDate());
 
         controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(salaryNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(salaryNews);
         //Проверка, что выбранная дата отображается
         controlPanelSteps.getNewsItemPublishDate().check(matches(withText(dateExpected)));
         controlPanelSteps.saveButtonClick();
@@ -267,7 +267,7 @@ public class NewsCreationFormTest extends BaseTest {
         String dateExpected = TestUtils.getDateToString(salaryNews.getDueDate());
 
         controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(salaryNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(salaryNews);
 
         controlPanelSteps.getNewsItemPublishDate().check(matches(withText(dateExpected)));
         controlPanelSteps.saveButtonClick();
@@ -308,14 +308,14 @@ public class NewsCreationFormTest extends BaseTest {
 
     @Test
     @DisplayName("Создание Новости с датой публикации час назад")
-    public void shouldCreateANewsItemWithPublicationTimeHourAgo() {
+    public void shouldNotCreateANewsItemWithPublicationTimeHourAgo() {
         DataHelper.CreateNews salaryNews = DataHelper.newsWithRandomNameAndDescription()
                 .withCategory(DataHelper.getCategorySalary()).withDueDate(today.minus(1, ChronoUnit.HOURS)).build();
         String categorySalary = "Зарплата";
         String timeExpected = TestUtils.getTimeToString(salaryNews.getDueDate());
 
         controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(salaryNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(salaryNews);
 
         //Проверка,что выбранное время отображается
         controlPanelSteps.getNewsItemPublishTime().check(matches(withText(timeExpected)));
@@ -323,7 +323,8 @@ public class NewsCreationFormTest extends BaseTest {
         //Сохраняем
         controlPanelSteps.saveButtonClick();
         //Проверка что отображаются новости с заголовком
-        controlPanelSteps.scrollToElementInRecyclerList(salaryNews.getNewsName()).check(matches(isDisplayed()));
+        controlPanelSteps.checkToast("Wrong publication date or time.", true);
+
     }
 
     @Test
@@ -337,7 +338,7 @@ public class NewsCreationFormTest extends BaseTest {
 
 
         controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(salaryNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(salaryNews);
         //Проверка,что выбранное время отображается
         controlPanelSteps.getNewsItemPublishTime().check(matches(withText(timeExpected)));
 
@@ -401,7 +402,7 @@ public class NewsCreationFormTest extends BaseTest {
         String categoryAnnouncement = "Объявление";
 
         controlPanelSteps.selectANewsCategoryFromTheList(categoryAnnouncement);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(announcementNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(announcementNews);
         controlPanelSteps.saveButtonClick();
         //Проверка, что отображается сообщение
         controlPanelSteps.checkToast("The field must not contain \";&&\" characters.", true);
@@ -416,7 +417,7 @@ public class NewsCreationFormTest extends BaseTest {
         String categoryAnnouncement = "Объявление";
 
         controlPanelSteps.selectANewsCategoryFromTheList(categoryAnnouncement);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(announcementNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(announcementNews);
         controlPanelSteps.saveButtonClick();
         //Проверка, что отображается сообщение
         controlPanelSteps.checkToast("The field must not contain \";&&\" characters.", true);
@@ -430,7 +431,7 @@ public class NewsCreationFormTest extends BaseTest {
         String categorySalary = "Зарплата";
 
         controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(salaryNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(salaryNews);
         //Включаем режим В самолете
         authSteps.turnOnAirplaneMode();
         //Пытаемся сохранить новость
@@ -450,7 +451,7 @@ public class NewsCreationFormTest extends BaseTest {
         String dateExpected = TestUtils.getDateToString(salaryNews.getDueDate());
 
         controlPanelSteps.selectANewsCategoryFromTheList(categorySalary);
-        controlPanelSteps.fillingOutTheFormCreatingNewsWithDateToday(salaryNews);
+        controlPanelSteps.fillingOutTheFormCreatingNewsWithDate(salaryNews);
         device.setOrientationLeft();
         //Проверяем, что введенные данные сохранились
         controlPanelSteps.getNewsItemTitle().check(matches(withText(salaryNews.getNewsName())));
