@@ -356,7 +356,7 @@ public class ClaimsCreationFormTest extends BaseTest {
         //Пытаемся сохранить заявку
         controlPanelSteps.saveButtonClick();
         //Проверяем, что отображается сообщение
-        controlPanelSteps.checkToast("Something went wrong. Try again later.", true);
+        creatingClaimsSteps.isDialogWindowMessageTryAgainLatter();
         //Отключаем режим в самолете
         TestUtils.disableAirplaneMode();
     }

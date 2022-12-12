@@ -220,8 +220,8 @@ public class ControlPanelSteps {
         TestUtils.waitView(descriptionTextInputEndIcon).check(matches(isDisplayed()));
     }
 
-    public void isDialogWindowMessageTryAgainLatter() {
-        TestUtils.waitView(withText("Something went wrong. Try again later.")).check(matches(isDisplayed()));
+    public void isDialogWindowMessageSavingFailed() {
+        TestUtils.waitView(withText("Saving failed. Try again later.")).check(matches(isDisplayed()));
         TestUtils.waitView(okBut).check(matches(isDisplayed()));
     }
 

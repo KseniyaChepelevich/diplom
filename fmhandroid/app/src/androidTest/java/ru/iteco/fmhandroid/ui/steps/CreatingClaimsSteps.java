@@ -132,4 +132,9 @@ public class CreatingClaimsSteps {
         }
     }
 
+    public void isDialogWindowMessageTryAgainLatter() {
+        TestUtils.waitView(withText("Something went wrong. Try again later.")).check(matches(isDisplayed()));
+        TestUtils.waitView(controlPanelSteps.okBut).check(matches(isDisplayed()));
+    }
+
 }

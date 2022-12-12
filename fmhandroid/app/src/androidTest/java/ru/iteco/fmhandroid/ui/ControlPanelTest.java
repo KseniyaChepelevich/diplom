@@ -353,7 +353,7 @@ public class ControlPanelTest extends BaseTest {
         //Сохраняем Новость
         controlPanelSteps.saveButtonClick();
         //Проверяем, что отображается сообщение
-        controlPanelSteps.isDialogWindowMessageTryAgainLatter();
+        controlPanelSteps.isDialogWindowMessageSavingFailed();
         //Отключаем режим в самолете
         TestUtils.disableAirplaneMode();
     }
