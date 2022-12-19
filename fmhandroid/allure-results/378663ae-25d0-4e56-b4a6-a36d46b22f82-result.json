@@ -1,0 +1,66 @@
+{
+    "name": "Редактирование Категории Новости",
+    "start": 1670419514171,
+    "stop": 1670419547627,
+    "stage": "finished",
+    "description": null,
+    "descriptionHtml": null,
+    "status": "broken",
+    "statusDetails": {
+        "message": "No views in hierarchy found matching: an instance of android.widget.TextView and view.getText() with or without transformation to match: is \"День рождения\"\n\nView Hierarchy:\n+>PopupDecorView{id=-1, visibility=VISIBLE, width=110, height=110, has-focus=false, has-focusable=false, has-window-focus=false, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params={(320,527)(wrapxwrap) gr=TOP START CENTER sim={state=unchanged} ty=APPLICATION_SUB_PANEL fmt=TRANSLUCENT wanim=0x1030307 surfaceInsets=Rect(0, 0 - 0, 0) (manual)\n  fl=NOT_FOCUSABLE LAYOUT_NO_LIMITS SPLIT_TOUCH HARDWARE_ACCELERATED FLAG_LAYOUT_ATTACHED_IN_DECOR\n  pfl=WILL_NOT_REPLACE_ON_RELAUNCH LAYOUT_CHILD_WINDOW_IN_PARENT_FRAME}, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} \n|\n+->InsertionHandleView{id=16909028, res-name=insertion_handle, visibility=VISIBLE, width=110, height=110, has-focus=false, has-focusable=false, has-window-focus=false, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} ",
+        "trace": "androidx.test.espresso.NoMatchingViewException: No views in hierarchy found matching: an instance of android.widget.TextView and view.getText() with or without transformation to match: is \"День рождения\"\n\nView Hierarchy:\n+>PopupDecorView{id=-1, visibility=VISIBLE, width=110, height=110, has-focus=false, has-focusable=false, has-window-focus=false, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params={(320,527)(wrapxwrap) gr=TOP START CENTER sim={state=unchanged} ty=APPLICATION_SUB_PANEL fmt=TRANSLUCENT wanim=0x1030307 surfaceInsets=Rect(0, 0 - 0, 0) (manual)\n  fl=NOT_FOCUSABLE LAYOUT_NO_LIMITS SPLIT_TOUCH HARDWARE_ACCELERATED FLAG_LAYOUT_ATTACHED_IN_DECOR\n  pfl=WILL_NOT_REPLACE_ON_RELAUNCH LAYOUT_CHILD_WINDOW_IN_PARENT_FRAME}, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} \n|\n+->InsertionHandleView{id=16909028, res-name=insertion_handle, visibility=VISIBLE, width=110, height=110, has-focus=false, has-focusable=false, has-window-focus=false, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} \n\tat androidx.test.espresso.NoMatchingViewException$Builder.build(NoMatchingViewException.java:5)\n\tat androidx.test.espresso.base.DefaultFailureHandler.lambda$getNoMatchingViewExceptionTruncater$0(DefaultFailureHandler.java:5)\n\tat androidx.test.espresso.base.DefaultFailureHandler$$ExternalSyntheticLambda1.truncateExceptionMessage(Unknown Source:2)\n\tat androidx.test.espresso.base.ViewHierarchyExceptionHandler.handleSafely(ViewHierarchyExceptionHandler.java:5)\n\tat androidx.test.espresso.base.ViewHierarchyExceptionHandler.handleSafely(ViewHierarchyExceptionHandler.java:1)\n\tat androidx.test.espresso.base.DefaultFailureHandler$TypedFailureHandler.handle(DefaultFailureHandler.java:4)\n\tat androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:5)\n\tat androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:8)\n\tat androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:12)\n\tat ru.iteco.fmhandroid.ui.steps.ControlPanelSteps.selectANewsCategoryFromTheList(ControlPanelSteps.java:138)\n\tat ru.iteco.fmhandroid.ui.ControlPanelTest.shouldChangeNewsCategory(ControlPanelTest.java:310)\n\tat java.lang.reflect.Method.invoke(Native Method)\n\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)\n\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)\n\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)\n\tat org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)\n\tat androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)\n\tat androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)\n\tat io.qameta.allure.android.rules.ScreenshotRule$apply$1.evaluate(ScreenshotRule.kt:22)\n\tat org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)\n\tat io.qameta.allure.android.rules.LogcatRule$apply$1.evaluate(LogcatRule.kt:23)\n\tat org.junit.rules.RunRules.evaluate(RunRules.java:20)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)\n\tat org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)\n\tat org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)\n\tat org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)\n\tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)\n\tat org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)\n\tat org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.ParentRunner.run(ParentRunner.java:413)\n\tat androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)\n\tat io.qameta.allure.android.runners.AllureAndroidJUnit4.run(AllureAndroidJUnitRunners.kt:29)\n\tat org.junit.runners.Suite.runChild(Suite.java:128)\n\tat org.junit.runners.Suite.runChild(Suite.java:27)\n\tat org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)\n\tat org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)\n\tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)\n\tat org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)\n\tat org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.ParentRunner.run(ParentRunner.java:413)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:137)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:115)\n\tat androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:67)\n\tat androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:58)\n\tat androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:438)\n\tat android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2189)\n"
+    },
+    "steps": [
+    ],
+    "attachments": [
+        {
+            "source": "1072f737-7fd5-4c1b-8287-b97f86cea226-attachment.png",
+            "name": "failure-screenshot",
+            "type": "image/png"
+        },
+        {
+            "source": "7c7b62d4-6365-4209-8790-5656f8078e94-attachment.txt",
+            "name": "logcat-dump",
+            "type": "text/plain"
+        }
+    ],
+    "parameters": [
+    ],
+    "uuid": "378663ae-25d0-4e56-b4a6-a36d46b22f82",
+    "historyId": "4e5d49ddd7021d906c6a689dca409ae",
+    "fullName": "ru.iteco.fmhandroid.ui.ControlPanelTest.shouldChangeNewsCategory",
+    "labels": [
+        {
+            "name": "package",
+            "value": "ru.iteco.fmhandroid.ui"
+        },
+        {
+            "name": "testClass",
+            "value": "ru.iteco.fmhandroid.ui.ControlPanelTest"
+        },
+        {
+            "name": "testMethod",
+            "value": "shouldChangeNewsCategory"
+        },
+        {
+            "name": "suite",
+            "value": "ru.iteco.fmhandroid.ui.ControlPanelTest"
+        },
+        {
+            "name": "host",
+            "value": "localhost"
+        },
+        {
+            "name": "thread",
+            "value": "Instr: androidx.test.runner.AndroidJUnitRunner(1196)"
+        },
+        {
+            "name": "framework",
+            "value": "junit4"
+        },
+        {
+            "name": "language",
+            "value": "kotlin"
+        }
+    ]
+}

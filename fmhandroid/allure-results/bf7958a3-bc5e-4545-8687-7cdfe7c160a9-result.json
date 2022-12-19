@@ -1,0 +1,66 @@
+{
+    "name": "Небуквенные и нецифровые знаки в поле Заголовок при создании новости",
+    "start": 1670490729586,
+    "stop": 1670490815843,
+    "stage": "finished",
+    "description": null,
+    "descriptionHtml": null,
+    "status": "broken",
+    "statusDetails": {
+        "message": "Matcher 'is toast' did not match any of the following roots: [Root{application-window-token=android.view.ViewRootImpl$W@c0331b6, window-token=android.view.ViewRootImpl$W@c0331b6, has-window-focus=true, layout-params-type=1, layout-params-string={(0,0)(fillxfill) ty=BASE_APPLICATION wanim=0x10302fe\n  fl=LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS\n  pfl=FORCE_DRAW_STATUS_BAR_BACKGROUND}, decor-view-string=DecorView{id=-1, visibility=VISIBLE, width=1080, height=2340, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params={(0,0)(fillxfill) ty=BASE_APPLICATION wanim=0x10302fe\n  fl=LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS\n  pfl=FORCE_DRAW_STATUS_BAR_BACKGROUND}, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=3}}]",
+        "trace": "androidx.test.espresso.NoMatchingRootException: Matcher 'is toast' did not match any of the following roots: [Root{application-window-token=android.view.ViewRootImpl$W@c0331b6, window-token=android.view.ViewRootImpl$W@c0331b6, has-window-focus=true, layout-params-type=1, layout-params-string={(0,0)(fillxfill) ty=BASE_APPLICATION wanim=0x10302fe\n  fl=LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS\n  pfl=FORCE_DRAW_STATUS_BAR_BACKGROUND}, decor-view-string=DecorView{id=-1, visibility=VISIBLE, width=1080, height=2340, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params={(0,0)(fillxfill) ty=BASE_APPLICATION wanim=0x10302fe\n  fl=LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS\n  pfl=FORCE_DRAW_STATUS_BAR_BACKGROUND}, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=3}}]\n\tat dalvik.system.VMStack.getThreadStackTrace(Native Method)\n\tat java.lang.Thread.getStackTrace(Thread.java:1720)\n\tat androidx.test.espresso.base.EspressoExceptionHandler.handleSafely(EspressoExceptionHandler.java:2)\n\tat androidx.test.espresso.base.EspressoExceptionHandler.handleSafely(EspressoExceptionHandler.java:1)\n\tat androidx.test.espresso.base.DefaultFailureHandler$TypedFailureHandler.handle(DefaultFailureHandler.java:4)\n\tat androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:5)\n\tat androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:8)\n\tat androidx.test.espresso.ViewInteraction.check(ViewInteraction.java:12)\n\tat ru.iteco.fmhandroid.ui.steps.ControlPanelSteps.checkToast(ControlPanelSteps.java:220)\n\tat ru.iteco.fmhandroid.ui.NewsCreationFormTest.shouldShowWarningMessageNewsTitleFieldIsIncorrect(NewsCreationFormTest.java:407)\n\tat java.lang.reflect.Method.invoke(Native Method)\n\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)\n\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)\n\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)\n\tat org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)\n\tat androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)\n\tat androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)\n\tat io.qameta.allure.android.rules.ScreenshotRule$apply$1.evaluate(ScreenshotRule.kt:22)\n\tat org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)\n\tat io.qameta.allure.android.rules.LogcatRule$apply$1.evaluate(LogcatRule.kt:23)\n\tat org.junit.rules.RunRules.evaluate(RunRules.java:20)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)\n\tat org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)\n\tat org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)\n\tat org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)\n\tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)\n\tat org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)\n\tat org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.ParentRunner.run(ParentRunner.java:413)\n\tat androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)\n\tat io.qameta.allure.android.runners.AllureAndroidJUnit4.run(AllureAndroidJUnitRunners.kt:29)\n\tat org.junit.runners.Suite.runChild(Suite.java:128)\n\tat org.junit.runners.Suite.runChild(Suite.java:27)\n\tat org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)\n\tat org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)\n\tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)\n\tat org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)\n\tat org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.ParentRunner.run(ParentRunner.java:413)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:137)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:115)\n\tat androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:67)\n\tat androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:58)\n\tat androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:438)\n\tat android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2189)\n"
+    },
+    "steps": [
+    ],
+    "attachments": [
+        {
+            "source": "61e16355-6b22-436c-ba36-d254e44bb278-attachment.png",
+            "name": "failure-screenshot",
+            "type": "image/png"
+        },
+        {
+            "source": "bc240c7a-bd9d-401f-8135-91b78d5148dc-attachment.txt",
+            "name": "logcat-dump",
+            "type": "text/plain"
+        }
+    ],
+    "parameters": [
+    ],
+    "uuid": "bf7958a3-bc5e-4545-8687-7cdfe7c160a9",
+    "historyId": "31caad2e4f7bff1fd317bba34fd23514",
+    "fullName": "ru.iteco.fmhandroid.ui.NewsCreationFormTest.shouldShowWarningMessageNewsTitleFieldIsIncorrect",
+    "labels": [
+        {
+            "name": "package",
+            "value": "ru.iteco.fmhandroid.ui"
+        },
+        {
+            "name": "testClass",
+            "value": "ru.iteco.fmhandroid.ui.NewsCreationFormTest"
+        },
+        {
+            "name": "testMethod",
+            "value": "shouldShowWarningMessageNewsTitleFieldIsIncorrect"
+        },
+        {
+            "name": "suite",
+            "value": "ru.iteco.fmhandroid.ui.NewsCreationFormTest"
+        },
+        {
+            "name": "host",
+            "value": "localhost"
+        },
+        {
+            "name": "thread",
+            "value": "Instr: androidx.test.runner.AndroidJUnitRunner(1551)"
+        },
+        {
+            "name": "framework",
+            "value": "junit4"
+        },
+        {
+            "name": "language",
+            "value": "kotlin"
+        }
+    ]
+}

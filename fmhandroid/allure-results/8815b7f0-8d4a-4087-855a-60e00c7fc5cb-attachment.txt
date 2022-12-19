@@ -1,0 +1,303 @@
+--------- beginning of main
+11-21 18:51:18.960  1322  1322 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@150baba in: STOPPED
+11-21 18:51:18.977  1322  1322 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@150baba in: DESTROYED
+11-21 18:51:19.069  2876  3118 I MicroDetectionWorker: #startMicroDetector [speakerMode: 0]
+11-21 18:51:19.114  2876  3118 W ErrorReporter: reportError [type: 211, code: 393244, bug: 0]: errorCode: 393244, engine: 0
+11-21 18:51:19.115  2876  3118 I MicroDetector: Keeping mic open: false
+11-21 18:51:19.115  2876  3118 I MicroDetectionWorker: #onError(false)
+11-21 18:51:19.437  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:19.866  1322  1374 E TestRunner: failed: shouldShowWarningMessageNewsTitleFieldIsIncorrect(ru.iteco.fmhandroid.ui.NewsCreationFormTest)
+11-21 18:51:19.866  1322  1374 E TestRunner: ----- begin exception -----
+11-21 18:51:19.867  1322  1374 E TestRunner: java.lang.RuntimeException: java.io.IOException: Cannot run program "adb": error=13, Permission denied
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at ru.iteco.fmhandroid.ui.data.DeviceHelper.executeBash(DeviceHelper.java:20)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at ru.iteco.fmhandroid.ui.BaseTest.disableAnimationOnEmulator(BaseTest.java:43)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at ru.iteco.fmhandroid.ui.BaseTest.beforeEachTest(BaseTest.java:50)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:76)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:543)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at io.qameta.allure.android.rules.LogcatRule$apply$1.evaluate(LogcatRule.kt:23)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at io.qameta.allure.android.rules.ScreenshotRule$apply$1.evaluate(ScreenshotRule.kt:22)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at io.qameta.allure.android.rules.ScreenshotRule$apply$1.evaluate(ScreenshotRule.kt:22)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at io.qameta.allure.android.runners.AllureAndroidJUnit4.run(AllureAndroidJUnitRunners.kt:29)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:67)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:58)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:438)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2189)
+11-21 18:51:19.867  1322  1374 E TestRunner: Caused by: java.io.IOException: Cannot run program "adb": error=13, Permission denied
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at java.lang.ProcessBuilder.start(ProcessBuilder.java:1050)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at java.lang.Runtime.exec(Runtime.java:698)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at java.lang.Runtime.exec(Runtime.java:528)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at java.lang.Runtime.exec(Runtime.java:425)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at ru.iteco.fmhandroid.ui.data.DeviceHelper.executeBash(DeviceHelper.java:18)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	... 41 more
+11-21 18:51:19.867  1322  1374 E TestRunner: Caused by: java.io.IOException: error=13, Permission denied
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at java.lang.UNIXProcess.forkAndExec(Native Method)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at java.lang.UNIXProcess.<init>(UNIXProcess.java:133)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at java.lang.ProcessImpl.start(ProcessImpl.java:141)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	at java.lang.ProcessBuilder.start(ProcessBuilder.java:1029)
+11-21 18:51:19.867  1322  1374 E TestRunner: 	... 45 more
+11-21 18:51:19.867  1322  1374 E TestRunner: ----- end exception -----
+11-21 18:51:19.872  1322  1374 I TestRunner: finished: shouldShowWarningMessageNewsTitleFieldIsIncorrect(ru.iteco.fmhandroid.ui.NewsCreationFormTest)
+11-21 18:51:19.900  1322  1374 I TestRunner: started: shouldCreateANewsItemWithCategoryMassage(ru.iteco.fmhandroid.ui.NewsCreationFormTest)
+11-21 18:51:19.925  1322  1374 W ActivityTestRule: getActivityIntent() returned null using default: Intent(Intent.ACTION_MAIN)
+--------- beginning of system
+11-21 18:51:19.929  2006  2023 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN flg=0x10000000 cmp=ru.iteco.fmhandroid/.ui.AppActivity} from uid 10153
+11-21 18:51:19.952  2006  2023 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:19.954  2006  2023 I chatty  : uid=1000(system) Binder:2006_1 identical 26 lines
+11-21 18:51:19.954  2006  2023 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:19.954  1322  1322 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@5c01845
+11-21 18:51:19.954  2006  2023 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:19.962  2006  2023 I chatty  : uid=1000(system) Binder:2006_1 identical 10 lines
+11-21 18:51:19.962  2006  2023 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:19.980  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:20.014  1322  1322 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@bcef3c1 in: PRE_ON_CREATE
+11-21 18:51:20.021  1322  1356 V FA      : onActivityCreated
+11-21 18:51:20.051  2006  2032 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:20.051  2006  2032 I chatty  : uid=1000(system) android.anim identical 8 lines
+11-21 18:51:20.051  2006  2032 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:20.063  1322  1322 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@bcef3c1 in: CREATED
+11-21 18:51:20.072  7825  7875 D EGL_emulation: eglMakeCurrent: 0xe5ffa5c0: ver 2 0 (tinfo 0xda8dd010)
+11-21 18:51:20.090  2441  2951 D EGL_emulation: eglMakeCurrent: 0xdde1a480: ver 2 0 (tinfo 0xdde0f530)
+11-21 18:51:20.094  2876  3288 D EGL_emulation: eglMakeCurrent: 0xdde1bb00: ver 2 0 (tinfo 0xdde0ff90)
+11-21 18:51:20.105  7825  7875 D EGL_emulation: eglMakeCurrent: 0xe5ffa5c0: ver 2 0 (tinfo 0xda8dd010)
+11-21 18:51:20.128  1322  1322 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@bcef3c1 in: STARTED
+11-21 18:51:20.131  1322  1322 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@bcef3c1 in: RESUMED
+11-21 18:51:20.135  1322  1363 V FA      : Activity resumed, time: 841914339
+11-21 18:51:20.191  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:20.197  1761  1761 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+11-21 18:51:20.200  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:20.209  1322  1388 D EGL_emulation: eglMakeCurrent: 0xdde1c1c0: ver 2 0 (tinfo 0xcd7b4040)
+11-21 18:51:20.265  2006  2036 I ActivityTaskManager: Displayed ru.iteco.fmhandroid/.ui.AppActivity: +332ms
+11-21 18:51:20.285  7825  7875 D EGL_emulation: eglMakeCurrent: 0xe5ffa5c0: ver 2 0 (tinfo 0xda8dd010)
+11-21 18:51:20.294  2757  1377 V FA-SVC  : Logging event: origin=auto,name=screen_view(_vs),params=Bundle[{ga_event_origin(_o)=auto, ga_previous_class(_pc)=AppActivity, ga_previous_id(_pi)=-3797736664109286978, ga_screen_class(_sc)=AppActivity, ga_screen_id(_si)=-3797736664109286977}]
+11-21 18:51:20.318  2006  2926 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:20.318  2006  2926 I chatty  : uid=1000(system) Binder:2006_B identical 8 lines
+11-21 18:51:20.318  2006  2926 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:20.324  2757  1377 V FA-SVC  : Upload scheduled in approximately ms: 3594345
+11-21 18:51:20.324  2757  1377 V FA-SVC  : Unscheduling upload
+11-21 18:51:20.348  1322  1322 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@bcef3c1 in: PAUSED
+11-21 18:51:20.357  1322  1363 V FA      : Screen exposed for less than 1000 ms. Event not sent. time: 216
+11-21 18:51:20.360  1322  1363 V FA      : Activity paused, time: 841914558
+11-21 18:51:20.369  2006  6495 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:20.376  2006  2926 I ActivityTaskManager: Activity reported stop, but no longer stopping: ActivityRecord{5fbaf61 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t1123}
+11-21 18:51:20.369  2006  6495 I chatty  : uid=1000(system) Binder:2006_1A identical 8 lines
+11-21 18:51:20.369  2006  6495 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:20.385  2757  1377 V FA-SVC  : Scheduling upload, millis: 3594345
+11-21 18:51:20.400  2876   797 I PBSessionCacheImpl: Deleted sessionId[360287841315] from persistence.
+11-21 18:51:20.406  2006  6495 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:20.406  2006  6495 I chatty  : uid=1000(system) Binder:2006_1A identical 8 lines
+11-21 18:51:20.406  2006  6495 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:20.412  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 9441280
+11-21 18:51:20.419  2876  3118 W SearchServiceCore: Abort, client detached.
+11-21 18:51:20.422  7825  7875 D EGL_emulation: eglMakeCurrent: 0xe5ffa5c0: ver 2 0 (tinfo 0xda8dd010)
+11-21 18:51:20.442  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:20.445  7825  7875 D EGL_emulation: eglMakeCurrent: 0xe5ffa5c0: ver 2 0 (tinfo 0xda8dd010)
+11-21 18:51:20.453  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:20.458  2441  2951 D EGL_emulation: eglMakeCurrent: 0xdde1a480: ver 2 0 (tinfo 0xdde0f530)
+11-21 18:51:20.459  7825  7875 D EGL_emulation: eglMakeCurrent: 0xe5ffa5c0: ver 2 0 (tinfo 0xda8dd010)
+11-21 18:51:20.459  1761  8136 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:20.496  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:20.506  2006  6581 D HostConnection: HostConnection::get() New Host Connection established 0xdde553f0, tid 6581
+11-21 18:51:20.512  2876  3288 D EGL_emulation: eglMakeCurrent: 0xdde1bb00: ver 2 0 (tinfo 0xdde0ff90)
+11-21 18:51:20.520  1775  1775 E Layer   : [Surface(name=AppWindowToken{cf95f47 token=Token{19f6a86 ActivityRecord{5fbaf61 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t1123}}})/@0xb8f158b - animation-leash#0] No local sync point found
+11-21 18:51:20.520  1775  1775 E Layer   : [Surface(name=AppWindowToken{99be57c token=Token{13e046f ActivityRecord{e384b4e u0 ru.iteco.fmhandroid/.ui.AppActivity t2498}}})/@0x9e86357 - animation-leash#0] No local sync point found
+11-21 18:51:20.542  2006  6581 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_null_optional_strings ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_YUV_Cache ANDROID_EMU_vulkan_ignored_handles ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_2 
+11-21 18:51:20.554  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:20.564  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:20.566  2006  2277 W system_server: Long monitor contention with owner Binder:2006_B (2926) at void com.android.server.am.ActivityManagerService.finishReceiver(android.os.IBinder, int, java.lang.String, android.os.Bundle, boolean, int)(ActivityManagerService.java:15663) waiters=1 in int com.android.server.am.ActivityManagerService.broadcastIntent(android.app.IApplicationThread, android.content.Intent, java.lang.String, android.content.IIntentReceiver, int, java.lang.String, android.os.Bundle, java.lang.String[], int, android.os.Bundle, boolean, boolean, int) for 129ms
+11-21 18:51:20.577  2757  1377 V FA-SVC  : Background event processing time, ms: 283
+11-21 18:51:20.578  2006  6581 W OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+11-21 18:51:20.579  1322  1388 D EGL_emulation: eglMakeCurrent: 0xdde1c1c0: ver 2 0 (tinfo 0xcd7b4040)
+11-21 18:51:20.595  2006  2006 W ActivityManager: Unable to start service Intent { act=android.service.appprediction.AppPredictionService cmp=com.google.android.as/com.google.android.apps.miphone.aiai.app.AiAiPredictionService } U=0: not found
+11-21 18:51:20.595  2006  2006 W RemoteAppPredictionService: could not bind to Intent { act=android.service.appprediction.AppPredictionService cmp=com.google.android.as/com.google.android.apps.miphone.aiai.app.AiAiPredictionService } using flags 67108865
+11-21 18:51:20.595  2006  2006 W Looper  : Slow dispatch took 106ms main h=android.os.Handler c=<recycled PooledLambda@52cd2ff> m=0
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: Error inserting flex_time=3594000 job_id=-1 period=7189000 source=16 requires_charging=0 preferred_network_type=1 target_class=com.google.android.gms.measurement.PackageMeasurementTaskService user_id=0 target_package=com.google.android.gms tag=Measurement.PackageMeasurementTaskService.UPLOAD_TASK_TAG task_type=0 required_idleness_state=0 service_kind=0 source_version=202414000 persistence_level=1 preferred_charging_state=1 required_network_type=0 runtime=1669045880596 retry_strategy={"maximum_backoff_seconds":{"3600":0},"initial_backoff_seconds":{"30":0},"retry_policy":{"0":0}} last_runtime=0
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: android.database.sqlite.SQLiteConstraintException: UNIQUE constraint failed: pending_ops.tag, pending_ops.target_class, pending_ops.target_package, pending_ops.user_id (code 2067 SQLITE_CONSTRAINT_UNIQUE)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at android.database.sqlite.SQLiteConnection.nativeExecuteForLastInsertedRowId(Native Method)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at android.database.sqlite.SQLiteConnection.executeForLastInsertedRowId(SQLiteConnection.java:879)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at android.database.sqlite.SQLiteSession.executeForLastInsertedRowId(SQLiteSession.java:790)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at android.database.sqlite.SQLiteStatement.executeInsert(SQLiteStatement.java:88)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at android.database.sqlite.SQLiteDatabase.insertWithOnConflict(SQLiteDatabase.java:1599)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at android.database.sqlite.SQLiteDatabase.insert(SQLiteDatabase.java:1468)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at aqui.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):175)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at aqtk.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):182)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at aqtk.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):23)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at aqtk.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):177)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at aqpu.run(:com.google.android.gms@202414022@20.24.14 (040700-319035315):9)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at soy.b(:com.google.android.gms@202414022@20.24.14 (040700-319035315):12)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at soy.run(:com.google.android.gms@202414022@20.24.14 (040700-319035315):7)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at sux.run(:com.google.android.gms@202414022@20.24.14 (040700-319035315):0)
+11-21 18:51:20.641  2580 32529 E SQLiteDatabase: 	at java.lang.Thread.run(Thread.java:919)
+11-21 18:51:20.649  2006  6581 D EGL_emulation: eglCreateContext: 0xdde1af60: maj 2 min 0 rcv 2
+11-21 18:51:20.654  1322  1322 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@bcef3c1 in: STOPPED
+11-21 18:51:20.665  2876  3118 W SessionLifecycleManager: Handover failed. Creating new session controller.
+11-21 18:51:20.667  1322  1322 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@bcef3c1 in: DESTROYED
+11-21 18:51:20.676  2006  6581 D EGL_emulation: eglMakeCurrent: 0xdde1af60: ver 2 0 (tinfo 0xb180ad60)
+11-21 18:51:20.685  2441  2459 I s.nexuslaunche: NativeAlloc concurrent copying GC freed 2309(175KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 2904KB/5808KB, paused 641us total 114.240ms
+11-21 18:51:20.686  2441  2461 W System  : A resource failed to call release. 
+11-21 18:51:20.686  2441  2461 I chatty  : uid=10109(com.google.android.apps.nexuslauncher) FinalizerDaemon identical 2 lines
+11-21 18:51:20.687  2441  2461 W System  : A resource failed to call release. 
+11-21 18:51:20.759  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:20.786  2876  3118 I MicroDetectionWorker: #startMicroDetector [speakerMode: 0]
+11-21 18:51:20.789  2876  3118 W ErrorReporter: reportError [type: 211, code: 393244, bug: 0]: errorCode: 393244, engine: 0
+11-21 18:51:20.789  2876  3118 I MicroDetector: Keeping mic open: false
+11-21 18:51:20.789  2876  3118 I MicroDetectionWorker: #onError(false)
+11-21 18:51:21.036  2876  2905 I earchbox:searc: Background concurrent copying GC freed 51934(2014KB) AllocSpace objects, 0(0B) LOS objects, 40% free, 8920KB/14MB, paused 631us total 646.644ms
+11-21 18:51:21.345  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:21.769  2006  2019 I system_server: NativeAlloc concurrent copying GC freed 54169(2938KB) AllocSpace objects, 16(512KB) LOS objects, 6% free, 83MB/89MB, paused 633us total 1.000s
+11-21 18:51:21.898  1322  1374 E TestRunner: failed: shouldCreateANewsItemWithCategoryMassage(ru.iteco.fmhandroid.ui.NewsCreationFormTest)
+11-21 18:51:21.898  1322  1374 E TestRunner: ----- begin exception -----
+11-21 18:51:21.899  1322  1374 E TestRunner: java.lang.RuntimeException: java.io.IOException: Cannot run program "adb": error=13, Permission denied
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at ru.iteco.fmhandroid.ui.data.DeviceHelper.executeBash(DeviceHelper.java:20)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at ru.iteco.fmhandroid.ui.BaseTest.disableAnimationOnEmulator(BaseTest.java:43)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at ru.iteco.fmhandroid.ui.BaseTest.beforeEachTest(BaseTest.java:50)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:76)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:543)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at io.qameta.allure.android.rules.LogcatRule$apply$1.evaluate(LogcatRule.kt:23)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at io.qameta.allure.android.rules.ScreenshotRule$apply$1.evaluate(ScreenshotRule.kt:22)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at io.qameta.allure.android.rules.ScreenshotRule$apply$1.evaluate(ScreenshotRule.kt:22)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at io.qameta.allure.android.runners.AllureAndroidJUnit4.run(AllureAndroidJUnitRunners.kt:29)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:67)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:58)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:438)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2189)
+11-21 18:51:21.899  1322  1374 E TestRunner: Caused by: java.io.IOException: Cannot run program "adb": error=13, Permission denied
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at java.lang.ProcessBuilder.start(ProcessBuilder.java:1050)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at java.lang.Runtime.exec(Runtime.java:698)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at java.lang.Runtime.exec(Runtime.java:528)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at java.lang.Runtime.exec(Runtime.java:425)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at ru.iteco.fmhandroid.ui.data.DeviceHelper.executeBash(DeviceHelper.java:18)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	... 41 more
+11-21 18:51:21.899  1322  1374 E TestRunner: Caused by: java.io.IOException: error=13, Permission denied
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at java.lang.UNIXProcess.forkAndExec(Native Method)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at java.lang.UNIXProcess.<init>(UNIXProcess.java:133)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at java.lang.ProcessImpl.start(ProcessImpl.java:141)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	at java.lang.ProcessBuilder.start(ProcessBuilder.java:1029)
+11-21 18:51:21.899  1322  1374 E TestRunner: 	... 45 more
+11-21 18:51:21.899  1322  1374 E TestRunner: ----- end exception -----
+11-21 18:51:21.904  1322  1374 I TestRunner: finished: shouldCreateANewsItemWithCategoryMassage(ru.iteco.fmhandroid.ui.NewsCreationFormTest)
+11-21 18:51:21.950  1322  1374 I TestRunner: started: shouldSubstituteInTheTitleFieldTheValueOfTheCategoryField(ru.iteco.fmhandroid.ui.NewsCreationFormTest)
+11-21 18:51:21.980  1322  1374 W ActivityTestRule: getActivityIntent() returned null using default: Intent(Intent.ACTION_MAIN)
+11-21 18:51:21.984  2006  2926 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN flg=0x10000000 cmp=ru.iteco.fmhandroid/.ui.AppActivity} from uid 10153
+11-21 18:51:22.000  2006  2899 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:22.002  2006  2899 I chatty  : uid=1000(system) Binder:2006_9 identical 28 lines
+11-21 18:51:22.002  2006  2899 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:22.007  1322  1322 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@7dc0c7a
+11-21 18:51:22.009  2006  2899 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:22.009  2006  2899 I chatty  : uid=1000(system) Binder:2006_9 identical 8 lines
+11-21 18:51:22.009  2006  2899 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:22.015  2006  2032 E system_server: Invalid ID 0x00000000.
+11-21 18:51:22.045  1322  1322 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@d0e7646 in: PRE_ON_CREATE
+11-21 18:51:22.049  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:22.052  1322  1356 V FA      : onActivityCreated
+11-21 18:51:22.098  1322  1322 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@d0e7646 in: CREATED
+11-21 18:51:22.281  1322  1322 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@d0e7646 in: STARTED
+11-21 18:51:22.284  1322  1322 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@d0e7646 in: RESUMED
+11-21 18:51:22.288  1322  1363 V FA      : Activity resumed, time: 841916492
+11-21 18:51:22.321  2006  2032 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:22.322  2006  2032 I chatty  : uid=1000(system) android.anim identical 8 lines
+11-21 18:51:22.322  2006  2032 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:22.340  7825  7875 D EGL_emulation: eglMakeCurrent: 0xe5ffa5c0: ver 2 0 (tinfo 0xda8dd010)
+11-21 18:51:22.362  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:22.369  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:22.373  2441  2951 D EGL_emulation: eglMakeCurrent: 0xdde1a480: ver 2 0 (tinfo 0xdde0f530)
+11-21 18:51:22.375  2876  3288 D EGL_emulation: eglMakeCurrent: 0xdde1bb00: ver 2 0 (tinfo 0xdde0ff90)
+11-21 18:51:22.376  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:22.381  1322  1388 D EGL_emulation: eglMakeCurrent: 0xdde1c1c0: ver 2 0 (tinfo 0xcd7b4040)
+11-21 18:51:22.382  1322  1335 I teco.fmhandroi: NativeAlloc concurrent copying GC freed 12166(876KB) AllocSpace objects, 4(68KB) LOS objects, 49% free, 3254KB/6508KB, paused 614us total 109.251ms
+11-21 18:51:22.415  7825  7875 D EGL_emulation: eglMakeCurrent: 0xe5ffa5c0: ver 2 0 (tinfo 0xda8dd010)
+11-21 18:51:22.446  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:22.448  7825  7875 D EGL_emulation: eglMakeCurrent: 0xe5ffa5c0: ver 2 0 (tinfo 0xda8dd010)
+11-21 18:51:22.691  7825  7875 D EGL_emulation: eglMakeCurrent: 0xe5ffa5c0: ver 2 0 (tinfo 0xda8dd010)
+11-21 18:51:22.714  2757  1377 V FA-SVC  : Logging event: origin=auto,name=screen_view(_vs),params=Bundle[{ga_event_origin(_o)=auto, ga_previous_class(_pc)=AppActivity, ga_previous_id(_pi)=-3797736664109286977, ga_screen_class(_sc)=AppActivity, ga_screen_id(_si)=-3797736664109286976}]
+11-21 18:51:22.733  2006  2036 I ActivityTaskManager: Displayed ru.iteco.fmhandroid/.ui.AppActivity: +729ms
+11-21 18:51:22.751  2757  1377 V FA-SVC  : Upload scheduled in approximately ms: 3591918
+11-21 18:51:22.751  2757  1377 V FA-SVC  : Unscheduling upload
+11-21 18:51:22.755  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:22.764  2006  2926 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:22.765  2006  2926 I chatty  : uid=1000(system) Binder:2006_B identical 8 lines
+11-21 18:51:22.765  2006  2926 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:22.796  1322  1322 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@d0e7646 in: PAUSED
+11-21 18:51:22.804  1322  1363 V FA      : Screen exposed for less than 1000 ms. Event not sent. time: 511
+11-21 18:51:22.808  1322  1363 V FA      : Activity paused, time: 841917005
+11-21 18:51:22.812  2006  2926 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:22.824  2006  2899 I ActivityTaskManager: Activity reported stop, but no longer stopping: ActivityRecord{5fbaf61 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t1123}
+11-21 18:51:22.812  2006  2926 I chatty  : uid=1000(system) Binder:2006_B identical 8 lines
+11-21 18:51:22.812  2006  2926 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:22.839  2757  1377 V FA-SVC  : Scheduling upload, millis: 3591918
+11-21 18:51:22.847  2876   794 I PBSessionCacheImpl: Deleted sessionId[360287841316] from persistence.
+11-21 18:51:22.873  2876  3118 W SearchServiceCore: Abort, client detached.
+11-21 18:51:22.877  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:22.928  2006  2106 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:22.929  2006  2106 I chatty  : uid=1000(system) Binder:2006_3 identical 8 lines
+11-21 18:51:22.929  2006  2106 W InputReader: Device has associated, but no associated display id.
+11-21 18:51:22.934  1761  8136 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 9441280
+11-21 18:51:22.953  2757  1377 V FA-SVC  : Background event processing time, ms: 241
+11-21 18:51:22.976  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:22.981  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:22.984  7825  7875 D EGL_emulation: eglMakeCurrent: 0xe5ffa5c0: ver 2 0 (tinfo 0xda8dd010)
+11-21 18:51:22.986  2876  3288 D EGL_emulation: eglMakeCurrent: 0xdde1bb00: ver 2 0 (tinfo 0xdde0ff90)
+11-21 18:51:22.989  1761  8136 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:23.000  1761  2617 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696
+11-21 18:51:23.005  2006  2006 W ActivityManager: Unable to start service Intent { act=android.service.appprediction.AppPredictionService cmp=com.google.android.as/com.google.android.apps.miphone.aiai.app.AiAiPredictionService } U=0: not found
+11-21 18:51:23.005  2006  2006 W RemoteAppPredictionService: could not bind to Intent { act=android.service.appprediction.AppPredictionService cmp=com.google.android.as/com.google.android.apps.miphone.aiai.app.AiAiPredictionService } using flags 67108865
+11-21 18:51:23.007  1761  1761 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 14749696

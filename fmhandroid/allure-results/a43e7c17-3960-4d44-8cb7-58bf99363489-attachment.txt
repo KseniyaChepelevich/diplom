@@ -1,0 +1,646 @@
+--------- beginning of main
+12-07 08:29:43.696  1744  1957 I netd    : networkAddRoute(102, "radio0", "fe80::/64", "") <0.39ms>
+12-07 08:29:43.699  1744  1957 I netd    : networkAddRoute(102, "radio0", "::/0", "fe80::2") <0.22ms>
+12-07 08:29:43.700  1744  1957 I netd    : networkAddRoute(102, "radio0", "0.0.0.0/0", "10.0.2.2") <0.30ms>
+--------- beginning of system
+12-07 08:29:43.702  2018  2139 D ConnectivityService: Setting DNS servers for network 102 to [/10.0.2.3]
+12-07 08:29:43.702  2018  2139 D DnsManager: setDnsConfigurationForNetwork(102, [10.0.2.3], [], 1800, 25, 8, 64, 0, 0, , [10.0.2.3])
+12-07 08:29:43.713  1744  1957 I netd    : DnsResolverService::setResolverConfiguration(102, [10.0.2.3], [], 1800, 25, 8, 64, 0, 0, [10.0.2.3], []) -> (0) (2ms)
+12-07 08:29:43.715  1744  1957 I netd    : setResolverConfiguration() <1.73ms>
+12-07 08:29:43.751  1744  1957 I netd    : trafficSwapActiveStatsMap() <31.45ms>
+12-07 08:29:43.754  1744  1957 I netd    : tetherGetStats() <1.67ms>
+12-07 08:29:43.796  1744  1957 I netd    : idletimerAddInterface("radio0", 10, "0") <2.41ms>
+12-07 08:29:43.797  2018  2139 D ConnectivityService: Switching to new default network: NetworkAgentInfo{ ni{[type: MOBILE[LTE], state: CONNECTED/CONNECTED, reason: connected, extra: epc.tmobile.com, failover: false, available: true, roaming: false]}  network{102}  nethandle{441492361229}  lp{{InterfaceName: radio0 LinkAddresses: [ 10.0.2.15/24,fe80::c47b:a6ff:fe12:2546/64 ] DnsAddresses: [ /10.0.2.3 ] Domains: null MTU: 1500 TcpBufferSizes: 524288,1048576,2097152,262144,524288,1048576 Routes: [ ::/0 -> fe80::2 radio0,0.0.0.0/0 -> 10.0.2.2 radio0,10.0.2.0/24 -> 0.0.0.0 radio0,fe80::/64 -> :: radio0 ]}}  nc{[ Transports: CELLULAR Capabilities: MMS&SUPL&DUN&FOTA&IMS&CBS&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_ROAMING&FOREGROUND&NOT_CONGESTED&NOT_SUSPENDED LinkUpBandwidth>=51200Kbps LinkDnBandwidth>=102400Kbps Specifier: <1>]}  Score{10}  everValidated{false}  lastValidated{false}  created{true} lingering{false} explicitlySelected{false} acceptUnvalidated{false} everCaptivePortalDetected{false} lastCaptivePortalDetected{false} captivePortalValidationPending{false} partialConnectivity{false} acceptPartialConnectivity{false} clat{mBaseIface: null, mIface: null, mState: IDLE} }
+12-07 08:29:43.798  1744  1957 I netd    : networkSetDefault(102) <0.22ms>
+12-07 08:29:43.801 28064 28064 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.hidl.base-V1.0-java.jar
+12-07 08:29:43.801 28064 28064 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.hidl.manager-V1.0-java.jar
+12-07 08:29:43.801 28064 28064 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.hidl.base-V1.0-java.jar
+12-07 08:29:43.810 28064 28064 I .android.diale: The ClassLoaderContext is a special shared library.
+12-07 08:29:43.845 28064 28064 I .android.diale: The ClassLoaderContext is a special shared library.
+12-07 08:29:43.853  1744  1957 I netd    : trafficSwapActiveStatsMap() <47.66ms>
+12-07 08:29:43.856  1744  1957 I netd    : tetherGetStats() <1.43ms>
+12-07 08:29:43.883  2018  2290 D NetworkTimeUpdateService: New default network 102; checking time.
+12-07 08:29:43.895  2018  2139 D ConnectivityService: Sending CONNECTED broadcast for type 0 NetworkAgentInfo [MOBILE (LTE) - 102] isDefaultNetwork=true
+12-07 08:29:43.921  1744  1957 I netd    : bandwidthSetInterfaceQuota("radio0", 9223372036854775807) <27.43ms>
+12-07 08:29:43.931  1744  1957 I netd    : bandwidthSetGlobalAlert(2097152) <0.89ms>
+12-07 08:29:43.978  4254  4345 I CarrierServices: [241] buo.a: FiST: Wifi connectivity status false
+12-07 08:29:43.988  2656 28104 I NetworkManagementSocketTagger: tagSocketFd(-1, 536871943, -1) failed with errno-9
+12-07 08:29:43.993  4254  4573 I CarrierServices: [271] bbd.handleMessage: RCS is disabled, skipping config update request
+12-07 08:29:43.998  4254  4345 I CarrierServices: [241] but.d: Connected state: [1], networkType: [MOBILE]
+12-07 08:29:44.011  4254  4345 I CarrierServices: [241] buo.a: FiST: Wifi connectivity status false
+12-07 08:29:44.013  4254  4573 I CarrierServices: [271] bbd.handleMessage: RCS is disabled, skipping config update request
+12-07 08:29:44.023  1744  1957 I netd    : trafficSwapActiveStatsMap() <59.31ms>
+12-07 08:29:44.031  1744  1957 I netd    : tetherGetStats() <4.79ms>
+12-07 08:29:44.057  4254  4345 I CarrierServices: [241] but.d: Connected state: [1], networkType: [MOBILE]
+12-07 08:29:44.064  1744  1957 I netd    : bandwidthRemoveInterfaceQuota("radio0") <2.72ms>
+12-07 08:29:44.067  1744  1957 I netd    : bandwidthSetInterfaceQuota("radio0", 9223372036854775807) <1.91ms>
+12-07 08:29:44.070  1744  1957 I netd    : bandwidthSetGlobalAlert(2097152) <0.12ms>
+12-07 08:29:44.084  2260 28095 D NetworkMonitor/102: PROBE_DNS www.google.com 286ms OK 173.194.220.103,173.194.220.105,173.194.220.147,173.194.220.106,173.194.220.99,173.194.220.104,2a00:1450:4010:c09::68,2a00:1450:4010:c09::6a,2a00:1450:4010:c09::93,2a00:1450:4010:c09::63
+12-07 08:29:44.092  2260 28096 D NetworkMonitor/102: PROBE_DNS connectivitycheck.gstatic.com 292ms OK 74.125.131.94,2a00:1450:4010:c05::5e
+12-07 08:29:44.177 28064 28064 I Dialer  : DialerExecutorModule.newThread - creating low priority thread
+12-07 08:29:44.200 28064 28064 I Dialer  : CallLogConfigImpl.schedulePollingJob - scheduling
+12-07 08:29:44.206 28064 28064 I Dialer  : DialerApplication.initializeAnnotatedCallLog - framework not enabled
+12-07 08:29:44.225 28064 28064 I Dialer  : LegacyVoicemailNotificationReceiver.onReceive - received legacy voicemail notification
+12-07 08:29:44.226 28064 28064 I Dialer  : LegacyVoicemailNotificationReceiver.onReceive - isRefresh: false
+12-07 08:29:44.229 28064 28064 I Dialer  : LegacyVoicemailNotificationReceiver.onReceive - clearing notification
+12-07 08:29:44.231 28064 28064 I Dialer  : LegacyVoicemailNotifier.cancelNotification - enter
+12-07 08:29:44.236  2018  4164 I ActivityManager: Killing 12222:com.android.providers.calendar/u0a55 (adj 995): empty for 3487s
+12-07 08:29:44.385  1745  1745 I Zygote  : Process 12222 exited due to signal 9 (Killed)
+12-07 08:29:44.404  2018  2061 I libprocessgroup: Successfully killed process cgroup uid 10055 pid 12222 in 160ms
+12-07 08:29:44.449  2260 28096 D NetworkMonitor/102: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 time=352ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.32 Safari/537.36]} headers={null=[HTTP/1.1 204 No Content], Connection=[close], Content-Length=[0], Cross-Origin-Resource-Policy=[cross-origin], Date=[Wed, 07 Dec 2022 13:29:46 GMT], X-Android-Received-Millis=[1670419784448], X-Android-Response-Source=[NETWORK 204], X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1670419784223]}
+12-07 08:29:44.538  2018  2051 D AutofillManagerService: onBackKeyPressed()
+12-07 08:29:44.539  2170  2170 V StatusBar: mStatusBarWindow: com.android.systemui.statusbar.phone.StatusBarWindowView{4752fa5 V.E...... ........ 0,0-1080,2340} canPanelBeCollapsed(): true
+12-07 08:29:44.547  2170  2170 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+12-07 08:29:44.559  1776  1825 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:44.598  2170  2170 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+12-07 08:29:44.626  2170  2566 D EGL_emulation: eglMakeCurrent: 0xe594e040: ver 2 0 (tinfo 0xc52450c0)
+12-07 08:29:44.637  1776  1825 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 286720
+12-07 08:29:44.647  2170  2566 D EGL_emulation: eglMakeCurrent: 0xe594e040: ver 2 0 (tinfo 0xc52450c0)
+12-07 08:29:44.664  2260 28095 D NetworkMonitor/102: PROBE_HTTPS https://www.google.com/generate_204 time=565ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.32 Safari/537.36]} headers={null=[HTTP/1.1 204 No Content], Alt-Svc=[h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443"; ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"], Connection=[close], Content-Length=[0], Cross-Origin-Resource-Policy=[cross-origin], Date=[Wed, 07 Dec 2022 13:29:47 GMT], X-Android-Received-Millis=[1670419784659], X-Android-Response-Source=[NETWORK 204], X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1670419784458]}
+12-07 08:29:44.674  1776  1825 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 286720
+12-07 08:29:44.687  1776  1825 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 286720
+12-07 08:29:44.693  2260 28094 D NetworkMonitor/102: isCaptivePortal: isSuccessful()=true isPortal()=false RedirectUrl=null isPartialConnectivity()=false Time=873ms
+12-07 08:29:44.694  2018  2059 W BroadcastQueue: Background execution not allowed: receiving Intent { act=android.net.conn.NETWORK_CONDITIONS_MEASURED flg=0x10 (has extras) } to com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver
+12-07 08:29:44.703  2018  2139 D ConnectivityService: NetworkAgentInfo [MOBILE (LTE) - 102] validation passed
+12-07 08:29:44.723  2656 28115 E WakeLock: GCM_CONN_ALARM release without a matched acquire!
+12-07 08:29:44.724  2018  2050 I GnssNetworkConnectivityHandler: updateNetworkState, state=CLOSED, connected=true, network=102, capabilities=[ Transports: CELLULAR Capabilities: MMS&SUPL&DUN&FOTA&IMS&CBS&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&VALIDATED&NOT_ROAMING&FOREGROUND&NOT_CONGESTED&NOT_SUSPENDED LinkUpBandwidth>=51200Kbps LinkDnBandwidth>=102400Kbps Specifier: <1>], apn: epc.tmobile.com, availableNetworkCount: 1
+12-07 08:29:44.729  2018  2139 D ConnectivityService: Setting DNS servers for network 102 to [/10.0.2.3]
+12-07 08:29:44.730  2018  2139 D DnsManager: setDnsConfigurationForNetwork(102, [10.0.2.3], [], 1800, 25, 8, 64, 0, 0, , [10.0.2.3])
+12-07 08:29:44.737  1744  1957 I netd    : DnsResolverService::setResolverConfiguration(102, [10.0.2.3], [], 1800, 25, 8, 64, 0, 0, [10.0.2.3], []) -> (0) (0.1ms)
+12-07 08:29:44.738  1744  1957 I netd    : setResolverConfiguration() <0.32ms>
+12-07 08:29:44.738  4254  4345 I CarrierServices: [241] buo.a: FiST: Wifi connectivity status false
+12-07 08:29:44.739  4254  4573 I CarrierServices: [271] bbd.handleMessage: RCS is disabled, skipping config update request
+12-07 08:29:44.746  4254  4345 I CarrierServices: [241] but.d: Connected state: [1], networkType: [MOBILE]
+12-07 08:29:45.291  2018  4653 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=ru.iteco.fmhandroid.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity} from uid 10146
+12-07 08:29:45.304 27762 27762 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@976ac50 in: PAUSED
+12-07 08:29:45.304 27762 27762 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=ru.iteco.fmhandroid.ui.AppActivity@976ac50
+12-07 08:29:45.305  2018  5837 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:45.308  2018  5837 I chatty  : uid=1000(system) Binder:2018_16 identical 38 lines
+12-07 08:29:45.308  2018  5837 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:45.308 27818 27818 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@f5d16d7
+12-07 08:29:45.309 27762 27799 V FA      : Recording user engagement, ms: 32926
+12-07 08:29:45.318  2018  5837 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:45.318  2018  5837 I chatty  : uid=1000(system) Binder:2018_16 identical 8 lines
+12-07 08:29:45.318  2018  5837 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:45.381 27762 27799 V FA      : Connecting to remote service
+12-07 08:29:45.411 27762 27799 V FA      : Connection attempt already in progress
+12-07 08:29:45.412 27762 27799 V FA      : Activity paused, time: 39247694
+12-07 08:29:45.426 27762 27799 D FA      : Connected to remote service
+12-07 08:29:45.427 27762 27799 V FA      : Processing queued up service tasks: 2
+12-07 08:29:45.439  1776  1825 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:45.449  1776  1825 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:45.453  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:45.461 27818 27849 D EGL_emulation: eglMakeCurrent: 0xe597eb60: ver 2 0 (tinfo 0xf0c893b0)
+12-07 08:29:45.480  2018  5837 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=ru.iteco.fmhandroid.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity} from uid 10146
+12-07 08:29:45.513  2873 28123 V FA-SVC  : Logging event: origin=auto,name=user_engagement(_e),params=Bundle[{ga_event_origin(_o)=auto, engagement_time_msec(_et)=32926, ga_screen_class(_sc)=AppActivity, ga_screen_id(_si)=8894325159233167661}]
+12-07 08:29:45.537  2018  4653 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:45.542  2018  4653 I chatty  : uid=1000(system) Binder:2018_12 identical 48 lines
+12-07 08:29:45.542  2018  4653 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:45.577 27818 27818 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@6ccb106
+12-07 08:29:45.620  2018  3031 W ActivityTaskManager: Duplicate finish request for ActivityRecord{341ead9 u0 ru.iteco.fmhandroid/.ui.AppActivity t195 f}
+12-07 08:29:45.644  2018  3031 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:45.644  2018  3031 I chatty  : uid=1000(system) Binder:2018_B identical 3 lines
+12-07 08:29:45.644  2018  3031 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:45.648  2873 28123 V FA-SVC  : Upload scheduled in approximately ms: 530932
+12-07 08:29:45.648  2018  3031 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:45.648  2018  3031 I chatty  : uid=1000(system) Binder:2018_B identical 3 lines
+12-07 08:29:45.648  2018  3031 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:45.648  2873 28123 V FA-SVC  : Unscheduling upload
+12-07 08:29:45.678  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:45.680  2873 28123 V FA-SVC  : Scheduling upload, millis: 530932
+12-07 08:29:45.687  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:45.692  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:45.696 27818 27849 D EGL_emulation: eglMakeCurrent: 0xe597eb60: ver 2 0 (tinfo 0xf0c893b0)
+12-07 08:29:45.697  2873 28123 V FA-SVC  : Background event processing time, ms: 188
+12-07 08:29:45.757  2018  3031 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:45.757  2018  3031 I chatty  : uid=1000(system) Binder:2018_B identical 8 lines
+12-07 08:29:45.757  2018  3031 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:45.777  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:45.793  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:45.800  2962  3510 D EGL_emulation: eglMakeCurrent: 0xe597d120: ver 2 0 (tinfo 0xbffb2540)
+12-07 08:29:45.810  2018  2018 W ActivityManager: Unable to start service Intent { act=android.service.appprediction.AppPredictionService cmp=com.google.android.as/com.google.android.apps.miphone.aiai.app.AiAiPredictionService } U=0: not found
+12-07 08:29:45.810  2018  2018 W RemoteAppPredictionService: could not bind to Intent { act=android.service.appprediction.AppPredictionService cmp=com.google.android.as/com.google.android.apps.miphone.aiai.app.AiAiPredictionService } using flags 67108865
+12-07 08:29:45.812  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:45.827  1776  1776 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+12-07 08:29:45.844  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:45.857 12448 12488 D EGL_emulation: eglMakeCurrent: 0xe594d140: ver 2 0 (tinfo 0xc539bd10)
+12-07 08:29:45.857  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:45.913  2962  2962 W ThreadPoolDumper: Queue length for executor EventBus is now 11. Perhaps some tasks are too long, or the pool is too small.
+12-07 08:29:45.914  2656  2671 I .gms.persisten: Background young concurrent copying GC freed 59093(3236KB) AllocSpace objects, 38(2504KB) LOS objects, 38% free, 9063KB/14MB, paused 1.987ms total 165.425ms
+12-07 08:29:45.931  2962  3348 W SessionLifecycleManager: Handover failed. Creating new session controller.
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: Error inserting flex_time=530000 job_id=-1 period=1062000 source=16 requires_charging=0 preferred_network_type=1 target_class=com.google.android.gms.measurement.PackageMeasurementTaskService user_id=0 target_package=com.google.android.gms tag=Measurement.PackageMeasurementTaskService.UPLOAD_TASK_TAG task_type=0 required_idleness_state=0 service_kind=0 source_version=202414000 persistence_level=1 preferred_charging_state=1 required_network_type=0 runtime=1670419785707 retry_strategy={"maximum_backoff_seconds":{"3600":0},"initial_backoff_seconds":{"30":0},"retry_policy":{"0":0}} last_runtime=0
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: android.database.sqlite.SQLiteConstraintException: UNIQUE constraint failed: pending_ops.tag, pending_ops.target_class, pending_ops.target_package, pending_ops.user_id (code 2067 SQLITE_CONSTRAINT_UNIQUE)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at android.database.sqlite.SQLiteConnection.nativeExecuteForLastInsertedRowId(Native Method)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at android.database.sqlite.SQLiteConnection.executeForLastInsertedRowId(SQLiteConnection.java:879)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at android.database.sqlite.SQLiteSession.executeForLastInsertedRowId(SQLiteSession.java:790)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at android.database.sqlite.SQLiteStatement.executeInsert(SQLiteStatement.java:88)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at android.database.sqlite.SQLiteDatabase.insertWithOnConflict(SQLiteDatabase.java:1599)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at android.database.sqlite.SQLiteDatabase.insert(SQLiteDatabase.java:1468)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at aqui.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):175)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at aqtk.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):182)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at aqtk.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):23)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at aqtk.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):177)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at aqpu.run(:com.google.android.gms@202414022@20.24.14 (040700-319035315):9)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at soy.b(:com.google.android.gms@202414022@20.24.14 (040700-319035315):12)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at soy.run(:com.google.android.gms@202414022@20.24.14 (040700-319035315):7)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at sux.run(:com.google.android.gms@202414022@20.24.14 (040700-319035315):0)
+12-07 08:29:45.942  2656 28018 E SQLiteDatabase: 	at java.lang.Thread.run(Thread.java:919)
+12-07 08:29:45.945  1764  1891 W audio_hw_generic: Not supplying enough data to HAL, expected position 87208917 , only wrote 87072208
+12-07 08:29:45.955  2018  2054 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:45.955  2018  2054 I chatty  : uid=1000(system) android.anim identical 8 lines
+12-07 08:29:45.955  2018  2054 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:45.959  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 6471680
+12-07 08:29:45.964  2170  2566 D EGL_emulation: eglMakeCurrent: 0xe594e040: ver 2 0 (tinfo 0xc52450c0)
+12-07 08:29:45.980 27818 27849 D EGL_emulation: eglMakeCurrent: 0xe597eb60: ver 2 0 (tinfo 0xf0c893b0)
+12-07 08:29:46.000  2170  2566 D EGL_emulation: eglMakeCurrent: 0xe594e040: ver 2 0 (tinfo 0xc52450c0)
+12-07 08:29:46.014  1793  1793 E Layer   : [Surface(name=AppWindowToken{8dcd2e token=Token{a00d3a9 ActivityRecord{4384b30 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t105}}})/@0x3848044 - animation-leash#0] No local sync point found
+12-07 08:29:46.014  1793  1793 E Layer   : [Surface(name=AppWindowToken{7df37f token=Token{5754c9e ActivityRecord{341ead9 u0 ru.iteco.fmhandroid/.ui.AppActivity t195}}})/@0xb1ce064 - animation-leash#0] No local sync point found
+12-07 08:29:46.029  2018  7392 D HostConnection: HostConnection::get() New Host Connection established 0xb22b1870, tid 7392
+12-07 08:29:46.031  2018  7392 D HostConnection: HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1 ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_null_optional_strings ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_YUV_Cache ANDROID_EMU_vulkan_ignored_handles ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8 ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_sync_buffer_data GL_OES_vertex_array_object GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_2 
+12-07 08:29:46.033 27762 27852 D EGL_emulation: eglMakeCurrent: 0xe593ea40: ver 2 0 (tinfo 0xf0cc0130)
+12-07 08:29:46.042  2170  2566 D EGL_emulation: eglMakeCurrent: 0xe594e040: ver 2 0 (tinfo 0xc52450c0)
+12-07 08:29:46.044  2018  7392 W OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+12-07 08:29:46.069 27762 27762 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@976ac50 in: STOPPED
+12-07 08:29:46.069 27762 27762 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=ru.iteco.fmhandroid.ui.AppActivity@976ac50
+12-07 08:29:46.102  2018  7392 D EGL_emulation: eglCreateContext: 0xb2357640: maj 2 min 0 rcv 2
+12-07 08:29:46.121  2018  7392 D EGL_emulation: eglMakeCurrent: 0xb2357640: ver 2 0 (tinfo 0xc0d1c860)
+12-07 08:29:46.135 27762 27762 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@976ac50 in: DESTROYED
+12-07 08:29:46.135 27762 27762 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+12-07 08:29:46.263  2962 27443 W LocationOracle: No location history returned by ContextManager
+12-07 08:29:46.366  2170  2186 I ndroid.systemu: NativeAlloc concurrent copying GC freed 36604(1395KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 5602KB/10MB, paused 5.261ms total 319.578ms
+12-07 08:29:46.379  2656  3542 W GCoreFlp: No location to return for getLastLocation()
+12-07 08:29:46.388  2962  3348 I MicroDetectionWorker: #startMicroDetector [speakerMode: 0]
+12-07 08:29:46.425  2962  3348 W ErrorReporter: reportError [type: 211, code: 393244, bug: 0]: errorCode: 393244, engine: 0
+12-07 08:29:46.425  2962  3348 I MicroDetector: Keeping mic open: false
+12-07 08:29:46.426  2962  3348 I MicroDetectionWorker: #onError(false)
+12-07 08:29:46.478 27762 27806 E TestRunner: failed: shouldShowDialogWindowSomethingWrong(ru.iteco.fmhandroid.ui.ControlPanelTest)
+12-07 08:29:46.478 27762 27806 E TestRunner: ----- begin exception -----
+12-07 08:29:46.481 27762 27806 E TestRunner: androidx.test.espresso.PerformException: Error performing 'wait for a specific view with <an instance of android.widget.TextView and view.getText() with or without transformation to match: is "Something went wrong. Try again later."> during 10000 millis.' on view 'view.getRootView() to equal view'.
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at androidx.test.espresso.PerformException$Builder.build(PerformException.java:1)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at androidx.test.espresso.base.PerformExceptionHandler.handleSafely(PerformExceptionHandler.java:8)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at androidx.test.espresso.base.PerformExceptionHandler.handleSafely(PerformExceptionHandler.java:9)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at androidx.test.espresso.base.DefaultFailureHandler$TypedFailureHandler.handle(DefaultFailureHandler.java:4)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:5)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:8)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at androidx.test.espresso.ViewInteraction.desugaredPerform(ViewInteraction.java:11)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at androidx.test.espresso.ViewInteraction.perform(ViewInteraction.java:8)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at ru.iteco.fmhandroid.ui.data.TestUtils.waitView(TestUtils.java:61)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at ru.iteco.fmhandroid.ui.steps.ControlPanelSteps.isDialogWindowMessageTryAgainLatter(ControlPanelSteps.java:241)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at ru.iteco.fmhandroid.ui.ControlPanelTest.shouldShowDialogWindowSomethingWrong(ControlPanelTest.java:371)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at io.qameta.allure.android.rules.ScreenshotRule$apply$1.evaluate(ScreenshotRule.kt:22)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at io.qameta.allure.android.rules.LogcatRule$apply$1.evaluate(LogcatRule.kt:23)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at io.qameta.allure.android.runners.AllureAndroidJUnit4.run(AllureAndroidJUnitRunners.kt:29)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:67)
+12-07 08:29:46.481 27762 27806 E TestRunner: 	at androidx.test.internal.runn
+12-07 08:29:46.481 27762 27806 E TestRunner: ----- end exception -----
+12-07 08:29:46.492 27762 27806 I TestRunner: finished: shouldShowDialogWindowSomethingWrong(ru.iteco.fmhandroid.ui.ControlPanelTest)
+12-07 08:29:46.559  2656 27951 W ctxmgr  : [AclManager] No 3 for (accnt=account#-517948760#, com.google.android.gms(10112):UserVelocityProducer, vrsn=202414022, 0, 3pPkg = null ,  3pMdlId = null ,  pid = 2656). Was: 3 for 1, account#-517948760# [CONTEXT service_id=47 ]
+12-07 08:29:46.601 27762 27775 I teco.fmhandroi: Background concurrent copying GC freed 116327(8384KB) AllocSpace objects, 11(1192KB) LOS objects, 21% free, 22MB/28MB, paused 3.508ms total 332.025ms
+12-07 08:29:46.620  2018  2031 I system_server: NativeAlloc concurrent copying GC freed 97584(4324KB) AllocSpace objects, 16(512KB) LOS objects, 28% free, 15MB/21MB, paused 718us total 277.925ms
+12-07 08:29:46.622  2018  2032 W JHwRemoteBinder: BinderProxy is being destroyed but the application did not call unlinkToDeath to unlink all of its death recipients beforehand.  Releasing leaked death recipient: com.android.server.wifi.-$$Lambda$HalDeviceManager$jNAzj5YlVhwJm5NjZ6HiKskQStI
+12-07 08:29:46.624  2656 28018 I LogUtils: [Places]: ?: Couldn't find platform key file. [CONTEXT service_id=253 ]
+12-07 08:29:46.634  2656  3542 W GCoreFlp: No location to return for getLastLocation()
+12-07 08:29:46.675 27762 27806 I TestRunner: started: shouldOpenTheNewsForEditing(ru.iteco.fmhandroid.ui.ControlPanelTest)
+12-07 08:29:46.701  2656  2656 I GeofencerStateMachine: removeGeofences: removeRequest=RemoveGeofencingRequest[REMOVE_BY_PENDING_INTENT pendingIntent=PendingIntent[creatorPackage=com.google.android.gms], packageName=com.google.android.gms]
+12-07 08:29:46.707  2656  2656 I GeofencerStateMachine: removeGeofences: removeRequest=RemoveGeofencingRequest[REMOVE_BY_PENDING_INTENT pendingIntent=PendingIntent[creatorPackage=com.google.android.gms], packageName=com.google.android.gms]
+12-07 08:29:46.710  2656 28018 I LogUtils: [Places]: ?: Couldn't find platform key file. [CONTEXT service_id=253 ]
+12-07 08:29:46.714  2656 28132 I PlacesLogger: [PlaceInferenceEngine]: [anon] Changed inference mode: 0 [CONTEXT service_id=253 ]
+12-07 08:29:46.714 27762 27806 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+12-07 08:29:46.717  2656 28136 I LogUtils: [Places]: ?: Couldn't find platform key file. [CONTEXT service_id=253 ]
+12-07 08:29:46.726  2018  7128 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 cmp=ru.iteco.fmhandroid.test/androidx.test.core.app.InstrumentationActivityInvoker$BootstrapActivity (has extras)} from uid 10146
+12-07 08:29:46.754  2018  4653 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:46.756  2018  4653 I chatty  : uid=1000(system) Binder:2018_12 identical 28 lines
+12-07 08:29:46.756  2018  4653 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:46.757 27818 27818 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@d07a351
+12-07 08:29:46.759  2018  4653 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:46.759  2018  4653 I chatty  : uid=1000(system) Binder:2018_12 identical 8 lines
+12-07 08:29:46.759  2018  4653 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:46.776  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:46.778  2656  3542 W GCoreFlp: No location to return for getLastLocation()
+12-07 08:29:46.780  2656 27652 I LogUtils: [Places]: ?: Couldn't find platform key file. [CONTEXT service_id=253 ]
+12-07 08:29:46.810  2018  4653 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=ru.iteco.fmhandroid/.ui.AppActivity} from uid 10146
+12-07 08:29:46.824  2656 28018 I LogUtils: [Places]: ?: Couldn't find platform key file. [CONTEXT service_id=253 ]
+12-07 08:29:46.826  2018  4653 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:46.836  2018  4653 I chatty  : uid=1000(system) Binder:2018_12 identical 38 lines
+12-07 08:29:46.836  2018  4653 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:46.838 27762 27762 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@f65846e
+12-07 08:29:46.839  2018  4653 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:46.839  2018  4653 I chatty  : uid=1000(system) Binder:2018_12 identical 8 lines
+12-07 08:29:46.839  2018  4653 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:46.849  2656 27951 I ctxmgr  : [ProducerStatusImpl] updateStateForNewContextData: inactive, contextName=7 [CONTEXT service_id=47 ]
+12-07 08:29:46.851  2018  2054 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:46.852  2018  2054 I chatty  : uid=1000(system) android.anim identical 8 lines
+12-07 08:29:46.852  2018  2054 W InputReader: Device has associated, but no associated display id.
+12-07 08:29:46.875  2962  3510 D EGL_emulation: eglMakeCurrent: 0xe597d120: ver 2 0 (tinfo 0xbffb2540)
+12-07 08:29:46.885 12448 12488 D EGL_emulation: eglMakeCurrent: 0xe594d140: ver 2 0 (tinfo 0xc539bd10)
+12-07 08:29:46.897  2170  2566 D EGL_emulation: eglMakeCurrent: 0xe594e040: ver 2 0 (tinfo 0xc52450c0)
+12-07 08:29:46.920  2170  2566 D EGL_emulation: eglMakeCurrent: 0xe594e040: ver 2 0 (tinfo 0xc52450c0)
+12-07 08:29:46.923 27762 27762 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@769797a in: PRE_ON_CREATE
+12-07 08:29:46.923 27762 27762 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+12-07 08:29:46.941 27762 27794 V FA      : onActivityCreated
+12-07 08:29:46.983 27762 27762 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@769797a in: CREATED
+12-07 08:29:46.983 27762 27762 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=ru.iteco.fmhandroid.ui.AppActivity@769797a
+12-07 08:29:47.000  2962 27433 I PBSessionCacheImpl: Deleted sessionId[635179488484] from persistence.
+12-07 08:29:47.025  2962  3348 W SearchServiceCore: Abort, client detached.
+12-07 08:29:47.052  2656  3542 W GCoreFlp: No location to return for getLastLocation()
+12-07 08:29:47.056 27762 27762 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@769797a in: STARTED
+12-07 08:29:47.057 27762 27762 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=ru.iteco.fmhandroid.ui.AppActivity@769797a
+12-07 08:29:47.060 27762 27799 V FA      : Activity resumed, time: 39249449
+12-07 08:29:47.061 27762 27762 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@769797a in: RESUMED
+12-07 08:29:47.061 27762 27762 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=ru.iteco.fmhandroid.ui.AppActivity@769797a
+12-07 08:29:47.097  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:47.106  1776  1776 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+12-07 08:29:47.108  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:47.113 27762 27852 D EGL_emulation: eglMakeCurrent: 0xe593ea40: ver 2 0 (tinfo 0xf0cc0130)
+12-07 08:29:47.128  2656 27652 I LogUtils: [Places]: ?: Couldn't find platform key file. [CONTEXT service_id=253 ]
+12-07 08:29:47.174  2656 28132 I LogUtils: [Places]: ?: PlacesBleScanner start() with priority 2 [CONTEXT service_id=253 ]
+12-07 08:29:47.175  2656 28132 I PlacesLogger: [PlaceInferenceEngine]: [anon] Changed inference mode: 1 [CONTEXT service_id=253 ]
+12-07 08:29:47.200  2170  2566 D EGL_emulation: eglMakeCurrent: 0xe594e040: ver 2 0 (tinfo 0xc52450c0)
+12-07 08:29:47.218 27762 27762 I ViewInteraction: Performing 'wait for a specific view with <(an instance of android.widget.TextView and view.getText() with or without transformation to match: is "Authorization" and view.getParent() view.getParent() view.getId() is <2131231186>)> during 10000 millis.' action on view view.getRootView() to equal view
+12-07 08:29:47.239  2656  2656 E BeaconBle: Missing BluetoothAdapter [CONTEXT service_id=111 ]
+12-07 08:29:47.239  2656  2656 I BeaconBle: BLE 'KK+' software access layer enabled [CONTEXT service_id=111 ]
+12-07 08:29:47.273  2873 28123 V FA-SVC  : Logging event: origin=auto,name=screen_view(_vs),params=Bundle[{ga_event_origin(_o)=auto, ga_previous_class(_pc)=AppActivity, ga_previous_id(_pi)=8894325159233167661, ga_screen_class(_sc)=AppActivity, ga_screen_id(_si)=8894325159233167662}]
+12-07 08:29:47.275  2018  2058 I ActivityTaskManager: Displayed ru.iteco.fmhandroid/.ui.AppActivity: +463ms
+12-07 08:29:47.282  2656  2656 I BeaconBle: Client requested scan, settings=BleSettings [scanMode=ZERO_POWER, callbackType=ALL_MATCHES, reportDelayMillis=0, 1 filters, 0 clients, callingClientName=Places] [CONTEXT service_id=111 ]
+12-07 08:29:47.283  2656  2656 I BeaconBle: Scan : No clients left, canceling alarm. [CONTEXT service_id=111 ]
+12-07 08:29:47.285  2656  2656 E BeaconBle: Scan couldn't start for Places [CONTEXT service_id=111 ]
+12-07 08:29:47.286  2656  2656 W Places  : BLE failure while scanning - code 5
+12-07 08:29:47.293  2656  3542 W GCoreFlp: No location to return for getLastLocation()
+12-07 08:29:47.308  2873 28123 V FA-SVC  : Upload scheduled in approximately ms: 529272
+12-07 08:29:47.309  2873 28123 V FA-SVC  : Unscheduling upload
+12-07 08:29:47.318  2873 28123 V FA-SVC  : Scheduling upload, millis: 529272
+12-07 08:29:47.324  2873 28123 V FA-SVC  : Background event processing time, ms: 51
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: Error inserting flex_time=529000 job_id=-1 period=1059000 source=16 requires_charging=0 preferred_network_type=1 target_class=com.google.android.gms.measurement.PackageMeasurementTaskService user_id=0 target_package=com.google.android.gms tag=Measurement.PackageMeasurementTaskService.UPLOAD_TASK_TAG task_type=0 required_idleness_state=0 service_kind=0 source_version=202414000 persistence_level=1 preferred_charging_state=1 required_network_type=0 runtime=1670419787340 retry_strategy={"maximum_backoff_seconds":{"3600":0},"initial_backoff_seconds":{"30":0},"retry_policy":{"0":0}} last_runtime=0
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: android.database.sqlite.SQLiteConstraintException: UNIQUE constraint failed: pending_ops.tag, pending_ops.target_class, pending_ops.target_package, pending_ops.user_id (code 2067 SQLITE_CONSTRAINT_UNIQUE)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at android.database.sqlite.SQLiteConnection.nativeExecuteForLastInsertedRowId(Native Method)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at android.database.sqlite.SQLiteConnection.executeForLastInsertedRowId(SQLiteConnection.java:879)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at android.database.sqlite.SQLiteSession.executeForLastInsertedRowId(SQLiteSession.java:790)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at android.database.sqlite.SQLiteStatement.executeInsert(SQLiteStatement.java:88)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at android.database.sqlite.SQLiteDatabase.insertWithOnConflict(SQLiteDatabase.java:1599)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at android.database.sqlite.SQLiteDatabase.insert(SQLiteDatabase.java:1468)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at aqui.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):175)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at aqtk.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):182)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at aqtk.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):23)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at aqtk.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):177)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at aqpu.run(:com.google.android.gms@202414022@20.24.14 (040700-319035315):9)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at soy.b(:com.google.android.gms@202414022@20.24.14 (040700-319035315):12)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at soy.run(:com.google.android.gms@202414022@20.24.14 (040700-319035315):7)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at sux.run(:com.google.android.gms@202414022@20.24.14 (040700-319035315):0)
+12-07 08:29:47.375  2656 27652 E SQLiteDatabase: 	at java.lang.Thread.run(Thread.java:919)
+12-07 08:29:47.482  2018  8910 D WificondControl: Scan result ready event
+12-07 08:29:50.063 27762 27861 I okhttp.OkHttpClient: --> GET http://www.981757-ca08998.tmweb.ru:8080/fmh/authentication/userInfo
+12-07 08:29:50.063 27762 27861 I okhttp.OkHttpClient: --> END GET
+12-07 08:29:51.387  2018  2058 E memtrack: Couldn't load memtrack module
+12-07 08:29:51.387  2018  2058 W android.os.Debug: failed to get memory consumption info: -1
+12-07 08:29:52.135  2656 28018 I LogUtils: [Places]: ?: Couldn't find platform key file. [CONTEXT service_id=253 ]
+12-07 08:29:52.144  2656 28019 I LogUtils: [Places]: ?: Couldn't find platform key file. [CONTEXT service_id=253 ]
+12-07 08:29:52.165  2656 28132 I LogUtils: [Places]: ?: PlacesBleScanner stop() [CONTEXT service_id=253 ]
+12-07 08:29:52.166  2656  2656 I BeaconBle: Scan : No clients left, canceling alarm. [CONTEXT service_id=111 ]
+12-07 08:29:52.168  2656  2656 I BeaconBle: Scan canceled successfully. [CONTEXT service_id=111 ]
+12-07 08:29:52.178  2656 28132 I PlacesLogger: [PlaceInferenceEngine]: [anon] Changed inference mode: 0 [CONTEXT service_id=253 ]
+12-07 08:29:52.204  2656  3542 W GCoreFlp: No location to return for getLastLocation()
+12-07 08:29:52.227  2656 27951 I LogUtils: [Places]: ?: Couldn't find platform key file. [CONTEXT service_id=253 ]
+12-07 08:29:52.231  2656 28019 I LogUtils: [Places]: ?: Couldn't find platform key file. [CONTEXT service_id=253 ]
+12-07 08:29:52.272 27762 27799 V FA      : Inactivity, disconnecting from the service
+12-07 08:29:52.339  2656  2656 I GeofencerStateMachine: removeGeofences: removeRequest=RemoveGeofencingRequest[REMOVE_BY_PENDING_INTENT pendingIntent=PendingIntent[creatorPackage=com.google.android.gms], packageName=com.google.android.gms]
+12-07 08:29:57.000  2962  3348 I WorkerManager: dispose()
+12-07 08:29:57.001  2962  3348 W ThreadPoolDumper: Queue length for executor EventBus is now 11. Perhaps some tasks are too long, or the pool is too small.
+12-07 08:29:57.182  2656  2656 I BeaconBle: Scan : No clients left, canceling alarm. [CONTEXT service_id=111 ]
+12-07 08:29:57.245 27762 27762 D takeScreenshot: Found 1 global views to redraw
+12-07 08:29:57.285  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: Failed to take screenshot
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: java.io.FileNotFoundException: view-op-error-9.png: open failed: EROFS (Read-only file system)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at libcore.io.IoBridge.open(IoBridge.java:496)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at java.io.FileOutputStream.<init>(FileOutputStream.java:235)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at java.io.FileOutputStream.<init>(FileOutputStream.java:125)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at androidx.test.platform.io.FileTestStorage.openOutputFile(FileTestStorage.java:60)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at androidx.test.core.graphics.BitmapStorage.writeToTestStorage(BitmapStorageExt.kt:49)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at androidx.test.espresso.base.DefaultFailureHandler.takeScreenshot(DefaultFailureHandler.java:4)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:3)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:8)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at androidx.test.espresso.ViewInteraction.desugaredPerform(ViewInteraction.java:11)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at androidx.test.espresso.ViewInteraction.perform(ViewInteraction.java:8)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at ru.iteco.fmhandroid.ui.data.TestUtils.waitView(TestUtils.java:61)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at ru.iteco.fmhandroid.ui.steps.AuthSteps.isAuthScreen(AuthSteps.java:56)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at ru.iteco.fmhandroid.ui.ControlPanelTest.logoutCheckAndOpenControlPanelPage(ControlPanelTest.java:60)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at java.lang.reflect.Method.invoke(Native Method)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:76)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at io.qameta.allure.android.rules.ScreenshotRule$apply$1.evaluate(ScreenshotRule.kt:22)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at io.qameta.allure.android.rules.LogcatRule$apply$1.evaluate(LogcatRule.kt:23)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at io.qameta.allure.android.runners.AllureAndroidJUnit4.run(AllureAndroidJUnitRunners.kt:29)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:67)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:58)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:438)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2189)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: Caused by: android.system.ErrnoException: open failed: EROFS (Read-only file system)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at libcore.io.Linux.open(Native Method)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:167)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:252)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:167)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at android.app.ActivityThread$AndroidOs.open(ActivityThread.java:7255)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	at libcore.io.IoBridge.open(IoBridge.java:482)
+12-07 08:29:57.354 27762 27806 W DefaultFailureHandler: 	... 51 more
+12-07 08:29:57.367 27762 27762 I ViewInteraction: Performing 'wait for a specific view with <view.getId() is <2131230870/ru.iteco.fmhandroid:id/authorization_image_button>> during 10000 millis.' action on view view.getRootView() to equal view
+12-07 08:30:00.009  2170  2170 D KeyguardClockSwitch: Updating clock: 830
+12-07 08:30:00.067 27762 27861 I okhttp.OkHttpClient: <-- HTTP FAILED: java.net.SocketTimeoutException: timeout
+12-07 08:30:00.068 27762 27762 W System.err: ru.iteco.fmhandroid.exceptions.UnknownException
+12-07 08:30:00.068 27762 27762 W System.err: 	at ru.iteco.fmhandroid.utils.Utils.makeRequest(Utils.kt:123)
+12-07 08:30:00.068 27762 27762 W System.err: 	at ru.iteco.fmhandroid.utils.Utils$makeRequest$1.invokeSuspend(Unknown Source:15)
+12-07 08:30:00.068 27762 27762 W System.err: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.DispatchedTaskKt.resume(DispatchedTask.kt:234)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.DispatchedTaskKt.resumeUnconfined(DispatchedTask.kt:190)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.DispatchedTaskKt.dispatch(DispatchedTask.kt:161)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.CancellableContinuationImpl.dispatchResume(CancellableContinuationImpl.kt:397)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.CancellableContinuationImpl.cancel(CancellableContinuationImpl.kt:183)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.CancellableContinuationImpl.parentCancelled$kotlinx_coroutines_core(CancellableContinuationImpl.kt:190)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.ChildContinuation.invoke(JobSupport.kt:1474)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobSupport.notifyCancelling(JobSupport.kt:1499)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobSupport.tryMakeCancelling(JobSupport.kt:795)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobSupport.makeCancelling(JobSupport.kt:755)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobSupport.cancelImpl$kotlinx_coroutines_core(JobSupport.kt:671)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobSupport.parentCancelled(JobSupport.kt:637)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.ChildHandleNode.invoke(JobSupport.kt:1465)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobSupport.notifyCancelling(JobSupport.kt:1499)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobSupport.tryMakeCompletingSlowPath(JobSupport.kt:900)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobSupport.tryMakeCompleting(JobSupport.kt:863)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobSupport.cancelMakeCompleting(JobSupport.kt:696)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobSupport.cancelImpl$kotlinx_coroutines_core(JobSupport.kt:667)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobSupport.cancelInternal(JobSupport.kt:632)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobSupport.cancel(JobSupport.kt:617)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobKt__JobKt.cancel(Job.kt:561)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobKt.cancel(Unknown Source:1)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobKt__JobKt.cancel$default(Job.kt:560)
+12-07 08:30:00.069 27762 27762 W System.err: 	at kotlinx.coroutines.JobKt.cancel$default(Unknown Source:1)
+12-07 08:30:00.069 27762 27762 W System.err: 	at androidx.lifecycle.CloseableCoroutineScope.close(ViewModel.kt:51)
+12-07 08:30:00.069 27762 27762 W System.err: 	at androidx.lifecycle.ViewModel.closeWithRuntimeException(ViewModel.java:188)
+12-07 08:30:00.069 27762 27762 W System.err: 	at androidx.lifecycle.ViewModel.clear(ViewModel.java:134)
+12-07 08:30:00.069 27762 27762 W System.err: 	at androidx.lifecycle.ViewModelStore.clear(ViewModelStore.java:62)
+12-07 08:30:00.069 27762 27762 W System.err: 	at androidx.fragment.app.FragmentManagerViewModel.clearNonConfigStateInternal(FragmentManagerViewModel.java:210)
+12-07 08:30:00.069 27762 27762 W System.err: 	at androidx.fragment.app.FragmentManagerViewModel.clearNonConfigState(FragmentManagerViewModel.java:190)
+12-07 08:30:00.069 27762 27762 W System.err: 	at androidx.fragment.app.FragmentStateManager.destroy(FragmentStateManager.java:778)
+12-07 08:30:00.069 27762 27762 W System.err: 	at androidx.fragment.app.FragmentStateManager.moveToExpectedState(FragmentStateManager.java:335)
+12-07 08:30:00.069 27762 27762 W System.err: 	at androidx.fragment.app.FragmentStore.moveToExpectedState(FragmentStore.java:121)
+12-07 08:30:00.069 27762 27762 W System.err: 	at androidx.fragment.app.FragmentManager.moveToState(FragmentManager.java:1374)
+12-07 08:30:00.069 27762 27762 W System.err: 	at androidx.fragment.app.FragmentManager.dispatchStateChange(FragmentManager.java:2841)
+12-07 08:30:00.070 27762 27762 W System.err: 	at androidx.fragment.app.FragmentManager.dispatchDestroy(FragmentManager.java:2820)
+12-07 08:30:00.070 27762 27762 W System.err: 	at androidx.fragment.app.Fragment.performDestroy(Fragment.java:3246)
+12-07 08:30:00.070 27762 27762 W System.err: 	at androidx.fragment.app.FragmentStateManager.destroy(FragmentStateManager.java:780)
+12-07 08:30:00.070 27762 27762 W System.err: 	at androidx.fragment.app.FragmentStateManager.moveToExpectedState(FragmentStateManager.java:335)
+12-07 08:30:00.070 27762 27762 W System.err: 	at androidx.fragment.app.SpecialEffectsController$FragmentStateManagerOperation.complete(SpecialEffectsController.java:771)
+12-07 08:30:00.070 27762 27762 W System.err: 	at androidx.fragment.app.SpecialEffectsController$Operation.cancel(SpecialEffectsController.java:615)
+12-07 08:30:00.070 27762 27762 W System.err: 	at androidx.fragment.app.SpecialEffectsController.forceCompleteAllOperations(SpecialEffectsController.java:350)
+12-07 08:30:00.070 27762 27762 W System.err: 	at androidx.fragment.app.FragmentManager.dispatchStateChange(FragmentManager.java:2844)
+12-07 08:30:00.070 27762 27762 W System.err: 	at androidx.fragment.app.FragmentManager.dispatchDestroy(FragmentManager.java:2820)
+12-07 08:30:00.070 27762 27762 W System.err: 	at androidx.fragment.app.FragmentController.dispatchDestroy(FragmentController.java:345)
+12-07 08:30:00.070 27762 27762 W System.err: 	at androidx.fragment.app.FragmentActivity.onDestroy(FragmentActivity.java:306)
+12-07 08:30:00.070 27762 27762 W System.err: 	at androidx.appcompat.app.AppCompatActivity.onDestroy(AppCompatActivity.java:278)
+12-07 08:30:00.070 27762 27762 W System.err: 	at android.app.Activity.performDestroy(Activity.java:8048)
+12-07 08:30:00.070 27762 27762 W System.err: 	at android.app.Instrumentation.callActivityOnDestroy(Instrumentation.java:1334)
+12-07 08:30:00.070 27762 27762 W System.err: 	at androidx.test.runner.MonitoringInstrumentation.callActivityOnDestroy(MonitoringInstrumentation.java:766)
+12-07 08:30:00.070 27762 27762 W System.err: 	at android.app.ActivityThread.performDestroyActivity(ActivityThread.java:4926)
+12-07 08:30:00.070 27762 27762 W System.err: 	at android.app.ActivityThread.handleDestroyActivity(ActivityThread.java:4970)
+12-07 08:30:00.070 27762 27762 W System.err: 	at android.app.servertransaction.DestroyActivityItem.execute(DestroyActivityItem.java:44)
+12-07 08:30:00.071 27762 27762 W System.err: 	at android.app.servertransaction.TransactionExecutor.executeLifecycleState(TransactionExecutor.java:176)
+12-07 08:30:00.071 27762 27762 W System.err: 	at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:97)
+12-07 08:30:00.071 27762 27762 W System.err: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2016)
+12-07 08:30:00.071 27762 27762 W System.err: 	at android.os.Handler.dispatchMessage(Handler.java:107)
+12-07 08:30:00.071 27762 27762 W System.err: 	at android.os.Looper.loop(Looper.java:214)
+12-07 08:30:00.071 27762 27762 W System.err: 	at android.app.ActivityThread.main(ActivityThread.java:7356)
+12-07 08:30:00.071 27762 27762 W System.err: 	at java.lang.reflect.Method.invoke(Native Method)
+12-07 08:30:00.071 27762 27762 W System.err: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:492)
+12-07 08:30:00.071 27762 27762 W System.err: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:930)
+12-07 08:30:06.480  2018  2058 E memtrack: Couldn't load memtrack module
+12-07 08:30:06.480  2018  2058 W android.os.Debug: failed to get memory consumption info: -1
+12-07 08:30:07.373 27762 27762 D takeScreenshot: Found 1 global views to redraw
+12-07 08:30:07.403  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: Failed to take screenshot
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: java.io.FileNotFoundException: view-op-error-10.png: open failed: EROFS (Read-only file system)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at libcore.io.IoBridge.open(IoBridge.java:496)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at java.io.FileOutputStream.<init>(FileOutputStream.java:235)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at java.io.FileOutputStream.<init>(FileOutputStream.java:125)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at androidx.test.platform.io.FileTestStorage.openOutputFile(FileTestStorage.java:60)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at androidx.test.core.graphics.BitmapStorage.writeToTestStorage(BitmapStorageExt.kt:49)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at androidx.test.espresso.base.DefaultFailureHandler.takeScreenshot(DefaultFailureHandler.java:4)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:3)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:8)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at androidx.test.espresso.ViewInteraction.desugaredPerform(ViewInteraction.java:11)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at androidx.test.espresso.ViewInteraction.perform(ViewInteraction.java:8)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at ru.iteco.fmhandroid.ui.data.TestUtils.waitView(TestUtils.java:61)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at ru.iteco.fmhandroid.ui.steps.MainPageSteps.clickLogOutBut(MainPageSteps.java:55)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at ru.iteco.fmhandroid.ui.ControlPanelTest.logoutCheckAndOpenControlPanelPage(ControlPanelTest.java:62)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at java.lang.reflect.Method.invoke(Native Method)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:76)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at io.qameta.allure.android.rules.ScreenshotRule$apply$1.evaluate(ScreenshotRule.kt:22)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at io.qameta.allure.android.rules.LogcatRule$apply$1.evaluate(LogcatRule.kt:23)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at io.qameta.allure.android.runners.AllureAndroidJUnit4.run(AllureAndroidJUnitRunners.kt:29)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:67)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:58)
+12-07 08:30:07.454 27762 27806 W DefaultFailureHandler: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:438)
+12-07 08:30:07.455 27762 27806 W DefaultFailureHandler: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2189)
+12-07 08:30:07.455 27762 27806 W DefaultFailureHandler: Caused by: android.system.ErrnoException: open failed: EROFS (Read-only file system)
+12-07 08:30:07.455 27762 27806 W DefaultFailureHandler: 	at libcore.io.Linux.open(Native Method)
+12-07 08:30:07.455 27762 27806 W DefaultFailureHandler: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:167)
+12-07 08:30:07.455 27762 27806 W DefaultFailureHandler: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:252)
+12-07 08:30:07.455 27762 27806 W DefaultFailureHandler: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:167)
+12-07 08:30:07.455 27762 27806 W DefaultFailureHandler: 	at android.app.ActivityThread$AndroidOs.open(ActivityThread.java:7255)
+12-07 08:30:07.455 27762 27806 W DefaultFailureHandler: 	at libcore.io.IoBridge.open(IoBridge.java:482)
+12-07 08:30:07.455 27762 27806 W DefaultFailureHandler: 	... 51 more
+12-07 08:30:07.468  2170  2170 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+12-07 08:30:07.502  2170  2566 D EGL_emulation: eglMakeCurrent: 0xe594e040: ver 2 0 (tinfo 0xc52450c0)
+12-07 08:30:07.514  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:07.528  2170  2566 D EGL_emulation: eglMakeCurrent: 0xe594e040: ver 2 0 (tinfo 0xc52450c0)
+12-07 08:30:07.572  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:07.599  2170  2170 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+12-07 08:30:07.641  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:08.495 27762 27806 I QueryController: Matched selector: UiSelector[DESCRIPTION=Airplane mode] <<==>> [android.view.accessibility.AccessibilityNodeInfo@6d7a0; boundsInParent: Rect(0, 0 - 292, 292); boundsInScreen: Rect(736, 804 - 1028, 1096); packageName: com.android.systemui; className: android.widget.Switch; text: Off; error: null; maxTextLength: -1; contentDescription: Airplane mode; tooltipText: null; viewIdResName: null; checkable: true; checked: false; focusable: true; focused: false; selected: false; clickable: true; longClickable: true; contextClickable: false; enabled: true; password: false; scrollable: false; importantForAccessibility: true; visible: true; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_CLICK - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_SET_SELECTION - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null, AccessibilityAction: ACTION_LONG_CLICK - Open settings]]
+12-07 08:30:08.520  2018  2051 D AutofillManagerService: onBackKeyPressed()
+12-07 08:30:09.221  2170  2170 V StatusBar: mStatusBarWindow: com.android.systemui.statusbar.phone.StatusBarWindowView{4752fa5 V.E...... ........ 0,0-1080,2340} canPanelBeCollapsed(): true
+12-07 08:30:09.229  2170  2170 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+12-07 08:30:09.242  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:09.325  2170  2170 D StatusBar: disable<e i a s b h r c s > disable2<q i n >
+12-07 08:30:09.376  2170  2566 D EGL_emulation: eglMakeCurrent: 0xe594e040: ver 2 0 (tinfo 0xc52450c0)
+12-07 08:30:09.385  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 286720
+12-07 08:30:09.405  2170  2566 D EGL_emulation: eglMakeCurrent: 0xe594e040: ver 2 0 (tinfo 0xc52450c0)
+12-07 08:30:09.433  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 286720
+12-07 08:30:09.219  2018  2051 D AutofillManagerService: onBackKeyPressed()
+12-07 08:30:09.542  2018  5907 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=ru.iteco.fmhandroid.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity} from uid 10146
+12-07 08:30:09.460  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 286720
+12-07 08:30:09.554 27762 27762 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@769797a in: PAUSED
+12-07 08:30:09.555 27762 27762 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=ru.iteco.fmhandroid.ui.AppActivity@769797a
+12-07 08:30:09.556  2018  8910 W InputReader: Device has associated, but no associated display id.
+12-07 08:30:09.558  2018  8910 I chatty  : uid=1000(system) Binder:2018_1C identical 38 lines
+12-07 08:30:09.558  2018  8910 W InputReader: Device has associated, but no associated display id.
+12-07 08:30:09.558 27818 27818 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@e4a6b89
+12-07 08:30:09.560  2018  8910 W InputReader: Device has associated, but no associated display id.
+12-07 08:30:09.560  2018  8910 I chatty  : uid=1000(system) Binder:2018_1C identical 8 lines
+12-07 08:30:09.560  2018  8910 W InputReader: Device has associated, but no associated display id.
+12-07 08:30:09.585 27762 27799 V FA      : Recording user engagement, ms: 22495
+12-07 08:30:09.619  2018  3051 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=ru.iteco.fmhandroid.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity} from uid 10146
+12-07 08:30:09.638 27762 27799 V FA      : Connecting to remote service
+12-07 08:30:09.646  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:09.655  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:09.660 27818 27849 D EGL_emulation: eglMakeCurrent: 0xe597eb60: ver 2 0 (tinfo 0xf0c893b0)
+12-07 08:30:09.669  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:09.696 27762 27799 V FA      : Connection attempt already in progress
+12-07 08:30:09.696 27762 27799 V FA      : Activity paused, time: 39271957
+12-07 08:30:09.704 27762 27799 D FA      : Connected to remote service
+12-07 08:30:09.704 27762 27799 V FA      : Processing queued up service tasks: 2
+12-07 08:30:09.709  2018  5907 W InputReader: Device has associated, but no associated display id.
+12-07 08:30:09.722  2018  5907 I chatty  : uid=1000(system) Binder:2018_17 identical 48 lines
+12-07 08:30:09.722  2018  5907 W InputReader: Device has associated, but no associated display id.
+12-07 08:30:09.739 27818 27818 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@b5c6143
+12-07 08:30:09.751  2873 28123 V FA-SVC  : Logging event: origin=auto,name=user_engagement(_e),params=Bundle[{ga_event_origin(_o)=auto, engagement_time_msec(_et)=22495, ga_screen_class(_sc)=AppActivity, ga_screen_id(_si)=8894325159233167662}]
+12-07 08:30:09.753  2018  2058 E memtrack: Couldn't load memtrack module
+12-07 08:30:09.753  2018  2058 W android.os.Debug: failed to get memory consumption info: -1
+12-07 08:30:09.780  2018  3051 W ActivityTaskManager: Duplicate finish request for ActivityRecord{791764d u0 ru.iteco.fmhandroid/.ui.AppActivity t196 f}
+12-07 08:30:09.810  2873 28123 V FA-SVC  : Upload scheduled in approximately ms: 506770
+12-07 08:30:09.810  2873 28123 V FA-SVC  : Unscheduling upload
+12-07 08:30:09.826  2873 28123 V FA-SVC  : Scheduling upload, millis: 506770
+12-07 08:30:09.841  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:09.840  2873 28123 V FA-SVC  : Background event processing time, ms: 89
+12-07 08:30:09.843  1744  1957 I netd    : trafficSwapActiveStatsMap() <40.37ms>
+12-07 08:30:09.850  1744  1957 I netd    : tetherGetStats() <5.20ms>
+12-07 08:30:09.856  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:09.860 27818 27849 D EGL_emulation: eglMakeCurrent: 0xe597eb60: ver 2 0 (tinfo 0xf0c893b0)
+12-07 08:30:09.865  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:09.886  2018  2054 W InputReader: Device has associated, but no associated display id.
+12-07 08:30:09.888  2018  2054 I chatty  : uid=1000(system) android.anim identical 18 lines
+12-07 08:30:09.888  2018  2054 W InputReader: Device has associated, but no associated display id.
+12-07 08:30:09.894  2018  2058 I ActivityTaskManager: Displayed ru.iteco.fmhandroid.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity: +151ms
+12-07 08:30:09.915 27762 27852 D EGL_emulation: eglMakeCurrent: 0xe593ea40: ver 2 0 (tinfo 0xf0cc0130)
+12-07 08:30:09.923  2018  8097 W InputReader: Device has associated, but no associated display id.
+12-07 08:30:09.923  2018  8097 I chatty  : uid=1000(system) Binder:2018_1B identical 8 lines
+12-07 08:30:09.923  2018  8097 W InputReader: Device has associated, but no associated display id.
+12-07 08:30:09.938 27818 27849 D EGL_emulation: eglMakeCurrent: 0xe597eb60: ver 2 0 (tinfo 0xf0c893b0)
+12-07 08:30:09.950 27818 27849 D EGL_emulation: eglMakeCurrent: 0xe597eb60: ver 2 0 (tinfo 0xf0c893b0)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: Error inserting flex_time=506000 job_id=-1 period=1014000 source=16 requires_charging=0 preferred_network_type=1 target_class=com.google.android.gms.measurement.PackageMeasurementTaskService user_id=0 target_package=com.google.android.gms tag=Measurement.PackageMeasurementTaskService.UPLOAD_TASK_TAG task_type=0 required_idleness_state=0 service_kind=0 source_version=202414000 persistence_level=1 preferred_charging_state=1 required_network_type=0 runtime=1670419809866 retry_strategy={"maximum_backoff_seconds":{"3600":0},"initial_backoff_seconds":{"30":0},"retry_policy":{"0":0}} last_runtime=0
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: android.database.sqlite.SQLiteConstraintException: UNIQUE constraint failed: pending_ops.tag, pending_ops.target_class, pending_ops.target_package, pending_ops.user_id (code 2067 SQLITE_CONSTRAINT_UNIQUE)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at android.database.sqlite.SQLiteConnection.nativeExecuteForLastInsertedRowId(Native Method)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at android.database.sqlite.SQLiteConnection.executeForLastInsertedRowId(SQLiteConnection.java:879)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at android.database.sqlite.SQLiteSession.executeForLastInsertedRowId(SQLiteSession.java:790)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at android.database.sqlite.SQLiteStatement.executeInsert(SQLiteStatement.java:88)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at android.database.sqlite.SQLiteDatabase.insertWithOnConflict(SQLiteDatabase.java:1599)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at android.database.sqlite.SQLiteDatabase.insert(SQLiteDatabase.java:1468)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at aqui.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):175)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at aqtk.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):182)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at aqtk.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):23)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at aqtk.a(:com.google.android.gms@202414022@20.24.14 (040700-319035315):177)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at aqpu.run(:com.google.android.gms@202414022@20.24.14 (040700-319035315):9)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at soy.b(:com.google.android.gms@202414022@20.24.14 (040700-319035315):12)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at soy.run(:com.google.android.gms@202414022@20.24.14 (040700-319035315):7)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at sux.run(:com.google.android.gms@202414022@20.24.14 (040700-319035315):0)
+12-07 08:30:09.954  2656 28136 E SQLiteDatabase: 	at java.lang.Thread.run(Thread.java:919)
+12-07 08:30:09.974  2018  3061 W InputReader: Device has associated, but no associated display id.
+12-07 08:30:09.974  2018  3061 I chatty  : uid=1000(system) Binder:2018_10 identical 8 lines
+12-07 08:30:09.974  2018  3061 W InputReader: Device has associated, but no associated display id.
+12-07 08:30:09.983 27762 27762 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@769797a in: STOPPED
+12-07 08:30:09.983 27762 27762 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=ru.iteco.fmhandroid.ui.AppActivity@769797a
+12-07 08:30:10.000  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:10.008  1776  1776 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+12-07 08:30:10.009  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:10.018 27762 27762 D LifecycleMonitor: Lifecycle status change: ru.iteco.fmhandroid.ui.AppActivity@769797a in: DESTROYED
+12-07 08:30:10.018 27762 27762 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+12-07 08:30:10.019  2962  3510 D EGL_emulation: eglMakeCurrent: 0xe597d120: ver 2 0 (tinfo 0xbffb2540)
+12-07 08:30:10.030  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:10.056  1776  1776 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+12-07 08:30:10.061  1776  1776 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 10108928
+12-07 08:30:10.062 12448 12488 D EGL_emulation: eglMakeCurrent: 0xe594d140: ver 2 0 (tinfo 0xc539bd10)
